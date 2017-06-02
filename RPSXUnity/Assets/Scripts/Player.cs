@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
 
 	Rigidbody2D rb;
 	SpriteRenderer sr;
+	public RPSState rps; 
 
 	public int playerNum;
 
@@ -13,9 +14,7 @@ public class Player : MonoBehaviour {
 	public float jumpSpeed;
 	public float normalGrav;
 	public float fastFallGrav;
-	public float hoverGrav;
 	public float gravityThreshold;
-
 	public int maxJumps; 
 	public int jumpsRemaining;
 
@@ -26,6 +25,8 @@ public class Player : MonoBehaviour {
 
 		rb = GetComponent<Rigidbody2D> ();
 		sr = GetComponent<SpriteRenderer> ();
+		rps = GetComponent<RPSState> ();
+		stateChange ();
 		
 	}
 	
@@ -72,6 +73,12 @@ public class Player : MonoBehaviour {
 		} else {
 			rb.gravityScale = normalGrav;
 		}
+
+		//AirAction
+		if (Input.GetButtonDown ("AButton_P" + playerNum) && (jumpsRemaining < maxJumps)) 
+		{
+			rps.airAction ();
+		}
 	}
 
 
@@ -82,5 +89,16 @@ public class Player : MonoBehaviour {
 		{
 			jumpsRemaining = maxJumps; 
 		}
+	}
+
+	//Adjusting Stats with State Change
+	void stateChange ()
+	{
+		moveSpeed = rps.moveSpeed;
+		jumpSpeed = rps.jumpSpeed;
+		normalGrav = rps.normalGrav;
+		fastFallGrav = rps.fastFallGrav;
+		maxJumps = rps.maxJumps;
+		sr.color = rps.color;
 	}
 }
