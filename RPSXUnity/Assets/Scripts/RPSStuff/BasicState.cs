@@ -8,7 +8,7 @@ public class BasicState : RPSState {
 	void Awake () {
 
 		p = GetComponent<Player> ();
-		moveSpeed = 5;
+		moveSpeed = 7;
 		jumpSpeed = 20;
 		normalGrav = 6;
 		fastFallGrav = 12;

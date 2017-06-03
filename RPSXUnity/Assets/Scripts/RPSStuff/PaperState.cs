@@ -7,11 +7,11 @@ public class PaperState : RPSState {
 	void Awake () {
 
 		p = GetComponent<Player> ();
-		moveSpeed = 4;
+		moveSpeed = 3;
 		jumpSpeed = 20;
 		normalGrav = 3;
 		fastFallGrav = 5;
-		maxAirActions = 3;
+		maxAirActions = 5;
 		airSpeedModifier = 2.5f;
 		color = Color.blue;
 
@@ -25,21 +25,6 @@ public class PaperState : RPSState {
 
 	public override void airAction ()
 	{
-		if (p.airActionsRemaining >= 3) 
-		{
-			p.jump (jumpSpeed * .5f);
-		}
-
-		if (p.airActionsRemaining == 2) 
-		{
 			p.jump (jumpSpeed * .75f);
-		}
-
-		if (p.airActionsRemaining == 1)
-		{
-			p.jump (jumpSpeed);
-		}
-
-
 	}
 }

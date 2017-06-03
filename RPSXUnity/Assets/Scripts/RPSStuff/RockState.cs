@@ -15,9 +15,9 @@ public class RockState : RPSState {
 		rb = GetComponent<Rigidbody2D> ();
 		p = GetComponent<Player> ();
 		hangTimeRemaining = maxHangTime;
-		moveSpeed = 3; 
+		moveSpeed = 6; 
 		jumpSpeed = 25;
-		normalGrav = 8;
+		normalGrav = 10;
 		fastFallGrav = 20;
 		maxAirActions = 1;
 		airSpeedModifier = 1.75f;
@@ -47,6 +47,7 @@ public class RockState : RPSState {
 			rb.gravityScale = 0;
 			rb.mass = 0;
 			hangTimeRemaining--;
+			moveSpeed = 1.5f;
 		} 
 		else 
 		{
@@ -57,6 +58,15 @@ public class RockState : RPSState {
 		{
 			hangTimeRemaining = maxHangTime;
 			isHanging = false;
+			moveSpeed = 6;
+			p.affectedByGrav = true;
+		}
+
+		if (Input.GetButtonUp ("AButton_P" + p.playerNum)) 
+		{
+			hangTimeRemaining = maxHangTime;
+			isHanging = false;
+			moveSpeed = 6;
 			p.affectedByGrav = true;
 		}
 	}

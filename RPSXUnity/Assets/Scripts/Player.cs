@@ -18,6 +18,7 @@ public class Player : MonoBehaviour {
 	public float normalGrav;
 	public float fastFallGrav;
 	public float gravityThreshold;
+	public int directionModifier;
 	public int maxAirActions;
 	public int airActionsRemaining;
 	public bool touchingGround;
@@ -33,6 +34,7 @@ public class Player : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D> ();
 		sr = GetComponent<SpriteRenderer> ();
 		rps = GetComponent<RPSState> ();
+		airActionsRemaining = maxAirActions;
 
 		
 	}
@@ -57,6 +59,7 @@ public class Player : MonoBehaviour {
 		if (Input.GetAxis ("LeftStickX_P" + playerNum) > 0) 
 		{
 			sr.flipX = false;
+			directionModifier = 1;
 			if (touchingGround) {
 				rb.velocity = new Vector2 (moveSpeed, rb.velocity.y);
 			} else {
@@ -67,6 +70,7 @@ public class Player : MonoBehaviour {
 		if (Input.GetAxis ("LeftStickX_P" + playerNum) < 0) 
 		{
 			sr.flipX = true;
+			directionModifier = -1;
 			if (touchingGround) {
 				rb.velocity = new Vector2 (moveSpeed * -1, rb.velocity.y);
 			} else {
@@ -121,10 +125,13 @@ public class Player : MonoBehaviour {
 				Destroy (gameObject.GetComponent<RPSState> ());
 				gameObject.AddComponent<PaperState> ();
 			}
-			else {
+			else if (selectedState == "Scissors" && currentState != "Scissors")
+			{
+				currentState = "Scissors";
 				Destroy (gameObject.GetComponent<RPSState>());
-				backToBasic ();
+				gameObject.AddComponent<ScissorsState> ();
 			}
+
 		}
 	}
 
@@ -163,6 +170,10 @@ public class Player : MonoBehaviour {
 		fastFallGrav = rps.fastFallGrav;
 		maxAirActions = rps.maxAirActions;
 		sr.color = rps.color;
+		if (airActionsRemaining > maxAirActions) 
+		{
+			airActionsRemaining = maxAirActions;
+		}
 	}
 
 	void chooseState ()
