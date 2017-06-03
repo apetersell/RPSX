@@ -11,12 +11,16 @@ public class Player : MonoBehaviour {
 	public int playerNum;
 
 	public float moveSpeed;
+	public float airSpeedModifier;
 	public float jumpSpeed;
 	public float normalGrav;
 	public float fastFallGrav;
 	public float gravityThreshold;
-	public int maxJumps; 
-	public int jumpsRemaining;
+	public int maxAirActions;
+	public int airActionsRemaining;
+	public bool touchingGround;
+	public bool actionable = true;
+	public bool affectedByGrav = true;
 
 
 
@@ -26,30 +30,41 @@ public class Player : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D> ();
 		sr = GetComponent<SpriteRenderer> ();
 		rps = GetComponent<RPSState> ();
-		stateChange ();
+		applyStats ();
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		movement ();
-		
+		if (actionable) 
+		{
+			actions ();
+		}
+
 	}
 		
-	void movement ()
+	void actions ()
 	{
 //		Left and right movement.
 		if (Input.GetAxis ("LeftStickX_P" + playerNum) > 0) 
 		{
-			rb.velocity = new Vector2 (moveSpeed, rb.velocity.y);
 			sr.flipX = false;
+			if (touchingGround) {
+				rb.velocity = new Vector2 (moveSpeed, rb.velocity.y);
+			} else {
+				rb.velocity = new Vector2 (moveSpeed * airSpeedModifier, rb.velocity.y);
+			}
 		}
 
 		if (Input.GetAxis ("LeftStickX_P" + playerNum) < 0) 
 		{
-			rb.velocity = new Vector2 ((moveSpeed * -1), rb.velocity.y);
 			sr.flipX = true;
+			if (touchingGround) {
+				rb.velocity = new Vector2 (moveSpeed * -1, rb.velocity.y);
+			} else {
+				rb.velocity = new Vector2 (moveSpeed * -1 * airSpeedModifier, rb.velocity.y);
+			}
 		}
 
 		if (Input.GetAxis ("LeftStickX_P" + playerNum) == 0)
@@ -60,45 +75,67 @@ public class Player : MonoBehaviour {
 //		Jumping
 		if (Input.GetButtonDown ("AButton_P" + playerNum)) 
 		{
-			if (jumpsRemaining != 0) 
+			if (touchingGround) 
 			{
-				rb.velocity = new Vector2 (rb.velocity.x, jumpSpeed);
-				jumpsRemaining = jumpsRemaining - 1;
+				jump (jumpSpeed);
 			}
 		}
 
 		//FastFalling
-		if (Input.GetAxis ("LeftStickY_P" + playerNum) > gravityThreshold) {
-			rb.gravityScale = fastFallGrav;
-		} else {
-			rb.gravityScale = normalGrav;
+		if (affectedByGrav) 
+		{
+			if (Input.GetAxis ("LeftStickY_P" + playerNum) > gravityThreshold) {
+				rb.gravityScale = fastFallGrav;
+			} else {
+				rb.gravityScale = normalGrav;
+			}
 		}
 
 		//AirAction
-		if (Input.GetButtonDown ("AButton_P" + playerNum) && (jumpsRemaining < maxJumps)) 
+		if (Input.GetButtonDown ("AButton_P" + playerNum) && touchingGround == false) 
 		{
-			rps.airAction ();
+			if (airActionsRemaining >= maxAirActions) 
+			{
+				rps.airAction ();
+				airActionsRemaining--;
+			}
 		}
 	}
 
+
+	public void jump (float jumpNum) 
+	{
+		rb.velocity = new Vector2 (rb.velocity.x, jumpNum); 
+	}
+		
 
 	void OnCollisionEnter2D (Collision2D coll)
 	{
 		//Reset Jumps upon touching ground
 		if (coll.gameObject.tag == "Floor") 
 		{
-			jumpsRemaining = maxJumps; 
+			touchingGround = true;
+			airActionsRemaining = maxAirActions;
+		}
+	}
+
+	void OnCollisionExit2D (Collision2D coll)
+	{
+		if (coll.gameObject.tag == "Floor") 
+		{
+			touchingGround = false;
 		}
 	}
 
 	//Adjusting Stats with State Change
-	void stateChange ()
+	void applyStats ()
 	{
 		moveSpeed = rps.moveSpeed;
+		airSpeedModifier = rps.airSpeedModifier;
 		jumpSpeed = rps.jumpSpeed;
 		normalGrav = rps.normalGrav;
 		fastFallGrav = rps.fastFallGrav;
-		maxJumps = rps.maxJumps;
+		maxAirActions = rps.maxAirActions;
 		sr.color = rps.color;
 	}
 }

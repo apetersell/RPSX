@@ -8,11 +8,15 @@ public abstract class RPSState : MonoBehaviour {
 	public float jumpSpeed;
 	public float normalGrav;
 	public float fastFallGrav;
-	public int maxJumps;
+	public float airSpeedModifier;
+	public int maxAirActions;
 	public Color color;
+	public Player p;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
+
+		p = GetComponent<Player> ();
 		
 	}
 	

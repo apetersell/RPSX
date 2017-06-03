@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class BasicState : RPSState {
 
-	// Use this for initialization
-	void Start () {
 
+	void Awake () {
+
+		p = GetComponent<Player> ();
 		moveSpeed = 5;
-		jumpSpeed = 30;
+		jumpSpeed = 20;
 		normalGrav = 6;
 		fastFallGrav = 12;
-		maxJumps = 1;
+		maxAirActions = 1;
+		airSpeedModifier = 1.5f;
 		color = Color.white;
 
 		
@@ -24,6 +26,8 @@ public class BasicState : RPSState {
 
 	public override void airAction ()
 	{
-		Debug.Log ("Basic State Air Action Does Nothing");
+		p.jump (jumpSpeed * .75f);
+		Debug.Log ("Basic State Air Action is a Weak Double Jump");
+
 	}
 }
