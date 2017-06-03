@@ -10,6 +10,8 @@ public class Player : MonoBehaviour {
 
 	public int playerNum;
 
+	public string selectedState;
+	public string currentState;
 	public float moveSpeed;
 	public float airSpeedModifier;
 	public float jumpSpeed;
@@ -22,6 +24,7 @@ public class Player : MonoBehaviour {
 	public bool actionable = true;
 	public bool affectedByGrav = true;
 
+	private int rpsNum = 1;
 
 
 	// Use this for initialization
@@ -30,7 +33,7 @@ public class Player : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D> ();
 		sr = GetComponent<SpriteRenderer> ();
 		rps = GetComponent<RPSState> ();
-		applyStats ();
+
 		
 	}
 	
@@ -41,6 +44,10 @@ public class Player : MonoBehaviour {
 		{
 			actions ();
 		}
+
+		chooseState ();
+		applyStats ();
+		rps = GetComponent<RPSState> ();
 
 	}
 		
@@ -72,7 +79,7 @@ public class Player : MonoBehaviour {
 			rb.velocity = new Vector2 (0, rb.velocity.y);
 		}
 
-//		Jumping
+		//Jumping
 		if (Input.GetButtonDown ("AButton_P" + playerNum)) 
 		{
 			if (touchingGround) 
@@ -94,10 +101,29 @@ public class Player : MonoBehaviour {
 		//AirAction
 		if (Input.GetButtonDown ("AButton_P" + playerNum) && touchingGround == false) 
 		{
-			if (airActionsRemaining >= maxAirActions) 
+			if (airActionsRemaining != 0) 
 			{
 				rps.airAction ();
 				airActionsRemaining--;
+			}
+		}
+
+		//Change RPS
+		if (Input.GetButtonDown ("YButton_P" + playerNum)) 
+		{
+			if (selectedState == "Rock" && currentState != "Rock") {
+				currentState = "Rock";
+				Destroy (gameObject.GetComponent<RPSState>()); 
+				gameObject.AddComponent<RockState>();
+			}
+			else if (selectedState == "Paper" && currentState != "Paper"){
+				currentState = "Paper";
+				Destroy (gameObject.GetComponent<RPSState> ());
+				gameObject.AddComponent<PaperState> ();
+			}
+			else {
+				Destroy (gameObject.GetComponent<RPSState>());
+				backToBasic ();
 			}
 		}
 	}
@@ -138,4 +164,42 @@ public class Player : MonoBehaviour {
 		maxAirActions = rps.maxAirActions;
 		sr.color = rps.color;
 	}
+
+	void chooseState ()
+	{
+		if (rpsNum > 3) {
+			rpsNum = 1;
+		}
+
+		if (rpsNum < 1) {
+			rpsNum = 3;
+		}
+
+		if (Input.GetButtonDown ("RBumper_P" + playerNum)) {
+			rpsNum++;
+		}
+
+		if (Input.GetButtonDown ("LBumper_P" + playerNum)) {
+			rpsNum--;
+		}
+			
+		if (rpsNum == 1) {
+			selectedState = "Rock";
+		}
+
+		if (rpsNum == 2) {
+			selectedState = "Paper";
+		}
+
+		if (rpsNum == 3) {
+			selectedState = "Scissors";
+		}
+	}
+
+	void backToBasic ()
+	{
+		currentState = "Basic";
+		gameObject.AddComponent<BasicState>();
+	}
+
 }

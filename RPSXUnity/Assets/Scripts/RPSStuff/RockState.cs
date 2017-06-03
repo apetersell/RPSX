@@ -5,7 +5,7 @@ using UnityEngine;
 public class RockState : RPSState {
 
 	Rigidbody2D rb;
-	public int maxHangTime = 120;
+	public int maxHangTime = 60;
 	public int hangTimeRemaining;
 	public bool isHanging;
 
