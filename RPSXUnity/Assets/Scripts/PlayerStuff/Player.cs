@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
 
 	Rigidbody2D rb;
 	SpriteRenderer sr;
+	StateCooldowns sc;
 	public RPSState rps; 
 
 	public int playerNum;
@@ -27,6 +28,9 @@ public class Player : MonoBehaviour {
 
 	private int rpsNum = 1;
 
+	public float maxTimeinState;
+	public float currentTimeinState;
+
 
 	// Use this for initialization
 	void Start () {
@@ -34,6 +38,7 @@ public class Player : MonoBehaviour {
 		rb = GetComponent<Rigidbody2D> ();
 		sr = GetComponent<SpriteRenderer> ();
 		rps = GetComponent<RPSState> ();
+		sc = GetComponent <StateCooldowns> ();
 		airActionsRemaining = maxAirActions;
 
 		
@@ -49,6 +54,7 @@ public class Player : MonoBehaviour {
 
 		chooseState ();
 		applyStats ();
+		stateTimer ();
 		rps = GetComponent<RPSState> ();
 
 	}
@@ -115,21 +121,24 @@ public class Player : MonoBehaviour {
 		//Change RPS
 		if (Input.GetButtonDown ("YButton_P" + playerNum)) 
 		{
-			if (selectedState == "Rock" && currentState != "Rock") {
-				currentState = "Rock";
-				Destroy (gameObject.GetComponent<RPSState>()); 
-				gameObject.AddComponent<RockState>();
-			}
-			else if (selectedState == "Paper" && currentState != "Paper"){
-				currentState = "Paper";
-				Destroy (gameObject.GetComponent<RPSState> ());
-				gameObject.AddComponent<PaperState> ();
-			}
-			else if (selectedState == "Scissors" && currentState != "Scissors")
+			if (selectedState != currentState) 
 			{
-				currentState = "Scissors";
-				Destroy (gameObject.GetComponent<RPSState>());
-				gameObject.AddComponent<ScissorsState> ();
+				sc.putStateOnCooldown (currentState);
+				if (selectedState == "Rock" && sc.rockOnCooldown == false) {
+					currentState = "Rock";
+					Destroy (gameObject.GetComponent<RPSState> ()); 
+					gameObject.AddComponent<RockState> ();
+
+				} else if (selectedState == "Paper" && sc.paperOnCooldown == false) {
+					currentState = "Paper";
+					Destroy (gameObject.GetComponent<RPSState> ());
+					gameObject.AddComponent<PaperState> ();
+				} else if (selectedState == "Scissors" && sc.scissorsOnCooldown == false) {
+					currentState = "Scissors";
+					Destroy (gameObject.GetComponent<RPSState> ());
+					gameObject.AddComponent<ScissorsState> ();
+				}
+				currentTimeinState = maxTimeinState;
 			}
 
 		}
@@ -207,8 +216,21 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	void backToBasic ()
+	void stateTimer()
 	{
+		currentTimeinState = currentTimeinState - Time.deltaTime;
+		if (currentTimeinState <= 0) 
+		{
+			sc.putStateOnCooldown (currentState);
+			currentTimeinState = 0;
+			backToBasic ();
+		}
+			
+	}
+
+	public void backToBasic ()
+	{
+		Destroy (gameObject.GetComponent<RPSState> ());
 		currentState = "Basic";
 		gameObject.AddComponent<BasicState>();
 	}

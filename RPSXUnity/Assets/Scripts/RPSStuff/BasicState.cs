@@ -27,7 +27,5 @@ public class BasicState : RPSState {
 	public override void airAction ()
 	{
 		p.jump (jumpSpeed * .75f);
-		Debug.Log ("Basic State Air Action is a Weak Double Jump");
-
 	}
 }
