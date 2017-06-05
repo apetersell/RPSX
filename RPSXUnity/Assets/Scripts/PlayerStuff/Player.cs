@@ -126,7 +126,7 @@ public class Player : MonoBehaviour {
 		//Change RPS
 		if (Input.GetButtonDown ("YButton_P" + playerNum)) 
 		{
-			if (selectedState != currentState) 
+			if (selectedState != currentState && !sc.statesOnCoolDown.Contains(selectedState)) 
 			{
 				sc.putStateOnCooldown (currentState);
 				if (selectedState == "Rock" && sc.rockOnCooldown == false) {
@@ -224,7 +224,7 @@ public class Player : MonoBehaviour {
 	void stateTimer()
 	{
 		currentTimeinState = currentTimeinState - Time.deltaTime;
-		if (currentTimeinState <= 0) 
+		if (currentTimeinState <= 0 && currentState != "Basic") 
 		{
 			sc.putStateOnCooldown (currentState);
 			currentTimeinState = 0;

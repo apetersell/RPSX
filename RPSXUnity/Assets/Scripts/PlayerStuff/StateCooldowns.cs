@@ -12,6 +12,7 @@ public class StateCooldowns : MonoBehaviour {
 	public bool rockOnCooldown;
 	public bool paperOnCooldown;
 	public bool scissorsOnCooldown;
+	public List <string> statesOnCoolDown;
 	GameObject rockSign;
 	GameObject paperSign;
 	GameObject scissorsSign;
@@ -44,6 +45,8 @@ public class StateCooldowns : MonoBehaviour {
 
 	public void putStateOnCooldown (string rps)
 	{
+
+		statesOnCoolDown.Add (rps);
 		if (rps == "Rock") 
 		{
 			rockOnCooldown = true;
@@ -73,6 +76,7 @@ public class StateCooldowns : MonoBehaviour {
 		if (currentRockCoolDown >= maxCoolDownTime) 
 		{
 			rockOnCooldown = false;
+			statesOnCoolDown.Remove ("Rock");
 		}
 			
 		if (paperOnCooldown) 
@@ -83,6 +87,7 @@ public class StateCooldowns : MonoBehaviour {
 		if (currentPaperCoolDown >= maxCoolDownTime) 
 		{
 			paperOnCooldown = false;
+			statesOnCoolDown.Remove ("Paper");
 		}	
 
 		if (scissorsOnCooldown) 
@@ -93,6 +98,7 @@ public class StateCooldowns : MonoBehaviour {
 		if (currentScissorsCoolDown >= maxCoolDownTime) 
 		{
 			scissorsOnCooldown = false;
+			statesOnCoolDown.Remove ("Scissors");
 		}
 	}
 
