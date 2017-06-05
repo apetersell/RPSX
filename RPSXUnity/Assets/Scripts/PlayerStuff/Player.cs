@@ -7,6 +7,7 @@ public class Player : MonoBehaviour {
 	Rigidbody2D rb;
 	SpriteRenderer sr;
 	StateCooldowns sc;
+	SignSelector ss;
 	public RPSState rps; 
 
 	public int playerNum;
@@ -44,6 +45,7 @@ public class Player : MonoBehaviour {
 		sr = GetComponent<SpriteRenderer> ();
 		rps = GetComponent<RPSState> ();
 		sc = GetComponent <StateCooldowns> ();
+		ss = GetComponentInChildren<SignSelector> ();
 		airActionsRemaining = maxAirActions;
 
 		
@@ -133,15 +135,18 @@ public class Player : MonoBehaviour {
 					currentState = "Rock";
 					Destroy (gameObject.GetComponent<RPSState> ()); 
 					gameObject.AddComponent<RockState> ();
+					ss.addToTimer (.5f);
 
 				} else if (selectedState == "Paper" && sc.paperOnCooldown == false) {
 					currentState = "Paper";
 					Destroy (gameObject.GetComponent<RPSState> ());
 					gameObject.AddComponent<PaperState> ();
+					ss.addToTimer (.5f);
 				} else if (selectedState == "Scissors" && sc.scissorsOnCooldown == false) {
 					currentState = "Scissors";
 					Destroy (gameObject.GetComponent<RPSState> ());
 					gameObject.AddComponent<ScissorsState> ();
+					ss.addToTimer (.5f);
 				}
 				currentTimeinState = maxTimeinState;
 			}
@@ -202,10 +207,12 @@ public class Player : MonoBehaviour {
 
 		if (Input.GetButtonDown ("RBumper_P" + playerNum)) {
 			rpsNum++;
+			ss.addToTimer (3f);
 		}
 
 		if (Input.GetButtonDown ("LBumper_P" + playerNum)) {
 			rpsNum--;
+			ss.addToTimer (3f);
 		}
 			
 		if (rpsNum == 1) {
