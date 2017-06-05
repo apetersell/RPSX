@@ -28,7 +28,18 @@ public class StateCooldowns : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		handleCooldowns ();
-		
+		if (currentRockCoolDown > maxCoolDownTime) 
+		{
+			currentRockCoolDown = maxCoolDownTime;
+		}
+		if (currentPaperCoolDown > maxCoolDownTime) 
+		{
+			currentPaperCoolDown = maxCoolDownTime;
+		}
+		if (currentScissorsCoolDown > maxCoolDownTime) 
+		{
+			currentRockCoolDown = maxCoolDownTime;
+		}
 	}
 
 	public void putStateOnCooldown (string rps)
@@ -36,16 +47,19 @@ public class StateCooldowns : MonoBehaviour {
 		if (rps == "Rock") 
 		{
 			rockOnCooldown = true;
+			currentRockCoolDown = 0;
 		}
 
 		if (rps == "Paper") 
 		{
 			paperOnCooldown = true;
+			currentPaperCoolDown = 0;
 		}
 
 		if (rps == "Scissors") 
 		{
 			scissorsOnCooldown = true;
+			currentScissorsCoolDown = 0;
 		}
 	}
 
@@ -59,7 +73,6 @@ public class StateCooldowns : MonoBehaviour {
 		if (currentRockCoolDown >= maxCoolDownTime) 
 		{
 			rockOnCooldown = false;
-			currentRockCoolDown = 0;
 		}
 			
 		if (paperOnCooldown) 
@@ -70,7 +83,6 @@ public class StateCooldowns : MonoBehaviour {
 		if (currentPaperCoolDown >= maxCoolDownTime) 
 		{
 			paperOnCooldown = false;
-			currentPaperCoolDown = 0;
 		}	
 
 		if (scissorsOnCooldown) 
@@ -81,7 +93,6 @@ public class StateCooldowns : MonoBehaviour {
 		if (currentScissorsCoolDown >= maxCoolDownTime) 
 		{
 			scissorsOnCooldown = false;
-			currentScissorsCoolDown = 0;
 		}
 	}
 

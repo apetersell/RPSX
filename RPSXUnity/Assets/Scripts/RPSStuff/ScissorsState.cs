@@ -5,8 +5,8 @@ using UnityEngine;
 public class ScissorsState : RPSState {
 
 	Rigidbody2D rb;
-	float airDashSpeed = 60;
-	public float maxDashTime = 2;
+	float airDashSpeed = 45;
+	public float maxDashTime = 5;
 	public float remainingDashTime;
 	public bool airDashing = false;
 

@@ -33,6 +33,11 @@ public class Player : MonoBehaviour {
 
 
 	// Use this for initialization
+	void Awake ()
+	{
+		airActionsRemaining = maxAirActions;
+	}
+
 	void Start () {
 
 		rb = GetComponent<Rigidbody2D> ();
