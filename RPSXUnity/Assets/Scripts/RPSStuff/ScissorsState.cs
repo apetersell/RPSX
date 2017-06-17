@@ -20,7 +20,7 @@ public class ScissorsState : RPSState {
 		fastFallGrav = 16;
 		maxAirActions = 2;
 		airSpeedModifier = .75f;
-		color = Color.red;
+		color = RPSX.scissorsColor;
 
 		remainingDashTime = maxDashTime;
 

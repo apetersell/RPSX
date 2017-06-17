@@ -8,18 +8,9 @@ public class SignSelector : MonoBehaviour {
 	public Sprite rock;
 	public Sprite paper;
 	public Sprite scissors;
-	public Color rockColor;
-	public Color rockColorDark; 
-	public Color paperColor;
-	public Color paperColorDark;
-	public Color scissorsColor;
-	public Color scissorsColorDark;
 	public Color lerpingRock;
 	public Color lerpingPaper;
 	public Color lerpingScissors;
-	public Color rockCD;
-	public Color paperCD;
-	public Color scissorsCD;
 	public float lerpSpeed;
 	public float timer;
 	public float timerMax; 
@@ -43,9 +34,9 @@ public class SignSelector : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		lerpingRock = Color.Lerp(rockColor, rockColorDark, Mathf.PingPong(Time.time*lerpSpeed, 1));
-		lerpingPaper = Color.Lerp(paperColor, paperColorDark, Mathf.PingPong(Time.time*lerpSpeed, 1));
-		lerpingScissors = Color.Lerp(scissorsColor, scissorsColorDark, Mathf.PingPong(Time.time*lerpSpeed, 1));
+		lerpingRock = Color.Lerp(RPSX.rockColor, RPSX.rockColorDark, Mathf.PingPong(Time.time*lerpSpeed, 1));
+		lerpingPaper = Color.Lerp(RPSX.paperColor, RPSX.paperColorDark, Mathf.PingPong(Time.time*lerpSpeed, 1));
+		lerpingScissors = Color.Lerp(RPSX.scissorsColor, RPSX.scissorsColorDark, Mathf.PingPong(Time.time*lerpSpeed, 1));
 
 		if (timer > 0) {
 			visible = true;
@@ -75,9 +66,9 @@ public class SignSelector : MonoBehaviour {
 					sr.color = lerpingRock;
 				}
 				else if (sc.rockOnCooldown) {
-					sr.color = rockCD;
+					sr.color = RPSX.rockColorFaded;
 				} else {
-					sr.color = rockColor;
+					sr.color = RPSX.rockColor;
 				}
 
 			}
@@ -89,9 +80,9 @@ public class SignSelector : MonoBehaviour {
 					sr.color = lerpingPaper;
 				}
 				else if (sc.paperOnCooldown) {
-					sr.color = paperCD;
+					sr.color = RPSX.paperColorFaded;
 				} else {
-					sr.color = paperColor;
+					sr.color = RPSX.paperColor;
 				}
 			}
 
@@ -102,9 +93,9 @@ public class SignSelector : MonoBehaviour {
 					sr.color = lerpingScissors;
 				}
 				else if (sc.scissorsOnCooldown) {
-					sr.color = scissorsCD;
+					sr.color = RPSX.scissorsColorFaded;
 				} else {
-					sr.color = scissorsColor;
+					sr.color = RPSX.scissorsColor;
 				}
 			}
 		} else 

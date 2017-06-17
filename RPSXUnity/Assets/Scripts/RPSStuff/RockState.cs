@@ -21,7 +21,7 @@ public class RockState : RPSState {
 		fastFallGrav = 20;
 		maxAirActions = 1;
 		airSpeedModifier = 1.75f;
-		color = Color.green;
+		color = RPSX.rockColor;
 
 
 	}

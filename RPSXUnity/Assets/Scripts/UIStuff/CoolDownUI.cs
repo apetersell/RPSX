@@ -13,10 +13,9 @@ public class CoolDownUI : MonoBehaviour {
 	GameObject player;
 	StateCooldowns sc;
 	Player p;
-	public Color ready;
-	public Color fillOnCoolDown;
+	public Color color;
+	public Color faded;
 	public Color inUse;
-	public Color bright;
 	public Color dark;
 	public float lerpSpeed;
 
@@ -27,14 +26,31 @@ public class CoolDownUI : MonoBehaviour {
 		sc = player.GetComponent<StateCooldowns> ();
 		p = player.GetComponent<Player> ();
 
-
+		if (signType == "Rock") 
+		{
+			color = RPSX.rockColor;
+			dark = RPSX.rockColorDark;
+			faded = RPSX.rockColorFaded;
+		}
+		if (signType == "Paper") 
+		{
+			color = RPSX.paperColor;
+			dark = RPSX.paperColorDark;
+			faded = RPSX.paperColorFaded;
+		}
+		if (signType == "Scissors") 
+		{
+			color = RPSX.scissorsColor;
+			dark = RPSX.scissorsColorDark;
+			faded = RPSX.scissorsColorFaded;
+		}
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		inUse = Color.Lerp(bright, dark, Mathf.PingPong(Time.time*lerpSpeed, 1));
+		inUse = Color.Lerp(color, dark, Mathf.PingPong(Time.time*lerpSpeed, 1));
 
 		maxTime = sc.maxCoolDownTime; 
 		if (signType == "Rock") 
@@ -57,12 +73,12 @@ public class CoolDownUI : MonoBehaviour {
 
 		if (currentTime < maxTime) 
 		{
-			content.color = fillOnCoolDown;
+			content.color = faded;
 		}
 
 		if (currentTime >= maxTime && signType != p.currentState) 
 		{
-			content.color = ready;
+			content.color = color;
 		}
 
 		handleFill ();

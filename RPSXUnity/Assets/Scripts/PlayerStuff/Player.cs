@@ -149,6 +149,9 @@ public class Player : MonoBehaviour {
 					ss.addToTimer (.5f);
 				}
 				currentTimeinState = maxTimeinState;
+				rb.gravityScale = rps.normalGrav;
+				rb.mass = 1;
+				affectedByGrav = true;
 			}
 
 		}
@@ -245,6 +248,9 @@ public class Player : MonoBehaviour {
 		Destroy (gameObject.GetComponent<RPSState> ());
 		currentState = "Basic";
 		gameObject.AddComponent<BasicState>();
+		rb.gravityScale = rps.normalGrav;
+		rb.mass = 1;
+		affectedByGrav = true;
 	}
 
 }

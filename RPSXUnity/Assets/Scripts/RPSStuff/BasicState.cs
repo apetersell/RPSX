@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class BasicState : RPSState {
 
+	private Color lightGreen;
+	private Color lightBlue;
+	private Color lightRed;
+
+
+
 
 	void Awake () {
 
@@ -14,7 +20,8 @@ public class BasicState : RPSState {
 		fastFallGrav = 12;
 		maxAirActions = 1;
 		airSpeedModifier = 1.5f;
-		color = Color.white;
+		color = RPSX.basicColor;
+
 
 		
 	}

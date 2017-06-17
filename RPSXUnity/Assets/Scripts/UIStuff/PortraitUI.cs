@@ -6,10 +6,6 @@ using UnityEngine.UI;
 public class PortraitUI : MonoBehaviour {
 
 	public int playerNum;
-	public Color basic;
-	public Color rock;
-	public Color paper;
-	public Color scissors; 
 	public Sprite basicSign;
 	public Sprite rockSign;
 	public Sprite paperSign;
@@ -35,42 +31,43 @@ public class PortraitUI : MonoBehaviour {
 
 		if (p.currentState == "Rock") 
 		{
-			GetComponent<Image> ().color = rock;
+			GetComponent<Image> ().color = RPSX.rockColor;
+			currentSign.color = RPSX.rockColor;
 			currentSign.sprite = rockSign;
 			mask.sprite = rockSign;
 			fill.sprite = rockSign;
-			fill.color = rock;
+			fill.color = RPSX.rockColor;
 		}
 			
 
 		if (p.currentState == "Paper") 
 		{
-			GetComponent<Image> ().color = paper;
-			currentSign.color = paper;
+			GetComponent<Image> ().color = RPSX.paperColor;
+			currentSign.color =RPSX.paperColor;
 			currentSign.sprite = paperSign;
 			mask.sprite = paperSign;
 			fill.sprite = paperSign;
-			fill.color = paper;
+			fill.color = RPSX.paperColor;
 		}
 			
 		if (p.currentState == "Scissors") 
 		{
-			GetComponent<Image> ().color = scissors;
-			currentSign.color = scissors;
+			GetComponent<Image> ().color = RPSX.scissorsColor;
+			currentSign.color = RPSX.scissorsColor;
 			currentSign.sprite = scissorsSign;
 			mask.sprite = scissorsSign;
 			fill.sprite = scissorsSign;
-			fill.color = scissors;
+			fill.color = RPSX.scissorsColor;
 		}
 
 		if (p.currentState == "Basic") 
 		{
-			GetComponent<Image> ().color = basic; 
-			currentSign.color = basic;
+			GetComponent<Image> ().color = RPSX.basicColor; 
+			currentSign.color = RPSX.basicColor;
 			currentSign.sprite = basicSign; 
 			mask.sprite = basicSign; 
 			fill.sprite = basicSign; 
-			fill.color = basic;
+			fill.color = RPSX.basicColor;
 		}
 		
 	}
