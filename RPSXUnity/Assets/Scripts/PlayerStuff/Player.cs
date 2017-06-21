@@ -8,7 +8,7 @@ public class Player : MonoBehaviour {
 	SpriteRenderer sr;
 	StateCooldowns sc;
 	SignSelector ss;
-	public RPSState rps; 
+	public RPSState rps;
 
 	public int playerNum;
 
@@ -27,8 +27,16 @@ public class Player : MonoBehaviour {
 	public bool actionable = true;
 	public bool affectedByGrav = true;
 
-	private int rpsNum = 1;
+	GameObject shield;
+	Shield s;
+	public float maxShieldDuration;
+	public float currentShieldDuration;
+	public bool shieldUp;
+	public bool shieldBroken = false;
+	public float shieldDiminishRate;
+	public float shieldRefreshRate;
 
+	private int rpsNum = 1;
 	public float maxTimeinState;
 	public float currentTimeinState;
 
@@ -36,7 +44,7 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Awake ()
 	{
-		airActionsRemaining = maxAirActions;
+		shield = GameObject.Find ("Shield_P" + playerNum);
 	}
 
 	void Start () {
@@ -46,8 +54,7 @@ public class Player : MonoBehaviour {
 		rps = GetComponent<RPSState> ();
 		sc = GetComponent <StateCooldowns> ();
 		ss = GetComponentInChildren<SignSelector> ();
-		airActionsRemaining = maxAirActions;
-
+		s = shield.GetComponent<Shield> ();
 		
 	}
 	
@@ -62,6 +69,7 @@ public class Player : MonoBehaviour {
 		chooseState ();
 		applyStats ();
 		stateTimer ();
+		handleShield ();
 		rps = GetComponent<RPSState> ();
 
 	}
@@ -87,7 +95,7 @@ public class Player : MonoBehaviour {
 			if (touchingGround) {
 				rb.velocity = new Vector2 (moveSpeed * -1, rb.velocity.y);
 			} else {
-				rb.velocity = new Vector2 (moveSpeed * -1 * airSpeedModifier, rb.velocity.y);
+				rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier), rb.velocity.y);
 			}
 		}
 
@@ -124,6 +132,21 @@ public class Player : MonoBehaviour {
 				airActionsRemaining--;
 			}
 		}
+
+		//Putting up Shield
+		if (shieldBroken == false) 
+		{
+			if (Input.GetAxis ("RTrigger_P" + playerNum) == 1) 
+			{
+				shield.SetActive (true);
+				shieldUp = true;
+			} else 
+			{
+				shield.SetActive (false);
+				shieldUp = false;
+			}
+		}
+				
 
 		//Change RPS
 		if (Input.GetButtonDown ("YButton_P" + playerNum)) 
@@ -191,6 +214,7 @@ public class Player : MonoBehaviour {
 		normalGrav = rps.normalGrav;
 		fastFallGrav = rps.fastFallGrav;
 		maxAirActions = rps.maxAirActions;
+		shieldDiminishRate = rps.shieldDiminishRate;
 		sr.color = rps.color;
 		if (airActionsRemaining > maxAirActions) 
 		{
@@ -241,6 +265,49 @@ public class Player : MonoBehaviour {
 			backToBasic ();
 		}
 			
+	}
+
+	//Shield Stuff
+	void handleShield ()
+	{
+		//Shield duration goes down when shield is up.  Shield regenarates when not in use.
+		if (shieldUp) {
+			currentShieldDuration = currentShieldDuration - shieldDiminishRate * Time.deltaTime;
+		} 
+		else 
+		{
+			currentShieldDuration = currentShieldDuration + shieldRefreshRate * Time.deltaTime;
+		}
+
+		//Makes sure the shield's duration can never be higher than it's max and cant go lower than 0.
+		if (currentShieldDuration > maxShieldDuration) 
+		{
+			currentShieldDuration = maxShieldDuration;
+		}
+		if (currentShieldDuration < 0) 
+		{
+			currentShieldDuration = 0;
+		}
+
+		//Shield "breaks" if it's duration goes down to zero.
+		if (currentShieldDuration <= 0) 
+		{
+			shield.SetActive(false);
+			shieldBroken = true;
+		}
+
+		//Shield can't be up if it's broken.
+		if (shieldBroken) 
+		{
+			shieldUp = false;
+		}
+
+		//Shield is no longer broken when it gets back up to full duration
+		if (currentShieldDuration >= maxShieldDuration) 
+		{
+			shieldBroken = false;
+		}
+	
 	}
 
 	public void backToBasic ()

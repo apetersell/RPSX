@@ -14,11 +14,13 @@ public class ScissorsState : RPSState {
 
 		rb = GetComponent<Rigidbody2D> ();
 		p = GetComponent<Player> ();
-		moveSpeed = 10; 
+		moveSpeed = 7; 
 		jumpSpeed = 25;
 		normalGrav = 8;
 		fastFallGrav = 16;
 		maxAirActions = 2;
+		shieldSize = 1;
+		shieldDiminishRate = 11; 
 		airSpeedModifier = .75f;
 		color = RPSX.scissorsColor;
 
