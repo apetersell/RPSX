@@ -17,4 +17,9 @@ public abstract class Attack : MonoBehaviour {
 		p = GetComponent<Player> ();
 
 	}
+		
+
+
+
+
 }

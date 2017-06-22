@@ -31,10 +31,16 @@ public class Shield : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-
 		currentState = p.currentState;
 		placement = new Vector2 (Input.GetAxis ("LeftStickX_P" + p.playerNum), Input.GetAxis ("LeftStickY_P" + p.playerNum) * -1); 
 		transform.localPosition = placement; 
+		if (p.touchingGround == true) 
+		{
+			if (placement.y <= 0) 
+			{
+				transform.localPosition = new Vector2 (placement.x, 0);
+			}
+		}
 		rps = GetComponentInParent<RPSState> (); 
 		transform.localScale = new Vector2 (rps.shieldSize, rps.shieldSize);
 

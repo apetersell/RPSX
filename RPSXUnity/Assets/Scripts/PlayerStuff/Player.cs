@@ -11,6 +11,7 @@ public class Player : MonoBehaviour {
 	public RPSState rps;
 
 	public int playerNum;
+	public float HP;
 
 	public string selectedState;
 	public string currentState;
@@ -55,6 +56,7 @@ public class Player : MonoBehaviour {
 		sc = GetComponent <StateCooldowns> ();
 		ss = GetComponentInChildren<SignSelector> ();
 		s = shield.GetComponent<Shield> ();
+		HP = RPSX.playerMaxHP;
 		
 	}
 	
@@ -131,6 +133,20 @@ public class Player : MonoBehaviour {
 				rps.airAction ();
 				airActionsRemaining--;
 			}
+		}
+
+		//Projectile Attack
+		if (Input.GetButtonDown ("BButton_P" + playerNum))
+		{
+			if (touchingGround) 
+			{
+				GetComponent<Projectile> ().fireProjectile ();
+			} 
+			else 
+			{
+				GetComponent<Projectile> ().fireAirProjectile ();
+			}
+			
 		}
 
 		//Putting up Shield
@@ -318,6 +334,11 @@ public class Player : MonoBehaviour {
 		rb.gravityScale = rps.normalGrav;
 		rb.mass = 1;
 		affectedByGrav = true;
+	}
+
+	public void takeDamage (float damage)
+	{
+		HP = HP - damage;
 	}
 
 }

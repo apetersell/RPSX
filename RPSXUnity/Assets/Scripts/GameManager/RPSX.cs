@@ -16,4 +16,70 @@ public class RPSX : MonoBehaviour {
 	public static Color basicColor = new Color (1f,1f,1f);
 	public static Color basicColorFaded = new Color (1f,1f,1f,0.5f);
 
+	public static float UIFlashSpeed = 3f;
+	public static float playerMaxHP = 100f;
+
+	public static string determineWinner (string hero, string villian)
+	{
+		string result = null;
+		if (hero == "Basic" && villian != "Basic") 
+		{
+			result = "Loss";
+		}
+		if (hero != "Basic" && villian == "Basic") 
+		{
+			result = "Win";
+		}
+		if (hero == villian) 
+		{
+			result = "Tie";
+		}
+		if (hero == "Rock") 
+		{
+			if (villian == "Paper") 
+			{
+				result = "Loss";
+			}
+
+			if (villian == "Scissors")
+			{
+				result = "Win";
+			}
+		}
+
+		if (hero == "Paper") 
+		{
+			if (villian == "Rock") 
+			{
+				result = "Win";
+			}
+			if (villian == "Scissors") 
+			{
+				result = "Loss";
+			}
+		}
+		if (hero == "Scissors") 
+		{
+			if (villian == "Rock") 
+			{
+				result = "Loss";
+			}
+
+			if (villian == "Paper") 
+			{
+				result = "Win";
+			}
+
+		}
+
+		return result;
+
+	}
+
+	public static float fillAmount (float current, float max)
+	{
+		float result = current / max;
+		return result;
+	}
+
 }

@@ -6,21 +6,27 @@ using UnityEngine.UI;
 public class PortraitUI : MonoBehaviour {
 
 	public int playerNum;
+	public Color color;
+	public Color dark;
+	public Color lerpingColor;
 	public Sprite basicSign;
 	public Sprite rockSign;
 	public Sprite paperSign;
 	public Sprite scissorsSign;
 	Player p;
+	HealthBarUI hb;
 
 	public Image currentSign;
 	public Image mask;
 	public Image fill;
+	public Image healthBar;
 
 
 	// Use this for initialization
 	void Start () {
 
 		p = GameObject.Find ("Player_" + playerNum).GetComponent<Player> ();
+		hb = healthBar.GetComponent<HealthBarUI> ();
 		
 	}
 	
@@ -28,57 +34,62 @@ public class PortraitUI : MonoBehaviour {
 	void Update () {
 
 		handleFill ();
+		lerpingColor = Color.Lerp(color, dark, Mathf.PingPong(Time.time*RPSX.UIFlashSpeed, 1));
+
+
+		GetComponent<Image>().color = color;
+		if (hb.result == "Win") 
+		{
+			currentSign.color = lerpingColor;
+			fill.color = lerpingColor;
+		} 
+		else 
+		{
+			currentSign.color = color;
+			fill.color = color;
+		}
 
 		if (p.currentState == "Rock") 
 		{
-			GetComponent<Image> ().color = RPSX.rockColor;
-			currentSign.color = RPSX.rockColor;
+			color = RPSX.rockColor;
+			dark = RPSX.rockColorDark;
 			currentSign.sprite = rockSign;
 			mask.sprite = rockSign;
 			fill.sprite = rockSign;
-			fill.color = RPSX.rockColor;
 		}
 			
 
 		if (p.currentState == "Paper") 
 		{
-			GetComponent<Image> ().color = RPSX.paperColor;
-			currentSign.color =RPSX.paperColor;
+			color = RPSX.paperColor;
+			dark = RPSX.paperColorDark;
 			currentSign.sprite = paperSign;
 			mask.sprite = paperSign;
 			fill.sprite = paperSign;
-			fill.color = RPSX.paperColor;
 		}
 			
 		if (p.currentState == "Scissors") 
 		{
-			GetComponent<Image> ().color = RPSX.scissorsColor;
-			currentSign.color = RPSX.scissorsColor;
+			color = RPSX.scissorsColor;
+			dark = RPSX.scissorsColorDark;
 			currentSign.sprite = scissorsSign;
 			mask.sprite = scissorsSign;
 			fill.sprite = scissorsSign;
-			fill.color = RPSX.scissorsColor;
 		}
 
 		if (p.currentState == "Basic") 
 		{
-			GetComponent<Image> ().color = RPSX.basicColor; 
-			currentSign.color = RPSX.basicColor;
+			color = RPSX.basicColor;
+			dark = RPSX.basicColor;
 			currentSign.sprite = basicSign; 
 			mask.sprite = basicSign; 
 			fill.sprite = basicSign; 
-			fill.color = RPSX.basicColor;
 		}
 		
 	}
 
-	private float map (float current, float max)
-	{
-		return current / max;
-	}
-
 	void handleFill()
 	{
-		fill.fillAmount = map (p.currentTimeinState, p.maxTimeinState);
+		fill.fillAmount = RPSX.fillAmount (p.currentTimeinState, p.maxTimeinState);
 	}
 }

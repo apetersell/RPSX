@@ -17,7 +17,6 @@ public class CoolDownUI : MonoBehaviour {
 	public Color faded;
 	public Color inUse;
 	public Color dark;
-	public float lerpSpeed;
 
 	// Use this for initialization
 	void Start () {
@@ -50,7 +49,7 @@ public class CoolDownUI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		inUse = Color.Lerp(color, dark, Mathf.PingPong(Time.time*lerpSpeed, 1));
+		inUse = Color.Lerp(color, dark, Mathf.PingPong(Time.time*RPSX.UIFlashSpeed, 1));
 
 		maxTime = sc.maxCoolDownTime; 
 		if (signType == "Rock") 
@@ -85,13 +84,9 @@ public class CoolDownUI : MonoBehaviour {
 		
 	}
 
-	private float map (float current, float max)
-	{
-		return current / max;
-	}
 
 	void handleFill ()
 	{
-		content.fillAmount = map (currentTime, maxTime);
+		content.fillAmount = RPSX.fillAmount (currentTime, maxTime);
 	}
 }
