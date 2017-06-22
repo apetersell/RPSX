@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Shield : MonoBehaviour {
 
-	RPSState rps;
+	public RPSState rps;
+	public int owner;
 	public string currentState;
 	public Sprite basic;
 	public Sprite rock;

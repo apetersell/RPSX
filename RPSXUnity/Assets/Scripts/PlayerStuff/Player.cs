@@ -8,6 +8,8 @@ public class Player : MonoBehaviour {
 	SpriteRenderer sr;
 	StateCooldowns sc;
 	SignSelector ss;
+	Color color;
+	Color flashing;
 	public RPSState rps;
 
 	public int playerNum;
@@ -72,6 +74,7 @@ public class Player : MonoBehaviour {
 		applyStats ();
 		stateTimer ();
 		handleShield ();
+		handleColor ();
 		rps = GetComponent<RPSState> ();
 
 	}
@@ -138,14 +141,8 @@ public class Player : MonoBehaviour {
 		//Projectile Attack
 		if (Input.GetButtonDown ("BButton_P" + playerNum))
 		{
-			if (touchingGround) 
-			{
-				GetComponent<Projectile> ().fireProjectile ();
-			} 
-			else 
-			{
-				GetComponent<Projectile> ().fireAirProjectile ();
-			}
+
+			GetComponent<ProjectileLauncher> ().fireProjectile (playerNum, directionModifier, currentState, touchingGround);
 			
 		}
 
@@ -231,7 +228,7 @@ public class Player : MonoBehaviour {
 		fastFallGrav = rps.fastFallGrav;
 		maxAirActions = rps.maxAirActions;
 		shieldDiminishRate = rps.shieldDiminishRate;
-		sr.color = rps.color;
+		color = rps.color;
 		if (airActionsRemaining > maxAirActions) 
 		{
 			airActionsRemaining = maxAirActions;
@@ -326,6 +323,7 @@ public class Player : MonoBehaviour {
 	
 	}
 
+	// Reset back to Basic State
 	public void backToBasic ()
 	{
 		Destroy (gameObject.GetComponent<RPSState> ());
@@ -336,9 +334,48 @@ public class Player : MonoBehaviour {
 		affectedByGrav = true;
 	}
 
-	public void takeDamage (float damage)
+	//Makes sure player is appropriate state color.  Flashes when state is close to over.
+	void handleColor ()
 	{
-		HP = HP - damage;
+		flashing = Color.Lerp(color, RPSX.basicColor, Mathf.PingPong(Time.time*10, 1));
+		if (currentTimeinState <= 3 && currentState != "Basic") {
+			sr.color = flashing;
+		} 
+		else 
+		{
+			sr.color = color;
+		}
+	}
+
+	//Function used for taking damage.
+	public void takeDamage (float damage, string sentState)
+	{
+		string result = RPSX.determineWinner (currentState, sentState);
+		if (result == "Win") 
+		{
+			HP = HP - (damage / 2);
+		}
+		if (result == "Loss") 
+		{
+			HP = HP - (damage * 2);
+		}
+		if (result == "Tie") 
+		{
+			HP = HP - damage;
+		}
+	}
+
+	public void takeShieldDamage (float damage, string sentState)
+	{
+		string result = RPSX.determineWinner (currentState, sentState);
+		if (result == "Loss") 
+		{
+			currentShieldDuration = currentShieldDuration - (damage * 2);
+		}
+		if (result == "Tie") 
+		{
+			currentShieldDuration = currentShieldDuration - damage;
+		}
 	}
 
 }

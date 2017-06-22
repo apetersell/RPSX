@@ -4,18 +4,66 @@ using UnityEngine;
 
 public abstract class Attack : MonoBehaviour {
 
-	public Player p;
 	public string state;
 	public int owner;
 	public float damage;
-	public float lifeSpan;
-	public bool projectile;
+	public float shieldDamage;
+	public Color stateColor; 
+	public SpriteRenderer sr;
 
-	// Use this for initialization
-	void Awake () {
+	public void handleColor ()
+	{
+		if (state == "Basic") 
+		{
+			stateColor = RPSX.basicColor;
+		}
 
-		p = GetComponent<Player> ();
+		if (state == "Rock") 
+		{
+			stateColor = RPSX.rockColor;
+		}
 
+		if (state == "Paper") 
+		{
+			stateColor = RPSX.paperColor;
+		}
+
+		if (state == "Scissors") 
+		{
+			stateColor = RPSX.scissorsColor;
+		}
+		sr.color = stateColor;
+	}
+
+	public virtual void OnCollisionEnter2D (Collision2D coll)
+	{
+		if (coll.gameObject.tag == "Player") 
+		{
+			Player p = coll.gameObject.GetComponent<Player> ();
+			if (p.playerNum != owner) 
+			{
+				hitPlayer (p);
+			}
+		}
+		if (coll.gameObject.tag == "Shield")
+		{
+			Shield s = coll.gameObject.GetComponent<Shield>();
+			Player p = GameObject.Find ("Player_" + s.owner).GetComponent<Player>(); 
+			if (p.playerNum != owner)
+			{
+				hitShield (p);
+			}
+		}
+	}
+
+	public virtual void hitPlayer (Player p)
+	{
+		p.takeDamage (damage, state);
+	}
+
+	public virtual void hitShield (Player p)
+	{
+		p.takeShieldDamage (damage, state);
 	}
 		
 
