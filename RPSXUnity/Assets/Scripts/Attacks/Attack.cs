@@ -40,9 +40,12 @@ public abstract class Attack : MonoBehaviour {
 		if (coll.gameObject.tag == "Player") 
 		{
 			Player p = coll.gameObject.GetComponent<Player> ();
-			if (p.playerNum != owner) 
-			{
+			if (p.playerNum != owner) {
 				hitPlayer (p);
+			} 
+			else 
+			{
+				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<BoxCollider2D> (), GetComponent<BoxCollider2D> ());
 			}
 		}
 		if (coll.gameObject.tag == "Shield")

@@ -285,7 +285,7 @@ public class Player : MonoBehaviour {
 	{
 		//Shield duration goes down when shield is up.  Shield regenarates when not in use.
 		if (shieldUp) {
-			currentShieldDuration = currentShieldDuration - shieldDiminishRate * Time.deltaTime;
+//			currentShieldDuration = currentShieldDuration - shieldDiminishRate * Time.deltaTime;
 		} 
 		else 
 		{

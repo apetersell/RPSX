@@ -19,7 +19,7 @@ public class ScissorsState : RPSState {
 		normalGrav = 8;
 		fastFallGrav = 16;
 		maxAirActions = 2;
-		shieldSize = 1;
+		shieldSize = 1.2f;
 		shieldDiminishRate = 11; 
 		airSpeedModifier = .75f;
 		color = RPSX.scissorsColor;
