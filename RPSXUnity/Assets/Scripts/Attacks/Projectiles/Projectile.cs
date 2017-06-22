@@ -34,21 +34,6 @@ public abstract class Projectile : Attack
 
 	public override void OnCollisionEnter2D (Collision2D coll)
 	{
-		if (coll.gameObject.tag == "Projectile") 
-		{
-			Projectile enemeyProj = coll.gameObject.GetComponent<Projectile> ();
-			string result = RPSX.determineWinner (state, enemeyProj.state);
-			{
-				if (result == "Win") {
-					Destroy (coll.gameObject);
-				} else if (result == "Loss") {
-					Destroy (this.gameObject);
-				} else {
-					Destroy (this.gameObject);
-					Destroy (coll.gameObject);
-				}
-			}
-		}
 		base.OnCollisionEnter2D (coll);
 	}
 

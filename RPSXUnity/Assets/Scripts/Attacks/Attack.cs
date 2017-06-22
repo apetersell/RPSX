@@ -43,7 +43,7 @@ public abstract class Attack : MonoBehaviour {
 			if (p.playerNum != owner) {
 				hitPlayer (p);
 			} 
-			else 
+			if (p.playerNum == owner) 
 			{
 				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<BoxCollider2D> (), GetComponent<BoxCollider2D> ());
 			}
@@ -57,6 +57,17 @@ public abstract class Attack : MonoBehaviour {
 				hitShield (p);
 			}
 		}
+
+		if (coll.gameObject.tag == "Projectile") 
+		{
+			GameObject enemyProj = coll.gameObject;
+			Projectile proj = coll.gameObject.GetComponent<Projectile> ();
+			if (proj.owner != owner) 
+			{
+				hitProjectile (enemyProj);
+			}
+
+		}
 	}
 
 	public virtual void hitPlayer (Player p)
@@ -67,6 +78,15 @@ public abstract class Attack : MonoBehaviour {
 	public virtual void hitShield (Player p)
 	{
 		p.takeShieldDamage (damage, state);
+	}
+
+	public virtual void hitProjectile (GameObject enemyProj)
+	{
+		string result = RPSX.determineWinner (state, enemyProj.GetComponent<Projectile> ().state);
+		if (result == "Win") 
+		{
+			Destroy (enemyProj.gameObject);
+		}
 	}
 		
 
