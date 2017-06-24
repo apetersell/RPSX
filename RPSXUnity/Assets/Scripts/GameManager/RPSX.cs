@@ -19,6 +19,12 @@ public class RPSX : MonoBehaviour {
 	public static float UIFlashSpeed = 3f;
 	public static float playerMaxHP = 100f;
 
+	public static int basicProjectileLimit = 1;
+	public static int rockProjectileLimit = 1;
+	public static int paperProjectileLimit = 3;
+	public static int scissorsProjectileLimit = 5;
+
+
 	public static string determineWinner (string hero, string villian)
 	{
 		string result = null;

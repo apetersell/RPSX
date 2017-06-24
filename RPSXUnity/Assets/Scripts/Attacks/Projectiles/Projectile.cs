@@ -19,6 +19,9 @@ public abstract class Projectile : Attack
 		if (currentLifeSpan <= 0) 
 		{
 			ProjectilePool.addToPool (this.gameObject, state);
+			GameObject player = GameObject.Find ("Player_" + owner); 
+			ProjectileLimit pl = player.GetComponent<ProjectileLimit> ();
+			pl.removeFromList (this.gameObject, state);
 		}
 	}
 
@@ -48,6 +51,9 @@ public abstract class Projectile : Attack
 		{
 			base.hitShield (p);
 			ProjectilePool.addToPool (this.gameObject, state);
+			GameObject player = GameObject.Find ("Player_" + owner); 
+			ProjectileLimit pl = player.GetComponent<ProjectileLimit> ();
+			pl.removeFromList (this.gameObject, state);
 		}
 	}
 
@@ -79,5 +85,8 @@ public abstract class Projectile : Attack
 	{
 		base.hitPlayer (p);
 		ProjectilePool.addToPool (this.gameObject, state);
+		GameObject player = GameObject.Find ("Player_" + owner); 
+		ProjectileLimit pl = player.GetComponent<ProjectileLimit> ();
+		pl.removeFromList (this.gameObject, state);
 	}
 }
