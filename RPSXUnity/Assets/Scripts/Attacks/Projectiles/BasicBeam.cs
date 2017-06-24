@@ -7,7 +7,6 @@ public class BasicBeam : Projectile {
 
 	void Awake () {
 
-		fired = true;
 		resetProjectile ();
 
 	}

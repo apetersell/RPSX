@@ -4,13 +4,14 @@ using UnityEngine;
 
 public abstract class Attack : MonoBehaviour {
 
-	public string state;
-	public int owner;
-	public float damage;
-	public float shieldDamage;
-	public Color stateColor; 
+	public string state; //Rock, paper, scissors, or basic.
+	public int owner; //The player that performed the attack.
+	public float damage; //How much damag the attack does to players.
+	public float shieldDamage; //How much damage the attack does to shields.
+	public Color stateColor;  //The color of the attack (changes based on state).
 	public SpriteRenderer sr;
 
+	// Makes sure the attack is colored correctly based on it's state.
 	public void handleColor ()
 	{
 		if (state == "Basic") 
@@ -35,19 +36,23 @@ public abstract class Attack : MonoBehaviour {
 		sr.color = stateColor;
 	}
 
+	//Handles Collisions with other objects.
 	public virtual void OnCollisionEnter2D (Collision2D coll)
 	{
+		//Handles collisions with players.
 		if (coll.gameObject.tag == "Player") 
 		{
 			Player p = coll.gameObject.GetComponent<Player> ();
 			if (p.playerNum != owner) {
 				hitPlayer (p);
 			} 
+			//Ignores collision if colliding with player who performed that attack (so you can't hit yourself).
 			if (p.playerNum == owner) 
 			{
 				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<BoxCollider2D> (), GetComponent<BoxCollider2D> ());
 			}
 		}
+		//Handles collisions with shields.
 		if (coll.gameObject.tag == "Shield")
 		{
 			Shield s = coll.gameObject.GetComponent<Shield>();
@@ -57,7 +62,7 @@ public abstract class Attack : MonoBehaviour {
 				hitShield (p);
 			}
 		}
-
+		//Handles collisions with projectiles.
 		if (coll.gameObject.tag == "Projectile") 
 		{
 			GameObject enemyProj = coll.gameObject;
