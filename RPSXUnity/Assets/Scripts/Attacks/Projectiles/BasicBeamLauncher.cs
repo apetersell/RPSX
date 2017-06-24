@@ -8,6 +8,7 @@ public class BasicBeamLauncher : ProjectileLauncher {
 	{
 		float modX = (Input.GetAxis("LeftStickX_P" + owner));
 		float modY = (Input.GetAxis("LeftStickY_P" + owner)) * -1;
+		GameObject beam = null;
 		if (modX == 0 && modY == 0) 
 		{
 			modX = directionMod;
@@ -18,7 +19,11 @@ public class BasicBeamLauncher : ProjectileLauncher {
 			modY = 0;
 		}
 		direction = new Vector3 (modX, modY, 0).normalized;
-		GameObject beam = Instantiate (projectile) as GameObject;
+		if (ProjectilePool.basicPool.Count == 0) {
+			beam = Instantiate (projectile) as GameObject;
+		} else {
+			beam = ProjectilePool.grabFromPool ("Basic");
+		}
 		beam.GetComponent<Projectile>().modPos = new Vector3 (modX, modY , 0).normalized;
 		beam.transform.position = transform.position + beam.GetComponent<Projectile>().modPos;
 		beam.GetComponent<Projectile> ().state = state;

@@ -18,7 +18,7 @@ public abstract class Projectile : Attack
 		currentLifeSpan--;
 		if (currentLifeSpan <= 0) 
 		{
-			Destroy (this.gameObject);
+			ProjectilePool.addToPool (this.gameObject, state);
 		}
 	}
 
@@ -47,7 +47,7 @@ public abstract class Projectile : Attack
 		else 
 		{
 			base.hitShield (p);
-			Destroy (this.gameObject);
+			ProjectilePool.addToPool (this.gameObject, state);
 		}
 	}
 
@@ -78,6 +78,6 @@ public abstract class Projectile : Attack
 	public override void hitPlayer (Player p)
 	{
 		base.hitPlayer (p);
-		Destroy (this.gameObject);
+		ProjectilePool.addToPool (this.gameObject, state);
 	}
 }
