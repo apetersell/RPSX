@@ -6,18 +6,23 @@ public class BasicBeamLauncher : ProjectileLauncher {
 
 	public override void fireProjectile (int owner, int directionMod, string state, bool touchingGround)
 	{
-		direction = new Vector3 (directionMod, 0, 0);
+		float modX = (Input.GetAxis("LeftStickX_P" + owner));
+		float modY = (Input.GetAxis("LeftStickY_P" + owner)) * -1;
+		if (modX == 0 && modY == 0) 
+		{
+			modX = directionMod;
+		}
+		if (modY < 0 && touchingGround == true) 
+		{
+			modX = directionMod;
+			modY = 0;
+		}
+		direction = new Vector3 (modX, modY, 0).normalized;
 		GameObject beam = Instantiate (projectile) as GameObject;
-		beam.GetComponent<Projectile> ().modPos = new Vector3 (directionMod, 0, 0);
+		beam.GetComponent<Projectile>().modPos = new Vector3 (modX, modY , 0).normalized;
 		beam.transform.position = transform.position + beam.GetComponent<Projectile>().modPos;
 		beam.GetComponent<Projectile> ().state = state;
 		beam.GetComponent<Projectile> ().owner = owner;
 		beam.GetComponent<Projectile> ().dir = direction;
-		if (directionMod == 1) {
-			beam.GetComponent<SpriteRenderer> ().flipX = false;
-		} else 
-		{
-			beam.GetComponent<SpriteRenderer> ().flipX = true;
-		}
 	}
 }

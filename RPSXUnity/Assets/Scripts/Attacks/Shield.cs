@@ -33,7 +33,7 @@ public class Shield : MonoBehaviour {
 	void Update () {
 		
 		currentState = p.currentState;
-		placement = new Vector2 (Input.GetAxis ("LeftStickX_P" + p.playerNum), Input.GetAxis ("LeftStickY_P" + p.playerNum) * -1); 
+		placement = new Vector2 (Input.GetAxis ("LeftStickX_P" + p.playerNum), Input.GetAxis ("LeftStickY_P" + p.playerNum) * -1).normalized; 
 		transform.localPosition = placement; 
 		if (p.touchingGround == true) 
 		{

@@ -9,4 +9,5 @@ public abstract class ProjectileLauncher : MonoBehaviour {
 
 	public abstract void fireProjectile (int owner, int directionMod, string state, bool touchingGround);
 
+
 }
