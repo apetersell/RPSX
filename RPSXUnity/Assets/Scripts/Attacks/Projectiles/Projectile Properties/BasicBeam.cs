@@ -36,4 +36,9 @@ public class BasicBeam : Projectile {
 	{
 		base.OnCollisionEnter2D (coll);
 	}
+	//Makes sure the projectile moves.
+	public override void handleMovement ()
+	{
+		rb.velocity = new Vector2 (dir.x * XSpeed, dir.y * YSpeed);
+	}
 }

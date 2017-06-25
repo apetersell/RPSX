@@ -24,10 +24,7 @@ public abstract class Projectile : Attack
 	}
 
 	//Makes sure the projectile moves.
-	public void handleMovement ()
-	{
-		rb.velocity = new Vector2 (dir.x * XSpeed, dir.y * YSpeed);
-	}
+	public abstract void handleMovement ();
 
 	//Resets the projectile's lifespan back to max.
 	public void resetProjectile ()

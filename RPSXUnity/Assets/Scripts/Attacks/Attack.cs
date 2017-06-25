@@ -49,7 +49,7 @@ public abstract class Attack : MonoBehaviour {
 			//Ignores collision if colliding with player who performed that attack (so you can't hit yourself).
 			if (p.playerNum == owner) 
 			{
-				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<BoxCollider2D> (), GetComponent<BoxCollider2D> ());
+				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
 			}
 		}
 		//Handles collisions with shields.

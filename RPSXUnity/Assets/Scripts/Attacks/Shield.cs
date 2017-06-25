@@ -78,7 +78,7 @@ public class Shield : MonoBehaviour {
 			Player p = coll.gameObject.GetComponent<Player> ();
 			if (p.playerNum == owner) 
 			{
-				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<BoxCollider2D> (), GetComponent<BoxCollider2D> ());
+				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
 			}
 		}
 	}
