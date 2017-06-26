@@ -24,6 +24,8 @@ public class RPSX : MonoBehaviour {
 	public static int paperProjectileLimit = 3;
 	public static int scissorsProjectileLimit = 5;
 
+	public static float rockThrowSpeed = 12;
+
 
 	public static string determineWinner (string hero, string villian)
 	{

@@ -22,7 +22,7 @@ public class BasicBeamLauncher : ProjectileLauncher {
 			}
 			direction = new Vector3 (modX, modY, 0).normalized;
 			if (ProjectilePool.basicPool.Count == 0) {
-				beam = Instantiate (projectile) as GameObject;
+				beam = Instantiate(Resources.Load("Prefabs/Projectiles/BasicBeamPrefab")) as GameObject;
 			} else {
 				beam = ProjectilePool.grabFromPool ("Basic");
 			}

@@ -62,17 +62,6 @@ public abstract class Attack : MonoBehaviour {
 				hitShield (p);
 			}
 		}
-		//Handles collisions with projectiles.
-		if (coll.gameObject.tag == "Projectile") 
-		{
-			GameObject enemyProj = coll.gameObject;
-			Projectile proj = coll.gameObject.GetComponent<Projectile> ();
-			if (proj.owner != owner) 
-			{
-				hitProjectile (enemyProj);
-			}
-
-		}
 	}
 
 	public virtual void hitPlayer (Player p)

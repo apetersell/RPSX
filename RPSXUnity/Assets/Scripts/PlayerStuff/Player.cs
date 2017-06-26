@@ -170,6 +170,8 @@ public class Player : MonoBehaviour {
 				if (selectedState == "Rock" && sc.rockOnCooldown == false) {
 					currentState = "Rock";
 					Destroy (gameObject.GetComponent<RPSState> ()); 
+					Destroy (gameObject.GetComponent<ProjectileLauncher> ());
+					gameObject.AddComponent<RockLauncher> ();
 					gameObject.AddComponent<RockState> ();
 					ss.addToTimer (.5f);
 
@@ -327,9 +329,11 @@ public class Player : MonoBehaviour {
 	public void backToBasic ()
 	{
 		Destroy (gameObject.GetComponent<RPSState> ());
+		Destroy (gameObject.GetComponent <ProjectileLauncher> ());
 		currentState = "Basic";
 		gameObject.AddComponent<BasicState>();
-		rb.gravityScale = rps.normalGrav;
+		gameObject.AddComponent<BasicBeamLauncher> ();
+		rb.gravityScale = rps.normalGrav; 
 		rb.mass = 1;
 		affectedByGrav = true;
 	}

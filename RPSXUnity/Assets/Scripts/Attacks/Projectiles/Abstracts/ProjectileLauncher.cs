@@ -5,7 +5,6 @@ using UnityEngine;
 public abstract class ProjectileLauncher : MonoBehaviour {
 
 	public Vector3 direction;
-	public GameObject projectile;
 	public int ownerNum;
 
 	public void Awake ()

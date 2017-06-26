@@ -35,6 +35,10 @@ public abstract class Projectile : Attack
 	//Makes sure we have ths ame collision interactions as other attacks.
 	public override void OnCollisionEnter2D (Collision2D coll)
 	{
+		if (coll.gameObject.tag == "Projectile") 
+		{
+			Physics2D.IgnoreCollision (coll.gameObject.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
+		}
 		base.OnCollisionEnter2D (coll);
 	}
 

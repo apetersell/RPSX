@@ -12,20 +12,25 @@ public class RockLauncher : ProjectileLauncher {
 	{
 		if (holdingRock && currentRock != null) 
 		{
-			holdingRock = false;
-			float modX = (Input.GetAxis ("LeftStickX_P" + owner));
-			float modY = (Input.GetAxis ("LeftStickY_P" + owner)) * -1;
-			if (modX == 0 && modY == 0) 
+			Rigidbody2D rb = currentRock.GetComponent<Rigidbody2D> ();
+			float throwDirX = Input.GetAxis ("LeftStickX_P" + owner) * RPSX.rockThrowSpeed;
+			if (throwDirX > 0 && throwDirX < 0.8f) 
 			{
-				modX = directionMod;
+				throwDirX = 0.8f;
 			}
-			if (modY < 0 && touchingGround == true) {
-				modX = directionMod;
-				modY = 0;
+			if (throwDirX < 0 && throwDirX > -0.8f)
+			{
+				throwDirX = -0.8f;
 			}
-			direction = new Vector3 (modX, modY, 0).normalized;
+			float throwDirY = (Input.GetAxis ("LeftStickY_P" + owner) * -1) * RPSX.rockThrowSpeed;
+			if (throwDirY < 0.6f) 
+			{
+				throwDirY = 0.6f;
+			}
+			Vector2 direction = new Vector2 (throwDirX, throwDirY);
+			rb.AddForce (direction, ForceMode2D.Impulse);
 			currentRock.GetComponent<RockThrow> ().beingHeld = false;
-			currentRock.GetComponent<Projectile> ().dir = direction;
+			currentRock.GetComponent<Rigidbody2D> ().velocity = direction;
 			currentRock = null;
 				
 		} 
@@ -36,7 +41,7 @@ public class RockLauncher : ProjectileLauncher {
 			if (pl.rockOnScreen.Count < RPSX.rockProjectileLimit) 
 			{
 				if (ProjectilePool.rockPool.Count == 0) { 
-					currentRock = Instantiate (projectile) as GameObject;  
+					currentRock = Instantiate(Resources.Load("Prefabs/Projectiles/RockThrowPrefab")) as GameObject; 
 				} 
 				else 
 				{

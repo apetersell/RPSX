@@ -7,13 +7,12 @@ public class RockThrow : Projectile {
 	public bool beingHeld;
 	public CircleCollider2D cc;
 	public GameObject player;
+	public float maxDamage;
 
 
 	void Awake () {
 
 		resetProjectile ();
-
-
 	}
 	// Use this for initialization
 	void Start () {
@@ -26,6 +25,16 @@ public class RockThrow : Projectile {
 
 	// Update is called once per frame
 	void Update () {
+		damage = (rb.velocity.x + rb.velocity.y) / 2; 
+		if (damage < 0) 
+		{
+			damage = damage * -1;
+		}
+
+		if (damage > maxDamage) 
+		{
+			damage = maxDamage;
+		}
 		player = GameObject.Find ("Player_" + owner);
 		handleColor ();
 		handleDuration ();
@@ -47,7 +56,6 @@ public class RockThrow : Projectile {
 		else 
 		{
 			cc.enabled = true;
-			rb.velocity = new Vector2 (dir.x * XSpeed, dir.y * YSpeed);
 		}
 
 	}
