@@ -22,7 +22,7 @@ public class RPSX : MonoBehaviour {
 	public static int basicProjectileLimit = 1;
 	public static int rockProjectileLimit = 1;
 	public static int paperProjectileLimit = 3;
-	public static int scissorsProjectileLimit = 5;
+	public static int scissorsProjectileLimit = 3;
 
 	public static float rockThrowSpeed = 12;
 
@@ -87,6 +87,22 @@ public class RPSX : MonoBehaviour {
 	public static float fillAmount (float current, float max)
 	{
 		float result = current / max;
+		return result;
+	}
+
+	public static int opponentNum (int playerNum)
+	{
+		int result = 0;
+		if (playerNum == 1) 
+		{
+			result = 2;
+		}
+
+		if (playerNum == 2) 
+		{
+			result = 1;
+		}
+
 		return result;
 	}
 

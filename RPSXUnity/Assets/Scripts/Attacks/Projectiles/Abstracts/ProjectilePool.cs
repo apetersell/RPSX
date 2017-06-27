@@ -41,6 +41,7 @@ public class ProjectilePool : MonoBehaviour {
 		}
 		beam.SetActive (true);
 		beam.GetComponent<Projectile> ().resetProjectile ();
+		beam.GetComponent<Projectile> ().reflected = false;
 		return beam;
 	}
 

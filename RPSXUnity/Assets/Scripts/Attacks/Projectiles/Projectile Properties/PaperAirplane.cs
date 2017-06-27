@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicBeam : Projectile {
+public class PaperAirplane : Projectile {
 
+	public int opponentNum;
 
 	void Awake () {
 
@@ -15,9 +16,9 @@ public class BasicBeam : Projectile {
 
 		sr = GetComponent<SpriteRenderer> ();
 		rb = GetComponent<Rigidbody2D> ();
-		
+
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		Vector3 moveDirection = new Vector3 (dir.x, dir.y, 0); 
@@ -30,6 +31,7 @@ public class BasicBeam : Projectile {
 		handleColor ();
 		handleMovement ();
 		handleDuration ();
+
 	}
 
 	public override void OnCollisionEnter2D (Collision2D coll)
@@ -39,21 +41,14 @@ public class BasicBeam : Projectile {
 	//Makes sure the projectile moves.
 	public override void handleMovement ()
 	{
+		opponentNum = RPSX.opponentNum (owner);
+		GameObject opponent = GameObject.Find ("Player_" + opponentNum);
+		dir = (opponent.transform.position - transform.position).normalized;
 		rb.velocity = new Vector2 (dir.x * XSpeed, dir.y * YSpeed);
 	}
 
 	public override void reflectProjectile (int sentOwner)
 	{
-		XSpeed = XSpeed * -2; // Doubles it's speed.
-		YSpeed = YSpeed * -2;
-		if (sr.flipX == true) //Changes the direction it is facing.
-		{
-			sr.flipX = false;
-		} 
-		else 
-		{
-			sr.flipX = true;
-		}
 		base.reflectProjectile (owner);
 	}
 }

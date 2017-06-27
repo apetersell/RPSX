@@ -61,7 +61,7 @@ public abstract class Projectile : Attack
 	}
 
 	// Handles reflection properties.
-	void reflectProjectile (int sentOwner)
+	public virtual void reflectProjectile (int sentOwner)
 	{
 		reflected = true; //Tells the projectile that it has been reflected.
 		if (sentOwner == 1) //Changes it's owner to the other player.
@@ -74,17 +74,6 @@ public abstract class Projectile : Attack
 			owner = 1;
 		}
 		resetProjectile (); // Resets the projectiles lifespan.
-		XSpeed = XSpeed * -2; // Doubles it's speed.
-		YSpeed = YSpeed * -2;
-		if (sr.flipX == true) //Changes the direction it is facing.
-		{
-			sr.flipX = false;
-		} 
-		else 
-		{
-			sr.flipX = true;
-		}
-
 	}
 
 	// Hanldes what happens when a projectile is killed.

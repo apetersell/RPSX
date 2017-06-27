@@ -178,6 +178,8 @@ public class Player : MonoBehaviour {
 				} else if (selectedState == "Paper" && sc.paperOnCooldown == false) {
 					currentState = "Paper";
 					Destroy (gameObject.GetComponent<RPSState> ());
+					Destroy (gameObject.GetComponent<ProjectileLauncher> ());
+					gameObject.AddComponent<PaperAirplaneLauncher> ();
 					gameObject.AddComponent<PaperState> ();
 					ss.addToTimer (.5f);
 				} else if (selectedState == "Scissors" && sc.scissorsOnCooldown == false) {

@@ -39,6 +39,7 @@ public abstract class Attack : MonoBehaviour {
 	//Handles Collisions with other objects.
 	public virtual void OnCollisionEnter2D (Collision2D coll)
 	{
+		Debug.Log (gameObject.name + " hit " + coll.gameObject.name);
 		//Handles collisions with players.
 		if (coll.gameObject.tag == "Player") 
 		{
