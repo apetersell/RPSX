@@ -33,6 +33,7 @@ public class RockLauncher : ProjectileLauncher {
 			Player p = GameObject.Find ("Player_" + ownerNum).GetComponent<Player> ();
 			p.startShotDelay ();
 			currentRock = null;
+			p.GetComponent<Player> ().heldRock = null;
 				
 		} 
 		else 
@@ -53,6 +54,7 @@ public class RockLauncher : ProjectileLauncher {
 				currentRock.GetComponent<Projectile> ().state = state;
 				currentRock.GetComponent<Projectile> ().owner = owner;
 				currentRock.GetComponent<RockThrow> ().beingHeld = true; 
+				p.GetComponent<Player> ().heldRock = currentRock; 
 			}
 
 		}

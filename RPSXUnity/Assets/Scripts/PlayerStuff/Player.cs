@@ -42,6 +42,7 @@ public class Player : MonoBehaviour {
 	public bool canShoot = true;
 	public float shotDelay;
 	public float currentShotDelay;
+	public GameObject heldRock;
 
 	private int rpsNum = 1;
 	public float maxTimeinState;
@@ -202,6 +203,10 @@ public class Player : MonoBehaviour {
 				rb.gravityScale = rps.normalGrav;
 				rb.mass = 1;
 				affectedByGrav = true;
+				if (heldRock != null) 
+				{
+					ProjectilePool.addToPool (heldRock, "Rock");
+				}
 			}
 
 		}
@@ -353,6 +358,10 @@ public class Player : MonoBehaviour {
 		rb.gravityScale = rps.normalGrav; 
 		rb.mass = 1;
 		affectedByGrav = true;
+		if (heldRock != null) 
+		{
+			ProjectilePool.addToPool (heldRock, "Rock");
+		}
 	}
 
 	//Makes sure player is appropriate state color.  Flashes when state is close to over.

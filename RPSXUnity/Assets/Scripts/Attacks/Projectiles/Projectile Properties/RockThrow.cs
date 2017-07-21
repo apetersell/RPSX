@@ -37,7 +37,10 @@ public class RockThrow : Projectile {
 		}
 		player = GameObject.Find ("Player_" + owner);
 		handleColor ();
-		handleDuration ();
+		if (beingHeld == false) 
+		{
+			handleDuration ();
+		}
 		handleMovement ();
 	}
 
