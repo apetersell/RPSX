@@ -49,8 +49,6 @@ public abstract class Projectile : Attack
 		if (result == "Loss") 
 		{
 			GameObject player = GameObject.Find ("Player_" + owner); 
-			ProjectileLimit pl = player.GetComponent<ProjectileLimit> ();
-			pl.removeFromList (this.gameObject, state); //When a projectile is reflected, we remove it from the launcher's limit list, so that they can fire again.
 			reflectProjectile (owner);
 		} 
 		else 
@@ -79,8 +77,6 @@ public abstract class Projectile : Attack
 		{
 			ProjectilePool.addToPool (this.gameObject, state);
 			GameObject player = GameObject.Find ("Player_" + owner); 
-			ProjectileLimit pl = player.GetComponent<ProjectileLimit> ();
-			pl.removeFromList (this.gameObject, state);
 		}
 	}
 

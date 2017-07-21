@@ -12,9 +12,10 @@ public class PaperState : RPSState {
 		normalGrav = 3;
 		fastFallGrav = 5;
 		maxAirActions = 5;
-		shieldSize = 2.5f;
+		shieldSize = 1.2f;
 		shieldDiminishRate = 20;
 		airSpeedModifier = 2.5f;
+		projectileFireRate = 40;
 		color = RPSX.paperColor;
 
 

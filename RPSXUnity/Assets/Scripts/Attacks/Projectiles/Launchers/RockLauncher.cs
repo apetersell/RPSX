@@ -6,7 +6,6 @@ public class RockLauncher : ProjectileLauncher {
 
 	public bool holdingRock;
 	public GameObject currentRock; 
-	public ProjectileLimit pl;
 
 	public override void fireProjectile (int owner, int directionMod, string state, bool touchingGround)
 	{
@@ -31,31 +30,29 @@ public class RockLauncher : ProjectileLauncher {
 			rb.AddForce (direction, ForceMode2D.Impulse);
 			currentRock.GetComponent<RockThrow> ().beingHeld = false;
 			currentRock.GetComponent<Rigidbody2D> ().velocity = direction;
+			Player p = GameObject.Find ("Player_" + ownerNum).GetComponent<Player> ();
+			p.startShotDelay ();
 			currentRock = null;
 				
 		} 
 		else 
 		{
 			GameObject p = GameObject.Find ("Player_" + ownerNum);   
-			pl = p.GetComponent<ProjectileLimit> ();
-			if (pl.rockOnScreen.Count < RPSX.rockProjectileLimit) 
+			if (ProjectilePool.rockPool.Count == 0) { 
+				currentRock = Instantiate(Resources.Load("Prefabs/Projectiles/RockThrowPrefab")) as GameObject; 
+			} 
+			else 
 			{
-				if (ProjectilePool.rockPool.Count == 0) { 
-					currentRock = Instantiate(Resources.Load("Prefabs/Projectiles/RockThrowPrefab")) as GameObject; 
-				} 
-				else 
-				{
-					currentRock = ProjectilePool.grabFromPool ("Rock");  
-				}
-				currentRock.transform.position = transform.position + currentRock.GetComponent<Projectile> ().modPos;
+				currentRock = ProjectilePool.grabFromPool ("Rock");  
 			}
+			currentRock.transform.position = transform.position + currentRock.GetComponent<Projectile> ().modPos;
+
 			holdingRock = true; 
 			if (currentRock != null) 
 			{
 				currentRock.GetComponent<Projectile> ().state = state;
 				currentRock.GetComponent<Projectile> ().owner = owner;
 				currentRock.GetComponent<RockThrow> ().beingHeld = true; 
-				pl.addToList (currentRock.gameObject, state); 
 			}
 
 		}

@@ -11,6 +11,7 @@ public abstract class RPSState : MonoBehaviour {
 	public float airSpeedModifier;
 	public float shieldDiminishRate;
 	public float shieldSize;
+	public float projectileFireRate;
 	public int maxAirActions;
 	public Color color;
 	public Player p;

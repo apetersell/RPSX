@@ -39,6 +39,10 @@ public class Player : MonoBehaviour {
 	public float shieldDiminishRate;
 	public float shieldRefreshRate;
 
+	public bool canShoot = true;
+	public float shotDelay;
+	public float currentShotDelay;
+
 	private int rpsNum = 1;
 	public float maxTimeinState;
 	public float currentTimeinState;
@@ -59,6 +63,7 @@ public class Player : MonoBehaviour {
 		ss = GetComponentInChildren<SignSelector> ();
 		s = shield.GetComponent<Shield> ();
 		HP = RPSX.playerMaxHP;
+
 		
 	}
 	
@@ -70,6 +75,7 @@ public class Player : MonoBehaviour {
 			actions ();
 		}
 
+		handleShotDelay ();
 		chooseState ();
 		applyStats ();
 		stateTimer ();
@@ -141,8 +147,10 @@ public class Player : MonoBehaviour {
 		//Projectile Attack
 		if (Input.GetButtonDown ("BButton_P" + playerNum))
 		{
-
-			GetComponent<ProjectileLauncher> ().fireProjectile (playerNum, directionModifier, currentState, touchingGround);
+			if (canShoot) 
+			{
+				GetComponent<ProjectileLauncher> ().fireProjectile (playerNum, directionModifier, currentState, touchingGround);
+			}
 			
 		}
 
@@ -235,9 +243,14 @@ public class Player : MonoBehaviour {
 		maxAirActions = rps.maxAirActions;
 		shieldDiminishRate = rps.shieldDiminishRate;
 		color = rps.color;
+		shotDelay = rps.projectileFireRate;
 		if (airActionsRemaining > maxAirActions) 
 		{
 			airActionsRemaining = maxAirActions;
+		}
+		if (currentShotDelay > shotDelay) 
+		{
+			currentShotDelay = shotDelay;
 		}
 	}
 
@@ -384,6 +397,25 @@ public class Player : MonoBehaviour {
 		{
 			currentShieldDuration = currentShieldDuration - damage;
 		}
+	}
+
+	public void handleShotDelay ()
+	{
+		if (canShoot == false) 
+		{
+			currentShotDelay++; 
+		}
+
+		if (currentShotDelay >= shotDelay) 
+		{
+			canShoot = true;
+		}
+	}
+
+	public void startShotDelay ()
+	{
+		currentShotDelay = 0;
+		canShoot = false;
 	}
 
 }

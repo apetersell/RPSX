@@ -22,6 +22,7 @@ public class ScissorsState : RPSState {
 		shieldSize = 1.2f;
 		shieldDiminishRate = 11; 
 		airSpeedModifier = .75f;
+		projectileFireRate = 30;
 		color = RPSX.scissorsColor;
 
 		remainingDashTime = maxDashTime;
