@@ -64,15 +64,7 @@ public abstract class Projectile : Attack
 	public virtual void reflectProjectile (int sentOwner)
 	{
 		reflected = true; //Tells the projectile that it has been reflected.
-		if (sentOwner == 1) //Changes it's owner to the other player.
-		{
-			owner = 2;
-		}
-
-		if (sentOwner == 2) 
-		{
-			owner = 1;
-		}
+		owner = RPSX.opponentNum(owner); // Changes the owner to the opponent.
 		resetProjectile (); // Resets the projectiles lifespan.
 	}
 

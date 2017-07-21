@@ -185,6 +185,8 @@ public class Player : MonoBehaviour {
 				} else if (selectedState == "Scissors" && sc.scissorsOnCooldown == false) {
 					currentState = "Scissors";
 					Destroy (gameObject.GetComponent<RPSState> ());
+					Destroy (gameObject.GetComponent<ProjectileLauncher> ());
+					gameObject.AddComponent<ScissorLauncher> ();
 					gameObject.AddComponent<ScissorsState> ();
 					ss.addToTimer (.5f);
 				}

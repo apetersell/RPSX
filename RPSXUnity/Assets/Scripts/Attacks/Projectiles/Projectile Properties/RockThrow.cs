@@ -5,7 +5,7 @@ using UnityEngine;
 public class RockThrow : Projectile {
 
 	public bool beingHeld;
-	public CircleCollider2D cc;
+	public CircleCollider2D circleCollider;
 	public GameObject player;
 	public float maxDamage;
 
@@ -19,7 +19,7 @@ public class RockThrow : Projectile {
 
 		sr = GetComponent<SpriteRenderer> ();
 		rb = GetComponent<Rigidbody2D> ();
-		cc = GetComponent <CircleCollider2D> ();
+		circleCollider = GetComponent <CircleCollider2D> ();
 
 	}
 
@@ -51,11 +51,11 @@ public class RockThrow : Projectile {
 		if (beingHeld) 
 		{
 			transform.position = new Vector2 (player.transform.position.x, (player.transform.position.y + modPos.y));
-			cc.enabled = false;
+			circleCollider.enabled = false;
 		} 
 		else 
 		{
-			cc.enabled = true;
+			circleCollider.enabled = true;
 		}
 
 	}
