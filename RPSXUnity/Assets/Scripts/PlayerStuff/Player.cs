@@ -134,13 +134,15 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		//FastFalling
+		//FastFalling/Fallling through soft platforms
 		if (affectedByGrav) 
 		{
 			if (Input.GetAxis ("LeftStickY_P" + playerNum) > gravityThreshold) {
 				rb.gravityScale = fastFallGrav;
+				passThroughPlatforms = true;
 			} else {
 				rb.gravityScale = normalGrav;
+				passThroughPlatforms = false;
 			}
 		}
 
@@ -470,11 +472,10 @@ public class Player : MonoBehaviour {
 		}
 
 		// Makes sure players can pass through platforms at the appropriate times.
-		if (rb.velocity.y > 0) {
-			passThroughPlatforms = true;
-		} else 
+
+		if (rb.velocity.y > 0 && touchingGround == false) 
 		{
-			passThroughPlatforms = false;
+			passThroughPlatforms = true;
 		}
 
 		if (passThroughPlatforms) {

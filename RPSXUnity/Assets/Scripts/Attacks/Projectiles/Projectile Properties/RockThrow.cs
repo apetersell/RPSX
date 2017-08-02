@@ -60,6 +60,5 @@ public class RockThrow : Projectile {
 		{
 			circleCollider.enabled = true;
 		}
-
 	}
 }

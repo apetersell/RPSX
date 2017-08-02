@@ -5,7 +5,7 @@ using UnityEngine;
 public class RockState : RPSState {
 
 	Rigidbody2D rb;
-	public int maxHangTime = 60;
+	public int maxHangTime = 120;
 	public int hangTimeRemaining;
 	public bool isHanging;
 
@@ -23,7 +23,7 @@ public class RockState : RPSState {
 		airSpeedModifier = .5f;
 		shieldDiminishRate = 5.5f;
 		shieldSize = 1.75f;
-		projectileFireRate = 70;
+		projectileFireRate = 50;
 		color = RPSX.rockColor;
 
 
@@ -50,7 +50,7 @@ public class RockState : RPSState {
 			rb.gravityScale = 0;
 			rb.mass = 0;
 			hangTimeRemaining--;
-			moveSpeed = 6f;
+			moveSpeed = 10f;
 		} 
 		else 
 		{
@@ -61,7 +61,7 @@ public class RockState : RPSState {
 		{
 			hangTimeRemaining = maxHangTime;
 			isHanging = false;
-			moveSpeed = 6;
+			moveSpeed = 12;
 			p.affectedByGrav = true;
 		}
 
