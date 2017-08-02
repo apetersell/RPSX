@@ -32,6 +32,7 @@ public class Player : MonoBehaviour {
 	public bool touchingWall= false;
 	public bool stopRightMomentum = false;
 	public bool stopLeftMomentum = false;
+	public bool passThroughPlatforms;
 
 	GameObject shield;
 	Shield s;
@@ -85,26 +86,8 @@ public class Player : MonoBehaviour {
 		stateTimer ();
 		handleShield ();
 		handleColor ();
+		movementSmoothing ();
 		rps = GetComponent<RPSState> ();
-
-		if (touchingGround) 
-		{
-			airActionsRemaining = maxAirActions;
-		}
-
-		if (touchingWall == true && touchingGround == false) {
-			if (directionModifier == 1) {
-				stopRightMomentum = true;
-			}
-
-			if (directionModifier == -1) {
-				stopLeftMomentum = true;
-			}
-		} else 
-		{
-			stopLeftMomentum = false;
-			stopRightMomentum = false;
-		}
 
 	}
 		
@@ -264,13 +247,13 @@ public class Player : MonoBehaviour {
 	{
 		if (coll.gameObject.tag == "Floor") 
 		{
-			touchingGround = false;
+			touchingGround = false; 
 		}
 
-		if (coll.gameObject.tag == "Wall") 
+		if (coll.gameObject.tag == "Wall")  
 		{
 			touchingWall = false;
-		}
+		} 
 	}
 
 	//Adjusting Stats with State Change
@@ -461,6 +444,54 @@ public class Player : MonoBehaviour {
 	{
 		currentShotDelay = 0;
 		canShoot = false;
+	}
+
+	void movementSmoothing ()
+	{
+		// Resets Air Actions when touching ground
+		if (touchingGround) 
+		{
+			airActionsRemaining = maxAirActions;
+		}
+
+		// Makes sure players don't awkwardly cling to walls
+		if (touchingWall == true && touchingGround == false) {
+			if (directionModifier == 1) {
+				stopRightMomentum = true;
+			}
+
+			if (directionModifier == -1) {
+				stopLeftMomentum = true;
+			}
+		} else 
+		{
+			stopLeftMomentum = false;
+			stopRightMomentum = false;
+		}
+
+		// Makes sure players can pass through platforms at the appropriate times.
+		if (rb.velocity.y > 0) {
+			passThroughPlatforms = true;
+		} else 
+		{
+			passThroughPlatforms = false;
+		}
+
+		if (passThroughPlatforms) {
+			if (playerNum == 1) {
+				Physics2D.IgnoreLayerCollision (8, 11, true);
+			}
+			if (playerNum == 2) {
+				Physics2D.IgnoreLayerCollision (9, 11, true);
+			}
+		} else {
+			if (playerNum == 1) {
+				Physics2D.IgnoreLayerCollision (8, 11, false);
+			}
+			if (playerNum == 2) {
+				Physics2D.IgnoreLayerCollision (9, 11, false);
+			}
+		}
 	}
 
 }
