@@ -29,6 +29,9 @@ public class Player : MonoBehaviour {
 	public bool touchingGround;
 	public bool actionable = true;
 	public bool affectedByGrav = true;
+	public bool touchingWall= false;
+	public bool stopRightMomentum = false;
+	public bool stopLeftMomentum = false;
 
 	GameObject shield;
 	Shield s;
@@ -84,29 +87,52 @@ public class Player : MonoBehaviour {
 		handleColor ();
 		rps = GetComponent<RPSState> ();
 
+		if (touchingGround) 
+		{
+			airActionsRemaining = maxAirActions;
+		}
+
+		if (touchingWall == true && touchingGround == false) {
+			if (directionModifier == 1) {
+				stopRightMomentum = true;
+			}
+
+			if (directionModifier == -1) {
+				stopLeftMomentum = true;
+			}
+		} else 
+		{
+			stopLeftMomentum = false;
+			stopRightMomentum = false;
+		}
+
 	}
 		
 	void actions ()
 	{
 //		Left and right movement.
-		if (Input.GetAxis ("LeftStickX_P" + playerNum) > 0) 
+		if ((Input.GetAxis ("LeftStickX_P" + playerNum) > 0) && stopRightMomentum == false) 
 		{
 			sr.flipX = false;
 			directionModifier = 1;
 			if (touchingGround) {
 				rb.velocity = new Vector2 (moveSpeed, rb.velocity.y);
-			} else {
-				rb.velocity = new Vector2 (moveSpeed * airSpeedModifier, rb.velocity.y);
+			} 
+			else 
+			{
+					rb.velocity = new Vector2 (moveSpeed * airSpeedModifier, rb.velocity.y);
 			}
 		}
 
-		if (Input.GetAxis ("LeftStickX_P" + playerNum) < 0) 
+		if ((Input.GetAxis ("LeftStickX_P" + playerNum) < 0) && stopLeftMomentum == false) 
 		{
 			sr.flipX = true;
 			directionModifier = -1;
 			if (touchingGround) {
 				rb.velocity = new Vector2 (moveSpeed * -1, rb.velocity.y);
-			} else {
+			} 
+			else 
+			{
 				rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier), rb.velocity.y);
 			}
 		}
@@ -225,15 +251,25 @@ public class Player : MonoBehaviour {
 		if (coll.gameObject.tag == "Floor") 
 		{
 			touchingGround = true;
-			airActionsRemaining = maxAirActions;
+		}
+
+		if (coll.gameObject.tag == "Wall") 
+		{
+			touchingWall = true;
 		}
 	}
+		
 
 	void OnCollisionExit2D (Collision2D coll)
 	{
 		if (coll.gameObject.tag == "Floor") 
 		{
 			touchingGround = false;
+		}
+
+		if (coll.gameObject.tag == "Wall") 
+		{
+			touchingWall = false;
 		}
 	}
 
@@ -309,7 +345,7 @@ public class Player : MonoBehaviour {
 	{
 		//Shield duration goes down when shield is up.  Shield regenarates when not in use.
 		if (shieldUp) {
-//			currentShieldDuration = currentShieldDuration - shieldDiminishRate * Time.deltaTime;
+			currentShieldDuration = currentShieldDuration - shieldDiminishRate * Time.deltaTime;
 		} 
 		else 
 		{
