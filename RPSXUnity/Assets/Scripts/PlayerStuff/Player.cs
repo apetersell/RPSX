@@ -33,6 +33,7 @@ public class Player : MonoBehaviour {
 	public bool stopRightMomentum = false;
 	public bool stopLeftMomentum = false;
 	public bool passThroughPlatforms;
+	public bool fusionReady; 
 
 	GameObject shield;
 	Shield s;
