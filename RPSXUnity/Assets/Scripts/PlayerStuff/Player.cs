@@ -10,6 +10,8 @@ public class Player : MonoBehaviour {
 	SignSelector ss;
 	Color color;
 	Color flashing;
+	public bool shieldDebug;
+	public bool stateDebug;
 	public RPSState rps;
 
 	public int playerNum;
@@ -84,7 +86,9 @@ public class Player : MonoBehaviour {
 		handleShotDelay ();
 		chooseState ();
 		applyStats ();
-		stateTimer ();
+		if (stateDebug == false) {
+			stateTimer ();
+		}
 		handleShield ();
 		handleColor ();
 		movementSmoothing ();
@@ -168,17 +172,19 @@ public class Player : MonoBehaviour {
 		}
 
 		//Putting up Shield
-		if (shieldBroken == false) 
-		{
-			if (Input.GetAxis ("RTrigger_P" + playerNum) == 1) 
-			{
-				shield.SetActive (true);
-				shieldUp = true;
-			} else 
-			{
-				shield.SetActive (false);
-				shieldUp = false;
+		if (shieldDebug == false) {
+			if (shieldBroken == false) {
+				if (Input.GetAxis ("RTrigger_P" + playerNum) == 1) {
+					shield.SetActive (true);
+					shieldUp = true;
+				} else {
+					shield.SetActive (false);
+					shieldUp = false;
+				}
 			}
+		} else {
+			shield.SetActive (true);
+			shieldUp = true;
 		}
 				
 
@@ -330,22 +336,20 @@ public class Player : MonoBehaviour {
 	void handleShield ()
 	{
 		//Shield duration goes down when shield is up.  Shield regenarates when not in use.
-		if (shieldUp) {
-			currentShieldDuration = currentShieldDuration - shieldDiminishRate * Time.deltaTime;
-		} 
-		else 
-		{
-			currentShieldDuration = currentShieldDuration + shieldRefreshRate * Time.deltaTime;
-		}
+		if (shieldDebug == false) {
+			if (shieldUp) {
+				currentShieldDuration = currentShieldDuration - shieldDiminishRate * Time.deltaTime;
+			} else {
+				currentShieldDuration = currentShieldDuration + shieldRefreshRate * Time.deltaTime;
+			}
 
-		//Makes sure the shield's duration can never be higher than it's max and cant go lower than 0.
-		if (currentShieldDuration > maxShieldDuration) 
-		{
-			currentShieldDuration = maxShieldDuration;
-		}
-		if (currentShieldDuration < 0) 
-		{
-			currentShieldDuration = 0;
+			//Makes sure the shield's duration can never be higher than it's max and cant go lower than 0.
+			if (currentShieldDuration > maxShieldDuration) {
+				currentShieldDuration = maxShieldDuration;
+			}
+			if (currentShieldDuration < 0) {
+				currentShieldDuration = 0;
+			}
 		}
 
 		//Shield "breaks" if it's duration goes down to zero.
@@ -451,6 +455,7 @@ public class Player : MonoBehaviour {
 
 	void movementSmoothing ()
 	{
+
 		// Resets Air Actions when touching ground
 		if (touchingGround) 
 		{

@@ -10,6 +10,7 @@ public class ScissorsState : RPSState {
 	public float remainingDashTime;
 	public bool airDashing = false;
 
+
 	void Awake () {
 
 		rb = GetComponent<Rigidbody2D> ();
@@ -19,7 +20,7 @@ public class ScissorsState : RPSState {
 		normalGrav = 8;
 		fastFallGrav = 16;
 		maxAirActions = 2;
-		shieldSize = 1.2f;
+		shieldSize = 1.75f;
 		shieldDiminishRate = 11; 
 		airSpeedModifier = .75f;
 		projectileFireRate = 30;
@@ -32,7 +33,6 @@ public class ScissorsState : RPSState {
 
 	// Update is called once per frame
 	void Update () {
-
 		airDashHanlde ();
 
 

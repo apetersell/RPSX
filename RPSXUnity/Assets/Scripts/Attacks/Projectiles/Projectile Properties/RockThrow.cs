@@ -51,6 +51,7 @@ public class RockThrow : Projectile {
 
 	public override void handleMovement()
 	{
+		Physics2D.IgnoreLayerCollision (11, 14, true);
 		if (beingHeld) 
 		{
 			transform.position = new Vector2 (player.transform.position.x, (player.transform.position.y + modPos.y));
@@ -60,5 +61,11 @@ public class RockThrow : Projectile {
 		{
 			circleCollider.enabled = true;
 		}
+	}
+	public override void reflectProjectile(int sentOwner)
+	{
+		Vector2 direction = rb.velocity * ((RPSX.rockThrowSpeed/2)*-1);
+		rb.AddForce (direction, ForceMode2D.Impulse);
+		base.reflectProjectile (owner);
 	}
 }

@@ -64,11 +64,30 @@ public class ProjectilePool : MonoBehaviour {
 		}
 	}
 
-	public static void clearAllPools ()
+	public static void clearPool (string sent)
 	{
-		basicPool.Clear ();
-		rockPool.Clear ();
-		paperPool.Clear ();
-		scissorsPool.Clear ();
+		if (sent == "Basic") 
+		{
+			basicPool.Clear ();
+		}
+		if (sent == "Rock") 
+		{
+			rockPool.Clear ();
+		}
+		if (sent == "Paper") 
+		{
+			paperPool.Clear ();
+		}
+		if (sent == "Scissors") 
+		{
+			scissorsPool.Clear ();
+		}
+		if (sent == "All") 
+		{
+			basicPool.Clear ();
+			rockPool.Clear ();
+			paperPool.Clear ();
+			scissorsPool.Clear ();
+		}
 	}
 }

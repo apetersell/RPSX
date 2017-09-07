@@ -72,6 +72,7 @@ public abstract class Projectile : Attack
 		if (reflected) //If the projectile has already been reflected, we just straight up destroy it.
 		{
 			Destroy (this.gameObject);
+			ProjectilePool.clearPool (state);
 		} 
 		else //Otherwise, we add it to a pool so that we're not constantly destroying and remaking projectiles.
 		{
