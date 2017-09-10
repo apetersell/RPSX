@@ -8,9 +8,9 @@ public class SignSelector : MonoBehaviour {
 	public Sprite rock;
 	public Sprite paper;
 	public Sprite scissors;
-	public Color lerpingRock;
-	public Color lerpingPaper;
-	public Color lerpingScissors;
+	Color lerpingRock;
+	Color lerpingPaper;
+	Color lerpingScissors;
 	public float lerpSpeed;
 	public float timer;
 	public float timerMax; 
@@ -61,41 +61,29 @@ public class SignSelector : MonoBehaviour {
 
 			if (p.selectedState == "Rock") {
 				sr.sprite = rock;
-				if (p.selectedState == p.currentState) 
-				{
-					sr.color = lerpingRock;
-				}
-				else if (sc.rockOnCooldown) {
+				if (sc.rockOnCooldown) {
 					sr.color = RPSX.rockColorFaded;
 				} else {
-					sr.color = RPSX.rockColor;
+					sr.color = lerpingRock;
 				}
 
 			}
 
 			if (p.selectedState == "Paper") {
 				sr.sprite = paper;
-				if (p.selectedState == p.currentState) 
-				{
-					sr.color = lerpingPaper;
-				}
-				else if (sc.paperOnCooldown) {
+				if (sc.paperOnCooldown) {
 					sr.color = RPSX.paperColorFaded;
 				} else {
-					sr.color = RPSX.paperColor;
+					sr.color = lerpingPaper;
 				}
 			}
 
 			if (p.selectedState == "Scissors") {
 				sr.sprite = scissors;
-				if (p.selectedState == p.currentState) 
-				{
-					sr.color = lerpingScissors;
-				}
-				else if (sc.scissorsOnCooldown) {
+				if (sc.scissorsOnCooldown) {
 					sr.color = RPSX.scissorsColorFaded;
 				} else {
-					sr.color = RPSX.scissorsColor;
+					sr.color = lerpingScissors;
 				}
 			}
 		} else 

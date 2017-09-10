@@ -8,6 +8,8 @@ public class CoolDownUI : MonoBehaviour {
 	public int playerNum;
 	public string signType; 
 	public Image content;
+	public Image mask;
+	Image img;
 	public float maxTime; 
 	public float currentTime; 
 	GameObject player;
@@ -21,6 +23,7 @@ public class CoolDownUI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+		img = GetComponent<Image> ();
 		player = GameObject.Find ("Player_" + playerNum);
 		sc = player.GetComponent<StateCooldowns> ();
 		p = player.GetComponent<Player> ();
@@ -73,11 +76,13 @@ public class CoolDownUI : MonoBehaviour {
 		if (currentTime < maxTime) 
 		{
 			content.color = faded;
+			mask.color = faded;
 		}
 
 		if (currentTime >= maxTime && signType != p.currentState) 
 		{
 			content.color = color;
+			mask.color = color;
 		}
 
 		handleFill ();
