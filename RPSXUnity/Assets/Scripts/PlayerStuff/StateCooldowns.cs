@@ -50,7 +50,7 @@ public class StateCooldowns : MonoBehaviour {
 		}
 		if (currentScissorsCoolDown > maxCoolDownTime) 
 		{
-			currentRockCoolDown = maxCoolDownTime;
+			currentScissorsCoolDown = maxCoolDownTime;
 		}
 
 		rockTimeLeft = Mathf.RoundToInt (maxCoolDownTime - currentRockCoolDown);
@@ -61,7 +61,10 @@ public class StateCooldowns : MonoBehaviour {
 	public void putStateOnCooldown (string rps)
 	{
 
-		statesOnCoolDown.Add (rps);
+		if (rps != "Basic") 
+		{
+			statesOnCoolDown.Add (rps);
+		}
 		if (rps == "Rock") 
 		{
 			rockOnCooldown = true;

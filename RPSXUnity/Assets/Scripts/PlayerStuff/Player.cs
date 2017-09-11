@@ -55,11 +55,14 @@ public class Player : MonoBehaviour {
 	public float maxTimeinState;
 	public float currentTimeinState;
 
+	SFXGuy sfx;
+
 
 	// Use this for initialization
 	void Awake ()
 	{
 		shield = GameObject.Find ("Shield_P" + playerNum);
+		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
 	}
 
 	void Start () {
@@ -201,6 +204,7 @@ public class Player : MonoBehaviour {
 					gameObject.AddComponent<RockLauncher> ();
 					gameObject.AddComponent<RockState> ();
 					ss.addToTimer (.5f);
+					selectionEffect ("Rock");
 
 				} else if (selectedState == "Paper" && sc.paperOnCooldown == false) {
 					currentState = "Paper";
@@ -209,6 +213,7 @@ public class Player : MonoBehaviour {
 					gameObject.AddComponent<PaperAirplaneLauncher> ();
 					gameObject.AddComponent<PaperState> ();
 					ss.addToTimer (.5f);
+					selectionEffect ("Paper");
 				} else if (selectedState == "Scissors" && sc.scissorsOnCooldown == false) {
 					currentState = "Scissors";
 					Destroy (gameObject.GetComponent<RPSState> ());
@@ -216,11 +221,13 @@ public class Player : MonoBehaviour {
 					gameObject.AddComponent<ScissorLauncher> ();
 					gameObject.AddComponent<ScissorsState> ();
 					ss.addToTimer (.5f);
+					selectionEffect ("Scissors");
 				}
 				currentTimeinState = maxTimeinState;
 				rb.gravityScale = rps.normalGrav;
 				rb.mass = 1;
 				affectedByGrav = true;
+				sfx.playSFX ("newState");
 				if (heldRock != null) 
 				{
 					ProjectilePool.addToPool (heldRock, "Rock");
@@ -384,6 +391,7 @@ public class Player : MonoBehaviour {
 		rb.gravityScale = rps.normalGrav; 
 		rb.mass = 1;
 		affectedByGrav = true;
+		sfx.playSFX ("powerDown");
 		if (heldRock != null) 
 		{
 			ProjectilePool.addToPool (heldRock, "Rock");
@@ -451,6 +459,14 @@ public class Player : MonoBehaviour {
 	{
 		currentShotDelay = 0;
 		canShoot = false;
+	}
+
+	public void selectionEffect (string state)
+	{
+		GameObject effect = Instantiate(Resources.Load("Prefabs/Effects/SelectEffect")) as GameObject;
+//		effect.transform.position = transform.position;
+		effect.GetComponent<SelectionEffect> ().state = state;
+		effect.GetComponent<SelectionEffect> ().playerSign = ss.gameObject;
 	}
 
 	void movementSmoothing ()

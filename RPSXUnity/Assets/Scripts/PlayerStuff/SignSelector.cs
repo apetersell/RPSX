@@ -19,6 +19,7 @@ public class SignSelector : MonoBehaviour {
 	Player p;
 	StateCooldowns sc;
 	SpriteRenderer sr;
+	public Color used;
 
 
 
@@ -61,8 +62,8 @@ public class SignSelector : MonoBehaviour {
 
 			if (p.selectedState == "Rock") {
 				sr.sprite = rock;
-				if (sc.rockOnCooldown) {
-					sr.color = RPSX.rockColorFaded;
+				if (sc.rockOnCooldown || p.currentState == "Rock") {
+					sr.color = used;
 				} else {
 					sr.color = lerpingRock;
 				}
@@ -71,8 +72,8 @@ public class SignSelector : MonoBehaviour {
 
 			if (p.selectedState == "Paper") {
 				sr.sprite = paper;
-				if (sc.paperOnCooldown) {
-					sr.color = RPSX.paperColorFaded;
+				if (sc.paperOnCooldown || p.currentState == "Paper") {
+					sr.color = used;
 				} else {
 					sr.color = lerpingPaper;
 				}
@@ -80,8 +81,8 @@ public class SignSelector : MonoBehaviour {
 
 			if (p.selectedState == "Scissors") {
 				sr.sprite = scissors;
-				if (sc.scissorsOnCooldown) {
-					sr.color = RPSX.scissorsColorFaded;
+				if (sc.scissorsOnCooldown || p.currentState == "Scissors") {
+					sr.color = used;
 				} else {
 					sr.color = lerpingScissors;
 				}
