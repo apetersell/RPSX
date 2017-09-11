@@ -414,16 +414,19 @@ public class Player : MonoBehaviour {
 	//Function used for taking damage.
 	public void takeDamage (float damage, string sentState)
 	{
-		string result = RPSX.determineWinner (currentState, sentState);
-		if (result == "Win") 
-		{
-			HP = HP - (damage / 2);
-		}
-		if (result == "Loss") 
-		{
-			HP = HP - (damage * 2);
-		}
-		if (result == "Tie") 
+		if (sentState != "Enviornment") {
+			string result = RPSX.determineWinner (currentState, sentState);
+			if (result == "Win") {
+				HP = HP - (damage / 2);
+			}
+			if (result == "Loss") {
+				HP = HP - (damage * 2);
+			}
+			if (result == "Tie") {
+				HP = HP - damage;
+			}
+		} 
+		else 
 		{
 			HP = HP - damage;
 		}
@@ -464,7 +467,6 @@ public class Player : MonoBehaviour {
 	public void selectionEffect (string state)
 	{
 		GameObject effect = Instantiate(Resources.Load("Prefabs/Effects/SelectEffect")) as GameObject;
-//		effect.transform.position = transform.position;
 		effect.GetComponent<SelectionEffect> ().state = state;
 		effect.GetComponent<SelectionEffect> ().playerSign = ss.gameObject;
 	}
