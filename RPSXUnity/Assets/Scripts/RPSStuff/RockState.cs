@@ -51,6 +51,7 @@ public class RockState : RPSState {
 			rb.mass = 0;
 			hangTimeRemaining--;
 			moveSpeed = 10f;
+			rb.velocity = new Vector2 (rb.velocity.x, Input.GetAxis("LeftStickY_P" + p.playerNum) * (moveSpeed * -0.5f));  
 		} 
 		else 
 		{

@@ -63,6 +63,8 @@ public class Player : MonoBehaviour {
 	{
 		shield = GameObject.Find ("Shield_P" + playerNum);
 		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
+		maxShieldDuration = RPSX.maxShieldDuration;
+		currentShieldDuration = RPSX.maxShieldDuration;
 	}
 
 	void Start () {

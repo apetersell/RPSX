@@ -20,6 +20,8 @@ public class RPSX : MonoBehaviour {
 	public static float UIFlashSpeed = 3f;
 	public static float playerMaxHP = 100f;
 
+	public static float maxShieldDuration = 25f;
+
 	public static float rockThrowSpeed = 12;
 
 
