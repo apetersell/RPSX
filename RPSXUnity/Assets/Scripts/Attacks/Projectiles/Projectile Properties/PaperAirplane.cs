@@ -50,5 +50,7 @@ public class PaperAirplane : Projectile {
 	public override void reflectProjectile (int sentOwner)
 	{
 		base.reflectProjectile (owner);
+		Physics2D.IgnoreCollision (GameObject.Find ("Player_" + RPSX.opponentNum(owner)).GetComponent<BoxCollider2D> (), GetComponent<Collider2D> (), false); 
+
 	}
 }
