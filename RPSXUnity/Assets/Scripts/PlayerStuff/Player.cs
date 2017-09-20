@@ -167,7 +167,7 @@ public class Player : MonoBehaviour {
 		}
 
 		//Projectile Attack
-		if (Input.GetButtonDown ("BButton_P" + playerNum))
+		if (Input.GetButtonDown ("XButton_P" + playerNum))
 		{
 			if (canShoot) 
 			{
@@ -194,7 +194,7 @@ public class Player : MonoBehaviour {
 				
 
 		//Change RPS
-		if (Input.GetButtonDown ("YButton_P" + playerNum)) 
+		if (Input.GetAxis ("LTrigger_P" + playerNum) == 1) 
 		{
 			if (selectedState != currentState && !sc.statesOnCoolDown.Contains(selectedState)) 
 			{
