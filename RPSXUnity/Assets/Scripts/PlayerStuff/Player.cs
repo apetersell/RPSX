@@ -55,6 +55,8 @@ public class Player : MonoBehaviour {
 	public float maxTimeinState;
 	public float currentTimeinState;
 
+	public float currentHitStun;
+
 	SFXGuy sfx;
 
 
@@ -91,6 +93,7 @@ public class Player : MonoBehaviour {
 		handleShotDelay ();
 		chooseState ();
 		applyStats ();
+		handleHitStun ();
 		if (stateDebug == false) {
 			stateTimer ();
 		}
@@ -414,7 +417,7 @@ public class Player : MonoBehaviour {
 	}
 
 	//Function used for taking damage.
-	public void takeDamage (float damage, string sentState)
+	public void takeDamage (float damage, string sentState, float inflictedHitStun)
 	{
 		if (sentState != "Enviornment") {
 			string result = RPSX.determineWinner (currentState, sentState);
@@ -432,6 +435,7 @@ public class Player : MonoBehaviour {
 		{
 			HP = HP - damage;
 		}
+		currentHitStun = inflictedHitStun; 
 	}
 
 	public void takeShieldDamage (float damage, string sentState)
@@ -518,6 +522,21 @@ public class Player : MonoBehaviour {
 			if (playerNum == 2) {
 				Physics2D.IgnoreLayerCollision (9, 11, false);
 			}
+		}
+	}
+
+	void handleHitStun ()
+	{
+		currentHitStun--;
+		if (currentHitStun < 0) 
+		{
+			currentHitStun = 0;
+		}
+		if (currentHitStun > 0) {
+			actionable = false; 
+		} else 
+		{
+			actionable = true;
 		}
 	}
 

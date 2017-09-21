@@ -8,6 +8,7 @@ public abstract class Attack : MonoBehaviour {
 	public int owner; //The player that performed the attack.
 	public float damage; //How much damag the attack does to players.
 	public float shieldDamage; //How much damage the attack does to shields.
+	public float hitStun; //How long (in frames) the other player is stunned after getting hit by the attack.
 	public Color stateColor;  //The color of the attack (changes based on state).
 	public SpriteRenderer sr;
 
@@ -66,7 +67,7 @@ public abstract class Attack : MonoBehaviour {
 
 	public virtual void hitPlayer (Player p)
 	{
-		p.takeDamage (damage, state);
+		p.takeDamage (damage, state, hitStun);
 	}
 
 	public virtual void hitShield (Player p)
