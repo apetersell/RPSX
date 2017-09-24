@@ -66,6 +66,7 @@ public class RockThrow : Projectile {
 	{
 		Vector2 direction = rb.velocity * ((RPSX.rockThrowSpeed/2)*-1);
 		rb.AddForce (direction, ForceMode2D.Impulse);
+		Physics2D.IgnoreCollision (GameObject.Find ("Player_" + RPSX.opponentNum(owner)).GetComponent<BoxCollider2D> (), GetComponent<Collider2D> (), false); 
 		base.reflectProjectile (owner);
 	}
 }

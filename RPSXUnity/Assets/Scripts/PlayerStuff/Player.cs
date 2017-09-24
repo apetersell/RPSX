@@ -57,6 +57,9 @@ public class Player : MonoBehaviour {
 
 	public float currentHitStun;
 
+	public float attackDuration;
+	public GameObject meleeAttack; 
+
 	SFXGuy sfx;
 
 
@@ -170,13 +173,23 @@ public class Player : MonoBehaviour {
 		}
 
 		//Projectile Attack
-		if (Input.GetButtonDown ("XButton_P" + playerNum))
+		if (Input.GetButtonDown ("BButton_P" + playerNum))
 		{
 			if (canShoot) 
 			{
 				GetComponent<ProjectileLauncher> ().fireProjectile (playerNum, directionModifier, currentState, touchingGround);
 			}
 			
+		}
+
+		//Melle Attacking
+		if (Input.GetButtonDown ("XButton_P" + playerNum))
+		{
+			string input = GetComponent<AttackMoveset> ().input (
+				               Input.GetAxis ("LeftStickX_P" + playerNum),
+				               Input.GetAxis ("LeftStickY_P" + playerNum),
+				               touchingGround);
+			Debug.Log (input);
 		}
 
 		//Putting up Shield
@@ -436,6 +449,8 @@ public class Player : MonoBehaviour {
 			HP = HP - damage;
 		}
 		currentHitStun = inflictedHitStun; 
+		Destroy (meleeAttack);
+		meleeAttack = null;
 	}
 
 	public void takeShieldDamage (float damage, string sentState)
@@ -537,6 +552,22 @@ public class Player : MonoBehaviour {
 		} else 
 		{
 			actionable = true;
+		}
+	}
+
+	void handleAttackDuration ()
+	{
+
+		if (attackDuration <= 0) 
+		{
+			attackDuration = 0;
+			Destroy (meleeAttack);
+			meleeAttack = null;
+		}
+
+		if (meleeAttack != null) 
+		{
+			attackDuration--;
 		}
 	}
 
