@@ -106,7 +106,10 @@ public class Player : MonoBehaviour {
 		handleAttackDuration ();
 		if (meleeAttack == null || meleeAttack.GetComponent<Melee> ().grounded == false) 
 		{
-			moving ();
+			if (currentHitStun <= 0) 
+			{
+				moving ();
+			}
 		}
 		rps = GetComponent<RPSState> ();
 
