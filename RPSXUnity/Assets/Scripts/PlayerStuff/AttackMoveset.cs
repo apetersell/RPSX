@@ -16,25 +16,28 @@ public class AttackMoveset : MonoBehaviour {
 		
 	}
 
-//	public void doAttack (float stickPosX, float stickPosY, int directionModifier, string state, int owner, Player p)
-//	{
-//		GameObject attack = Instantiate(Resources.Load("Prefabs/Melee/"+ moveset + "/" + input)) as GameObject; 
-//		Melee m = attack.GetComponent<Melee> ();
-//		if (directionModifier == -1) {
-//			attack.transform.localScale = new Vector3 (
-//				attack.transform.localScale.x * -1,
-//				attack.transform.localScale.y,
-//				attack.transform.localScale.z);
-//		}
-//		m.state = state;
-//		m.owner = owner;
-//		m.player = p;
-//		p.meleeAttack = attack;
-//		p.attackDuration = m.duration;
-//		m.modPos.x = m.modPos.x * directionModifier;
-//
-//
-//	}
+	public void doAttack (float stickPosX, float stickPosY, bool grounded, int directionModifier, string state, int owner, Player p)
+	{
+		string playerInput = input (stickPosX, stickPosY, grounded);
+		GameObject attack = Instantiate(Resources.Load("Prefabs/MeleeAttacks/"+ moveset + "/" + playerInput)) as GameObject; 
+		Melee m = attack.GetComponent<Melee> ();
+		if (directionModifier == -1) {
+			attack.transform.localScale = new Vector3 (
+				attack.transform.localScale.x * -1,
+				attack.transform.localScale.y,
+				attack.transform.localScale.z);
+			m.knockBackX = m.knockBackX * -1;
+		}
+		attack.transform.position = p.gameObject.transform.position;
+		m.state = state;
+		m.owner = owner;
+		m.player = p;
+		p.meleeAttack = attack;
+		p.attackDuration = m.duration;
+		m.modPos.x = m.modPos.x * directionModifier;
+
+
+	}
 
 	public string input (float x, float y, bool grounded)
 	{
@@ -57,7 +60,7 @@ public class AttackMoveset : MonoBehaviour {
 				result = "NeutralAir";
 			}
 			if (Mathf.Abs (x) > Mathf.Abs (y)) {
-				result = "ForwarAir";
+				result = "ForwardAir";
 			}
 			if ((Mathf.Abs (x) < Mathf.Abs (y)) && y > 0) {
 				result = "DownAir"; 

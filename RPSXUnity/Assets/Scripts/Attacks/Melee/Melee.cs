@@ -11,8 +11,18 @@ public class Melee : Attack {
 	public float duration;
 	public Player player;
 	public Vector3 modPos;
+	public bool grounded;
 
+	public virtual void Awake ()
+	{
+		sr = GetComponent<SpriteRenderer> ();
+	}
 
+	public virtual void Update ()
+	{
+		handleColor ();
+		handlePosition ();
+	}
 
 	public virtual void handlePosition ()
 	{

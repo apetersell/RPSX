@@ -16,6 +16,7 @@ public class RPSX : MonoBehaviour {
 	public static Color basicColor = new Color (1f,1f,1f);
 	public static Color basicColorFaded = new Color (1f,1f,1f,0.5f);
 	public static Color alphadOut = new Color (0f, 0f, 0f, 0f);
+	public static Color inHitStun = new Color (0f, 0f, 0f);
 
 	public static float UIFlashSpeed = 3f;
 	public static float playerMaxHP = 100f;

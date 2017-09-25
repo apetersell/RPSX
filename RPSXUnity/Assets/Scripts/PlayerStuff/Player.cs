@@ -103,44 +103,17 @@ public class Player : MonoBehaviour {
 		handleShield ();
 		handleColor ();
 		movementSmoothing ();
+		handleAttackDuration ();
+		if (meleeAttack == null || meleeAttack.GetComponent<Melee> ().grounded == false) 
+		{
+			moving ();
+		}
 		rps = GetComponent<RPSState> ();
 
 	}
 		
 	void actions ()
 	{
-//		Left and right movement.
-		if ((Input.GetAxis ("LeftStickX_P" + playerNum) > 0) && stopRightMomentum == false) 
-		{
-			sr.flipX = false;
-			directionModifier = 1;
-			if (touchingGround) {
-				rb.velocity = new Vector2 (moveSpeed, rb.velocity.y);
-			} 
-			else 
-			{
-					rb.velocity = new Vector2 (moveSpeed * airSpeedModifier, rb.velocity.y);
-			}
-		}
-
-		if ((Input.GetAxis ("LeftStickX_P" + playerNum) < 0) && stopLeftMomentum == false) 
-		{
-			sr.flipX = true;
-			directionModifier = -1;
-			if (touchingGround) {
-				rb.velocity = new Vector2 (moveSpeed * -1, rb.velocity.y);
-			} 
-			else 
-			{
-				rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier), rb.velocity.y);
-			}
-		}
-
-		if (Input.GetAxis ("LeftStickX_P" + playerNum) == 0)
-		{
-			rb.velocity = new Vector2 (0, rb.velocity.y);
-		}
-
 		//Jumping
 		if (Input.GetButtonDown ("AButton_P" + playerNum)) 
 		{
@@ -182,14 +155,24 @@ public class Player : MonoBehaviour {
 			
 		}
 
-		//Melle Attacking
+		//Melee Attacking
 		if (Input.GetButtonDown ("XButton_P" + playerNum))
 		{
-			string input = GetComponent<AttackMoveset> ().input (
-				               Input.GetAxis ("LeftStickX_P" + playerNum),
-				               Input.GetAxis ("LeftStickY_P" + playerNum),
-				               touchingGround);
-			Debug.Log (input);
+//			string input = GetComponent<AttackMoveset> ().input (
+//				               Input.GetAxis ("LeftStickX_P" + playerNum),
+//				               Input.GetAxis ("LeftStickY_P" + playerNum),
+//				               touchingGround);
+//			Debug.Log (input);
+			if (meleeAttack == null) {
+				GetComponent<AttackMoveset> ().doAttack (
+					Input.GetAxis ("LeftStickX_P" + playerNum),
+					Input.GetAxis ("LeftStickY_P" + playerNum),
+					touchingGround,
+					directionModifier,
+					currentState,
+					playerNum,
+					this);
+			}
 		}
 
 		//Putting up Shield
@@ -268,6 +251,14 @@ public class Player : MonoBehaviour {
 		if (coll.gameObject.tag == "Floor") 
 		{
 			touchingGround = true;
+			if (meleeAttack != null) 
+			{
+				if (meleeAttack.GetComponent<Melee> ().grounded == false) 
+				{
+					Destroy (meleeAttack);
+					meleeAttack = null;
+				}
+			}
 		}
 
 		if (coll.gameObject.tag == "Wall") 
@@ -282,6 +273,14 @@ public class Player : MonoBehaviour {
 		if (coll.gameObject.tag == "Floor") 
 		{
 			touchingGround = false; 
+			if (meleeAttack != null) 
+			{
+				if (meleeAttack.GetComponent<Melee> ().grounded == true) 
+				{
+					Destroy (meleeAttack);
+					meleeAttack = null;
+				}
+			}
 		}
 
 		if (coll.gameObject.tag == "Wall")  
@@ -300,7 +299,11 @@ public class Player : MonoBehaviour {
 		fastFallGrav = rps.fastFallGrav;
 		maxAirActions = rps.maxAirActions;
 		shieldDiminishRate = rps.shieldDiminishRate;
-		color = rps.color;
+		if (currentHitStun == 0) {
+			color = rps.color;
+		} else {
+			color = RPSX.inHitStun;
+		}
 		shotDelay = rps.projectileFireRate;
 		if (airActionsRemaining > maxAirActions) 
 		{
@@ -557,7 +560,6 @@ public class Player : MonoBehaviour {
 
 	void handleAttackDuration ()
 	{
-
 		if (attackDuration <= 0) 
 		{
 			attackDuration = 0;
@@ -565,10 +567,49 @@ public class Player : MonoBehaviour {
 			meleeAttack = null;
 		}
 
-		if (meleeAttack != null) 
-		{
+		if (meleeAttack != null) {
 			attackDuration--;
+			actionable = false;
+		} else {
+			actionable = true;
 		}
 	}
+
+	void moving ()
+	{
+		//Left and right movement.
+		if ((Input.GetAxis ("LeftStickX_P" + playerNum) > 0) && stopRightMomentum == false) 
+		{
+			sr.flipX = false;
+			directionModifier = 1;
+			if (touchingGround) {
+				rb.velocity = new Vector2 (moveSpeed, rb.velocity.y);
+			} 
+			else 
+			{
+				rb.velocity = new Vector2 (moveSpeed * airSpeedModifier, rb.velocity.y);
+			}
+		}
+
+		if ((Input.GetAxis ("LeftStickX_P" + playerNum) < 0) && stopLeftMomentum == false) 
+		{
+			sr.flipX = true;
+			directionModifier = -1;
+			if (touchingGround) {
+				rb.velocity = new Vector2 (moveSpeed * -1, rb.velocity.y);
+			} 
+			else 
+			{
+				rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier), rb.velocity.y);
+			}
+		}
+
+		if (Input.GetAxis ("LeftStickX_P" + playerNum) == 0)
+		{
+			rb.velocity = new Vector2 (0, rb.velocity.y);
+		}
+
+	}
+		
 
 }
