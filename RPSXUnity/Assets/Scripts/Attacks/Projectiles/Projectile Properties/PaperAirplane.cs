@@ -31,6 +31,7 @@ public class PaperAirplane : Projectile {
 		handleColor ();
 		handleMovement ();
 		handleDuration ();
+		avoidCollidingWithSelf ();
 
 	}
 

@@ -21,6 +21,7 @@ public class Melee : Attack {
 	public virtual void Update ()
 	{
 		handleColor ();
+		avoidCollidingWithSelf ();
 		handlePosition ();
 	}
 
@@ -34,6 +35,7 @@ public class Melee : Attack {
 		base.hitPlayer (p);
 		Vector2 knockBackDir = new Vector2 (knockBackX, knockBackY);
 		Rigidbody2D rb = p.gameObject.GetComponent<Rigidbody2D> ();
+		rb.velocity = Vector3.zero;
 		rb.AddForce (knockBackDir);
 	}
 
@@ -44,13 +46,13 @@ public class Melee : Attack {
 		string result = RPSX.determineWinner (state, p.currentState);
 		if (result == "Loss") 
 		{
-			bounceAway = new Vector2 ((reflectKnockBackX * -2), reflectKnockBackY * - 2);
+			bounceAway = new Vector2 ((knockBackX * -2), knockBackY * - 2);
 			rb.AddForce (bounceAway);  
 		} 
 		else 
 		{
 			base.hitShield (p);
-			bounceAway = new Vector2 (knockBackX, reflectKnockBackY);
+			bounceAway = new Vector2 (knockBackX * -1, knockBackY * -1);
 			rb.AddForce (bounceAway);  
 		}
 	}

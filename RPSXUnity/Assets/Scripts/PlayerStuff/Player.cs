@@ -39,6 +39,7 @@ public class Player : MonoBehaviour {
 
 	GameObject shield;
 	Shield s;
+	public Collider2D playerCollider;
 	public float maxShieldDuration;
 	public float currentShieldDuration;
 	public bool shieldUp;
@@ -70,6 +71,7 @@ public class Player : MonoBehaviour {
 		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
 		maxShieldDuration = RPSX.maxShieldDuration;
 		currentShieldDuration = RPSX.maxShieldDuration;
+		playerCollider = GetComponent<Collider2D> ();
 	}
 
 	void Start () {
@@ -106,8 +108,7 @@ public class Player : MonoBehaviour {
 		handleAttackDuration ();
 		if (meleeAttack == null || meleeAttack.GetComponent<Melee> ().grounded == false) 
 		{
-			if (currentHitStun <= 0) 
-			{
+			if (currentHitStun <= 0) {
 				moving ();
 			}
 		}

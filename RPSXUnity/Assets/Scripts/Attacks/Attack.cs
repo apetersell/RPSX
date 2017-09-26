@@ -12,6 +12,12 @@ public abstract class Attack : MonoBehaviour {
 	public Color stateColor;  //The color of the attack (changes based on state).
 	public SpriteRenderer sr;
 
+	public void avoidCollidingWithSelf ()
+	{
+		GameObject myPlayer = GameObject.Find ("Player_" + owner);
+		Physics2D.IgnoreCollision (myPlayer.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
+	}
+
 	// Makes sure the attack is colored correctly based on it's state.
 	public void handleColor ()
 	{
@@ -40,6 +46,7 @@ public abstract class Attack : MonoBehaviour {
 	//Handles Collisions with other objects.
 	public virtual void OnCollisionEnter2D (Collision2D coll)
 	{
+		Debug.Log (this.gameObject.name + " hit " + coll.gameObject.name);
 		//Handles collisions with players.
 		if (coll.gameObject.tag == "Player") 
 		{
@@ -47,11 +54,11 @@ public abstract class Attack : MonoBehaviour {
 			if (p.playerNum != owner) {
 				hitPlayer (p);
 			} 
-			//Ignores collision if colliding with player who performed that attack (so you can't hit yourself).
-			if (p.playerNum == owner) 
-			{
-				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
-			}
+//			//Ignores collision if colliding with player who performed that attack (so you can't hit yourself).
+//			if (p.playerNum == owner) 
+//			{
+//				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
+//			}
 		}
 		//Handles collisions with shields.
 		if (coll.gameObject.tag == "Shield")
