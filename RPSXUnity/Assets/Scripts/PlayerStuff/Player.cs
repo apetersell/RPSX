@@ -458,6 +458,7 @@ public class Player : MonoBehaviour {
 		currentHitStun = inflictedHitStun; 
 		Destroy (meleeAttack);
 		meleeAttack = null;
+	
 	}
 
 	public void takeShieldDamage (float damage, string sentState)

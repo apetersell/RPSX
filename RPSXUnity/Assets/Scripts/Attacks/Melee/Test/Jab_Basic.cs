@@ -11,10 +11,9 @@ public class Jab_Basic : Melee {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public override void Update () {
 
-		state = player.currentState;
-
+		base.Update ();
 		if (Input.GetButtonDown ("XButton_P" + owner)) 
 		{
 			if (nextJab <= 3) 
