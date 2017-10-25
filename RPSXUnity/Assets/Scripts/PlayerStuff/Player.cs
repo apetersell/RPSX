@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-	Rigidbody2D rb;
-	SpriteRenderer sr;
-	StateCooldowns sc;
-	SignSelector ss;
-	Color color;
-	Color flashing;
+	public Rigidbody2D rb;
+	public SpriteRenderer sr;
+	public StateCooldowns sc;
+	public SignSelector ss;
+	public Color color;
+	public Color flashing;
 	public bool shieldDebug;
 	public bool stateDebug;
 	public RPSState rps;
@@ -37,8 +37,8 @@ public class Player : MonoBehaviour {
 	public bool passThroughPlatforms;
 	public bool fusionReady; 
 
-	GameObject shield;
-	Shield s;
+	public GameObject shield;
+	public Shield s;
 	public Collider2D playerCollider;
 	public float maxShieldDuration;
 	public float currentShieldDuration;
@@ -61,11 +61,11 @@ public class Player : MonoBehaviour {
 	public float attackDuration;
 	public GameObject meleeAttack; 
 
-	SFXGuy sfx;
+	public SFXGuy sfx;
 
 
 	// Use this for initialization
-	void Awake ()
+	public virtual void Awake ()
 	{
 		shield = GameObject.Find ("Shield_P" + playerNum);
 		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
@@ -74,7 +74,7 @@ public class Player : MonoBehaviour {
 		playerCollider = GetComponent<Collider2D> ();
 	}
 
-	void Start () {
+	public virtual void Start () {
 
 		rb = GetComponent<Rigidbody2D> ();
 		sr = GetComponent<SpriteRenderer> ();
@@ -88,7 +88,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	public virtual void Update () {
 
 		if (actionable) 
 		{
@@ -99,7 +99,8 @@ public class Player : MonoBehaviour {
 		chooseState ();
 		applyStats ();
 		handleHitStun ();
-		if (stateDebug == false) {
+		if (stateDebug == false) 
+		{
 			stateTimer ();
 		}
 		handleShield ();
@@ -108,7 +109,8 @@ public class Player : MonoBehaviour {
 		handleAttackDuration ();
 		if (meleeAttack == null || meleeAttack.GetComponent<Melee> ().grounded == false) 
 		{
-			if (currentHitStun <= 0) {
+			if (currentHitStun <= 0) 
+			{
 				moving ();
 			}
 		}
@@ -116,7 +118,7 @@ public class Player : MonoBehaviour {
 
 	}
 		
-	void actions ()
+	public virtual void actions ()
 	{
 		//Jumping
 		if (Input.GetButtonDown ("AButton_P" + playerNum)) 
@@ -126,20 +128,29 @@ public class Player : MonoBehaviour {
 				jump (jumpSpeed);
 			}
 		}
-
-		//FastFalling/Fallling through soft platforms
-		if (affectedByGrav) 
+		airAction();
+		shoot();
+		normalAttacks ();
+		changeRPS ();
+		fastFalling ();
+		if (shieldDebug == false) 
 		{
-			if (Input.GetAxis ("LeftStickY_P" + playerNum) > gravityThreshold) {
-				rb.gravityScale = fastFallGrav;
-				passThroughPlatforms = true;
-			} else {
-				rb.gravityScale = normalGrav;
-				passThroughPlatforms = false;
+			if (shieldBroken == false) 
+			{
+				putUpShield ();
 			}
-		}
+		} 
+	}
 
-		//AirAction
+	//Handles jumping
+	public virtual void jump (float jumpNum) 
+	{
+		rb.velocity = new Vector2 (rb.velocity.x, jumpNum); 
+	}
+
+	//What happens when a player "double jumps"
+	public virtual void airAction ()
+	{
 		if (Input.GetButtonDown ("AButton_P" + playerNum) && touchingGround == false) 
 		{
 			if (airActionsRemaining != 0) 
@@ -148,55 +159,47 @@ public class Player : MonoBehaviour {
 				airActionsRemaining--;
 			}
 		}
+	}
 
-		//Projectile Attack
+	//The player can put up shield with RT
+	public virtual void putUpShield ()
+	{
+		if (shieldDebug == false) 
+		{
+			if (Input.GetAxis ("RTrigger_P" + playerNum) == 1) 
+			{
+				shield.SetActive (true);
+				shieldUp = true;
+			} 
+			else 
+			{
+				shield.SetActive (false);
+				shieldUp = false;
+			}
+		} 
+		else 
+		{
+			shield.SetActive (true); 
+			shieldUp = true;
+		}
+	}
+
+	//Handdles projectile attack
+	public virtual void shoot ()
+	{
 		if (Input.GetButtonDown ("BButton_P" + playerNum))
 		{
 			if (canShoot) 
 			{
 				GetComponent<ProjectileLauncher> ().fireProjectile (playerNum, directionModifier, currentState, touchingGround);
 			}
-			
-		}
 
-		//Melee Attacking
-		if (Input.GetButtonDown ("XButton_P" + playerNum))
-		{
-//			string input = GetComponent<AttackMoveset> ().input (
-//				               Input.GetAxis ("LeftStickX_P" + playerNum),
-//				               Input.GetAxis ("LeftStickY_P" + playerNum),
-//				               touchingGround);
-//			Debug.Log (input);
-			if (meleeAttack == null) {
-				GetComponent<AttackMoveset> ().doAttack (
-					Input.GetAxis ("LeftStickX_P" + playerNum),
-					Input.GetAxis ("LeftStickY_P" + playerNum),
-					touchingGround,
-					directionModifier,
-					currentState,
-					playerNum,
-					this);
-			}
 		}
+	}
 
-		//Putting up Shield
-		if (shieldDebug == false) {
-			if (shieldBroken == false) {
-				if (Input.GetAxis ("RTrigger_P" + playerNum) == 1) {
-					shield.SetActive (true);
-					shieldUp = true;
-				} else {
-					shield.SetActive (false);
-					shieldUp = false;
-				}
-			}
-		} else {
-			shield.SetActive (true);
-			shieldUp = true;
-		}
-				
-
-		//Change RPS
+	//Handles changing RPS State
+	public virtual void changeRPS ()
+	{
 		if (Input.GetAxis ("LTrigger_P" + playerNum) == 1) 
 		{
 			if (selectedState != currentState && !sc.statesOnCoolDown.Contains(selectedState)) 
@@ -242,14 +245,45 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-
-	public void jump (float jumpNum) 
+	//Handles normal XButton attacks
+	public virtual void normalAttacks ()
 	{
-		rb.velocity = new Vector2 (rb.velocity.x, jumpNum); 
+		if (Input.GetButtonDown ("XButton_P" + playerNum))
+		{
+			//			string input = GetComponent<AttackMoveset> ().input (
+			//				               Input.GetAxis ("LeftStickX_P" + playerNum),
+			//				               Input.GetAxis ("LeftStickY_P" + playerNum),
+			//				               touchingGround);
+			//			Debug.Log (input);
+			if (meleeAttack == null) {
+				GetComponent<AttackMoveset> ().doAttack (
+					Input.GetAxis ("LeftStickX_P" + playerNum),
+					Input.GetAxis ("LeftStickY_P" + playerNum),
+					touchingGround,
+					directionModifier,
+					currentState,
+					playerNum,
+					this);
+			}
+		}
+	}
+
+	//Player falls faster when holding down.
+	public virtual void fastFalling ()
+	{
+		if (affectedByGrav) 
+		{
+			if (Input.GetAxis ("LeftStickY_P" + playerNum) > gravityThreshold) {
+				rb.gravityScale = fastFallGrav;
+				passThroughPlatforms = true;
+			} else {
+				rb.gravityScale = normalGrav;
+				passThroughPlatforms = false;
+			}
+		}
 	}
 		
-
-	void OnCollisionEnter2D (Collision2D coll)
+	public virtual void OnCollisionEnter2D (Collision2D coll)
 	{
 		//Reset Jumps upon touching ground
 		if (coll.gameObject.tag == "Floor") 
@@ -272,7 +306,7 @@ public class Player : MonoBehaviour {
 	}
 		
 
-	void OnCollisionExit2D (Collision2D coll)
+	public virtual void OnCollisionExit2D (Collision2D coll)
 	{
 		if (coll.gameObject.tag == "Floor") 
 		{
@@ -294,7 +328,7 @@ public class Player : MonoBehaviour {
 	}
 
 	//Adjusting Stats with State Change
-	void applyStats ()
+	public virtual void applyStats ()
 	{
 		moveSpeed = rps.moveSpeed;
 		airSpeedModifier = rps.airSpeedModifier;
@@ -319,7 +353,7 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	void chooseState ()
+	public virtual void chooseState ()
 	{
 		if (rpsNum > 3) {
 			rpsNum = 1;
@@ -352,7 +386,7 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	void stateTimer()
+	public virtual void stateTimer()
 	{
 		currentTimeinState = currentTimeinState - Time.deltaTime;
 		if (currentTimeinState <= 0 && currentState != "Basic") 
@@ -365,7 +399,7 @@ public class Player : MonoBehaviour {
 	}
 
 	//Shield Stuff
-	void handleShield ()
+	public virtual void handleShield ()
 	{
 		//Shield duration goes down when shield is up.  Shield regenarates when not in use.
 		if (shieldDebug == false) {
@@ -406,7 +440,7 @@ public class Player : MonoBehaviour {
 	}
 
 	// Reset back to Basic State
-	public void backToBasic ()
+	public virtual void backToBasic ()
 	{
 		Destroy (gameObject.GetComponent<RPSState> ());
 		Destroy (gameObject.GetComponent <ProjectileLauncher> ());
@@ -424,7 +458,7 @@ public class Player : MonoBehaviour {
 	}
 
 	//Makes sure player is appropriate state color.  Flashes when state is close to over.
-	void handleColor ()
+	public virtual void handleColor ()
 	{
 		flashing = Color.Lerp(color, RPSX.basicColor, Mathf.PingPong(Time.time*10, 1));
 		if (currentTimeinState <= 3 && currentState != "Basic") {
@@ -437,7 +471,7 @@ public class Player : MonoBehaviour {
 	}
 
 	//Function used for taking damage.
-	public void takeDamage (float damage, string sentState, float inflictedHitStun)
+	public virtual void takeDamage (float damage, string sentState, float inflictedHitStun)
 	{
 		if (sentState != "Enviornment") {
 			string result = RPSX.determineWinner (currentState, sentState);
@@ -461,7 +495,7 @@ public class Player : MonoBehaviour {
 	
 	}
 
-	public void takeShieldDamage (float damage, string sentState)
+	public virtual void takeShieldDamage (float damage, string sentState)
 	{
 		string result = RPSX.determineWinner (currentState, sentState);
 		if (result == "Loss") 
@@ -474,7 +508,7 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	public void handleShotDelay ()
+	public virtual void handleShotDelay ()
 	{
 		if (canShoot == false) 
 		{
@@ -487,20 +521,20 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	public void startShotDelay ()
+	public virtual void startShotDelay ()
 	{
 		currentShotDelay = 0;
 		canShoot = false;
 	}
 
-	public void selectionEffect (string state)
+	public virtual void selectionEffect (string state)
 	{
 		GameObject effect = Instantiate(Resources.Load("Prefabs/Effects/SelectEffect")) as GameObject;
 		effect.GetComponent<SelectionEffect> ().state = state;
 		effect.GetComponent<SelectionEffect> ().playerSign = ss.gameObject;
 	}
 
-	void movementSmoothing ()
+	public virtual void movementSmoothing ()
 	{
 
 		// Resets Air Actions when touching ground
@@ -548,7 +582,7 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	void handleHitStun ()
+	public virtual void handleHitStun ()
 	{
 		currentHitStun--;
 		if (currentHitStun < 0) 
@@ -563,7 +597,7 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	void handleAttackDuration ()
+	public virtual void handleAttackDuration ()
 	{
 		if (attackDuration <= 0) 
 		{
@@ -580,7 +614,7 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	void moving ()
+	public virtual void moving ()
 	{
 		//Left and right movement.
 		if ((Input.GetAxis ("LeftStickX_P" + playerNum) > 0) && stopRightMomentum == false) 
