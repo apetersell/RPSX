@@ -19,8 +19,8 @@ public class FallToDeath : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		player1 = GameObject.Find ("Player_1");
-		player2 = GameObject.Find ("Player_2");
+		player1 = GameObject.Find (RPSX.Player1Name);
+		player2 = GameObject.Find (RPSX.Player2Name);
 		spawn1 = player1.transform.position;
 		spawn2 = player2.transform.position;
 		

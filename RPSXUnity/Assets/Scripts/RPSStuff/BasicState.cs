@@ -4,13 +4,6 @@ using UnityEngine;
 
 public class BasicState : RPSState {
 
-	private Color lightGreen;
-	private Color lightBlue;
-	private Color lightRed;
-
-
-
-
 	void Awake () {
 
 		p = GetComponent<Player> ();

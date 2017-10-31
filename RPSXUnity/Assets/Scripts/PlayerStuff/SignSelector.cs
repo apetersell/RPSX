@@ -15,7 +15,6 @@ public class SignSelector : MonoBehaviour {
 	public float timer;
 	public float timerMax; 
 	public bool visible;
-	GameObject player;
 	Player p;
 	StateCooldowns sc;
 	SpriteRenderer sr;
@@ -26,9 +25,8 @@ public class SignSelector : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		player = GameObject.Find ("Player_" + playerNum);
-		p = player.GetComponent<Player> ();
-		sc = player.GetComponent<StateCooldowns> ();
+		p = GetComponentInParent<Player> ();
+		sc = GetComponentInParent<StateCooldowns> ();
 		sr = GetComponent<SpriteRenderer> ();
 	}
 	

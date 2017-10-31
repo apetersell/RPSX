@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class DynamicCamera : MonoBehaviour {
 
-	public GameObject player1;
-	public GameObject player2;
-	public GameObject fusion;
-	public bool fused; 
+	GameObject player1;
+	GameObject player2;
+//	public GameObject fusion;
+//	public bool fused; 
 	public float camZ;
 	float camZoom;
 	public float zoomLowerLim; 
@@ -22,15 +22,15 @@ public class DynamicCamera : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		player1 = GameObject.Find ("Player_1");
-		player2 = GameObject.Find ("Player_2");
+		player1 = GameObject.Find (RPSX.Player1Name);
+		player2 = GameObject.Find (RPSX.Player2Name);
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		fusion = GameObject.Find ("FusionPlayer");
-		if (fused == false) {
+//		fusion = GameObject.Find ("FusionPlayer");
+//		if (fused == false) {
 			Camera.main.orthographicSize = camZoom;
 			midpoint = ((player1.transform.position - player2.transform.position) * 0.5f) + player2.transform.position;
 			midpoint.z = camZ;
@@ -60,9 +60,9 @@ public class DynamicCamera : MonoBehaviour {
 			if (midpoint.y < lowerLimit) {
 				midpoint.y = lowerLimit;
 			}
-		} else 
-		{
-			Camera.main.transform.position = new Vector3 (fusion.transform.position.x, fusion.transform.position.y, camZ);
-		}
+//		} else 
+//		{
+//			Camera.main.transform.position = new Vector3 (fusion.transform.position.x, fusion.transform.position.y, camZ);
+//		}
 	}
 }

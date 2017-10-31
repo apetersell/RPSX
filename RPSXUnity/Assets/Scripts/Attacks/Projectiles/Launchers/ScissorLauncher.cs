@@ -6,7 +6,15 @@ public class ScissorLauncher : ProjectileLauncher {
 
 	public override void fireProjectile (int owner, int directionMod, string state, bool touchingGround)
 	{
-		GameObject p = GameObject.Find ("Player_" + ownerNum);
+		GameObject p = null;
+		if (owner == 1) 
+		{
+			p = GameObject.Find (RPSX.Player1Name);
+		}
+		if (owner == 2) 
+		{
+			p = GameObject.Find (RPSX.Player2Name);
+		}
 		float modX = (Input.GetAxis ("LeftStickX_P" + owner));
 		float modY = (Input.GetAxis ("LeftStickY_P" + owner)) * -1;
 		GameObject beam = null;

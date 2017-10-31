@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-	public Rigidbody2D rb;
-	public SpriteRenderer sr;
-	public StateCooldowns sc;
-	public SignSelector ss;
-	public Color color;
-	public Color flashing;
+	protected Rigidbody2D rb;
+	protected SpriteRenderer sr;
+	protected StateCooldowns sc;
+	protected SignSelector ss;
+	protected Color color;
+	protected Color flashing;
 	public bool shieldDebug;
 	public bool stateDebug;
 	public RPSState rps;
@@ -207,7 +207,7 @@ public class Player : MonoBehaviour {
 				sc.putStateOnCooldown (currentState);
 				if (selectedState == "Rock" && sc.rockOnCooldown == false) {
 					currentState = "Rock";
-					Destroy (gameObject.GetComponent<RPSState> ()); 
+					Destroy (gameObject.GetComponent<RPSState>()); 
 					Destroy (gameObject.GetComponent<ProjectileLauncher> ());
 					gameObject.AddComponent<RockLauncher> ();
 					gameObject.AddComponent<RockState> ();
@@ -216,7 +216,7 @@ public class Player : MonoBehaviour {
 
 				} else if (selectedState == "Paper" && sc.paperOnCooldown == false) {
 					currentState = "Paper";
-					Destroy (gameObject.GetComponent<RPSState> ());
+					Destroy (gameObject.GetComponent<RPSState>()); 
 					Destroy (gameObject.GetComponent<ProjectileLauncher> ());
 					gameObject.AddComponent<PaperAirplaneLauncher> ();
 					gameObject.AddComponent<PaperState> ();
@@ -224,7 +224,7 @@ public class Player : MonoBehaviour {
 					selectionEffect ("Paper");
 				} else if (selectedState == "Scissors" && sc.scissorsOnCooldown == false) {
 					currentState = "Scissors";
-					Destroy (gameObject.GetComponent<RPSState> ());
+					Destroy (gameObject.GetComponent<RPSState>()); 
 					Destroy (gameObject.GetComponent<ProjectileLauncher> ());
 					gameObject.AddComponent<ScissorLauncher> ();
 					gameObject.AddComponent<ScissorsState> ();

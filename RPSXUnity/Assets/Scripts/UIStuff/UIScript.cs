@@ -14,12 +14,20 @@ public class UIScript : MonoBehaviour {
 	public Text shieldValue;
 	public Sprite fullShield;
 	public Sprite brokenShield;
+	string TargetName;
 
 
 	// Use this for initialization
 	void Start () {
 
-		p = GameObject.Find ("Player_" + playerNum).GetComponent<Player> ();
+		if (playerNum == 1) 
+		{
+			p = GameObject.Find (RPSX.Player1Name).GetComponent<Player> ();
+		}
+		if (playerNum == 2) 
+		{
+			p = GameObject.Find (RPSX.Player2Name).GetComponent<Player> ();
+		}
 		
 	}
 	

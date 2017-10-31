@@ -6,7 +6,15 @@ public class PaperAirplaneLauncher : ProjectileLauncher {
 
 	public override void fireProjectile (int owner, int directionMod, string state, bool touchingGround)
 	{
-		GameObject p = GameObject.Find ("Player_" + ownerNum);
+		Player p = null;
+		if (owner == 1) 
+		{
+			p = GameObject.Find (RPSX.Player1Name).GetComponent<Player> ();
+		}
+		if (owner == 2) 
+		{
+			p = GameObject.Find (RPSX.Player2Name).GetComponent<Player> ();
+		}
 		float modX = (Input.GetAxis ("LeftStickX_P" + owner));
 		float modY = (Input.GetAxis ("LeftStickY_P" + owner)) * -1;
 		GameObject airplane = null;
@@ -27,6 +35,6 @@ public class PaperAirplaneLauncher : ProjectileLauncher {
 		airplane.GetComponent<Projectile> ().state = state;
 		airplane.GetComponent<Projectile> ().owner = owner;
 		airplane.GetComponent<Projectile> ().dir = direction;
-		p.GetComponent<Player> ().startShotDelay (); 
+		p.startShotDelay (); 
 	}
 }

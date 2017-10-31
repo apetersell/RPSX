@@ -19,11 +19,17 @@ public class HealthBarUI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-
-		owner = GameObject.Find ("Player_" + playerNum).GetComponent<Player> ();
-		enemy = GameObject.Find ("Player_" + enemyNum).GetComponent<Player> ();
-
-		
+		if (playerNum == 1) 
+		{
+			owner = GameObject.Find (RPSX.Player1Name).GetComponent<Player> ();
+			enemy = GameObject.Find (RPSX.Player2Name).GetComponent<Player> ();
+		}
+		if (playerNum == 2) 
+		{
+			owner = GameObject.Find (RPSX.Player2Name).GetComponent<Player> ();
+			enemy = GameObject.Find (RPSX.Player1Name).GetComponent<Player> ();
+		}
+			
 	}
 	
 	// Update is called once per fram

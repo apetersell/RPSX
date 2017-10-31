@@ -14,7 +14,15 @@ public abstract class Attack : MonoBehaviour {
 
 	public void avoidCollidingWithSelf ()
 	{
-		GameObject myPlayer = GameObject.Find ("Player_" + owner);
+		GameObject myPlayer = null;
+		if (owner == 1) 
+		{
+			myPlayer = GameObject.Find (RPSX.Player1Name);
+		}
+		if (owner == 2) 
+		{
+			myPlayer = GameObject.Find (RPSX.Player2Name);
+		}
 		Physics2D.IgnoreCollision (myPlayer.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
 	}
 

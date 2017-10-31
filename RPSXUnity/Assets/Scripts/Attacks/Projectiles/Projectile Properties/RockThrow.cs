@@ -35,7 +35,14 @@ public class RockThrow : Projectile {
 		{
 			damage = maxDamage;
 		}
-		player = GameObject.Find ("Player_" + owner);
+		if (owner == 1) 
+		{
+			player = GameObject.Find (RPSX.Player1Name);
+		}
+		if (owner == 2) 
+		{
+			player = GameObject.Find (RPSX.Player2Name);
+		}
 		handleColor ();
 		if (beingHeld == false) 
 		{

@@ -43,7 +43,15 @@ public class PaperAirplane : Projectile {
 	public override void handleMovement ()
 	{
 		opponentNum = RPSX.opponentNum (owner);
-		GameObject opponent = GameObject.Find ("Player_" + opponentNum);
+		GameObject opponent = null;
+		if (opponentNum == 1) 
+		{
+			opponent = GameObject.Find (RPSX.Player1Name);
+		}
+		if (opponentNum == 2) 
+		{
+			opponent = GameObject.Find (RPSX.Player2Name);
+		}
 		dir = (opponent.transform.position - transform.position).normalized;
 		rb.velocity = new Vector2 (dir.x * XSpeed, dir.y * YSpeed);
 	}

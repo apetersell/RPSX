@@ -76,8 +76,8 @@ public class WinDecider : MonoBehaviour {
 	void findPlayers ()
 	{
 		if (player1 == null && player2 == null && itsOver == false) {
-			player1 = GameObject.Find ("Player_1").GetComponent<Player> ();
-			player2 = GameObject.Find ("Player_2").GetComponent<Player> ();
+			player1 = GameObject.Find (RPSX.Player1Name).GetComponent<Player> ();
+			player2 = GameObject.Find (RPSX.Player2Name).GetComponent<Player> ();
 		}
 	}
 		

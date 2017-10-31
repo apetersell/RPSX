@@ -12,7 +12,6 @@ public class CoolDownUI : MonoBehaviour {
 	Image img;
 	public float maxTime; 
 	public float currentTime; 
-	GameObject player;
 	StateCooldowns sc;
 	Player p;
 	public Color color;
@@ -24,9 +23,16 @@ public class CoolDownUI : MonoBehaviour {
 	void Start () {
 
 		img = GetComponent<Image> ();
-		player = GameObject.Find ("Player_" + playerNum);
-		sc = player.GetComponent<StateCooldowns> ();
-		p = player.GetComponent<Player> ();
+		if (playerNum == 1) 
+		{
+			p = GameObject.Find (RPSX.Player1Name).GetComponent<Player> ();
+		}
+		if (playerNum == 2) 
+		{
+			p = GameObject.Find (RPSX.Player2Name).GetComponent<Player> ();
+		}
+		sc = p.gameObject.GetComponent<StateCooldowns> ();
+
 
 		if (signType == "Rock") 
 		{

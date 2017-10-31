@@ -9,6 +9,15 @@ public class RockLauncher : ProjectileLauncher {
 
 	public override void fireProjectile (int owner, int directionMod, string state, bool touchingGround)
 	{
+		Player p = null;
+		if (owner == 1) 
+		{
+			p = GameObject.Find (RPSX.Player1Name).GetComponent<Player> ();
+		}
+		if (owner == 2) 
+		{
+			p = GameObject.Find (RPSX.Player2Name).GetComponent<Player> ();
+		}
 		if (holdingRock && currentRock != null) 
 		{
 			Rigidbody2D rb = currentRock.GetComponent<Rigidbody2D> ();
@@ -30,15 +39,13 @@ public class RockLauncher : ProjectileLauncher {
 			rb.AddForce (direction, ForceMode2D.Impulse);
 			currentRock.GetComponent<RockThrow> ().beingHeld = false;
 			currentRock.GetComponent<Rigidbody2D> ().velocity = direction;
-			Player p = GameObject.Find ("Player_" + ownerNum).GetComponent<Player> ();
 			p.startShotDelay ();
 			currentRock = null;
 			p.GetComponent<Player> ().heldRock = null;
 				
 		} 
 		else 
-		{
-			GameObject p = GameObject.Find ("Player_" + ownerNum);   
+		{  
 			if (ProjectilePool.rockPool.Count == 0) { 
 				currentRock = Instantiate(Resources.Load("Prefabs/Projectiles/RockThrowPrefab")) as GameObject; 
 			} 
