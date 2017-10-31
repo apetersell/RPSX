@@ -8,6 +8,7 @@ public class RoughHiro : Player {
 	public List<GameObject> meshSkeleton = new List<GameObject> ();
 	public Animator anim;
 
+
 	public override void Awake ()
 	{
 		//Get a reference to the animator
@@ -19,7 +20,6 @@ public class RoughHiro : Player {
 		{
 			GameObject currentMesh = meshes.transform.GetChild (i).gameObject;
 			meshSkeleton.Add (currentMesh);
-			currentMesh.AddComponent<BoxCollider2D>();
 		}
 		shield = GameObject.Find ("Shield_" + gameObject.name);
 		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
@@ -102,6 +102,12 @@ public class RoughHiro : Player {
 
 	}
 
+	public override void jump (float jumpNum)
+	{
+		anim.SetTrigger ("Jump");
+		base.jump (jumpNum);
+	}
+
 	public override void handleColor()
 	{
 		flashing = Color.Lerp(color, RPSX.basicColor, Mathf.PingPong(Time.time*10, 1));
@@ -125,47 +131,14 @@ public class RoughHiro : Player {
 			}
 		}
 	}
-
-//	public override void applyStats ()
-//	{
-//		moveSpeed = rps.moveSpeed;
-//		airSpeedModifier = rps.airSpeedModifier;
-//		jumpSpeed = rps.jumpSpeed;
-//		normalGrav = rps.normalGrav;
-//		fastFallGrav = rps.fastFallGrav;
-//		maxAirActions = rps.maxAirActions;
-//		shieldDiminishRate = rps.shieldDiminishRate;
-//		if (currentHitStun == 0) 
-//		{
-//			foreach (GameObject mesh in meshSkeleton) 
-//			{
-//				SpriteMeshInstance smi = mesh.GetComponent<SpriteMeshInstance> ();
-//				smi.color = rps.color;
-//			}
-//		} else {
-//			foreach (GameObject mesh in meshSkeleton) 
-//			{
-//				SpriteMeshInstance smi = mesh.GetComponent<SpriteMeshInstance> ();
-//				smi.color = RPSX.inHitStun;
-//			}
-//		}
-//		shotDelay = rps.projectileFireRate;
-//		if (airActionsRemaining > maxAirActions) 
-//		{
-//			airActionsRemaining = maxAirActions;
-//		}
-//		if (currentShotDelay > shotDelay) 
-//		{
-//			currentShotDelay = shotDelay;
-//		}
-//	}
+		
 		
 	public virtual void handleAnimations ()
 	{
 		anim.SetBool ("Grounded", touchingGround);
 		anim.SetBool ("Shielding", shieldUp);
 		anim.SetFloat ("HitStun", currentHitStun);
-		anim.SetFloat ("HoriozntaltMovement", rb.velocity.x);
+		anim.SetFloat ("HorizontalMovement", Mathf.Abs(rb.velocity.x));
 		anim.SetFloat ("VerticalMovement", rb.velocity.y);
 	}
 
