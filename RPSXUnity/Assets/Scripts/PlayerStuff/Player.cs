@@ -57,6 +57,7 @@ public class Player : MonoBehaviour {
 	public float currentTimeinState;
 
 	public float currentHitStun;
+	public bool canMove;
 
 	public float attackDuration;
 	public GameObject meleeAttack; 
@@ -616,36 +617,31 @@ public class Player : MonoBehaviour {
 
 	public virtual void moving ()
 	{
-		//Left and right movement.
-		if ((Input.GetAxis ("LeftStickX_P" + playerNum) > 0) && stopRightMomentum == false) 
-		{
-			sr.flipX = false;
-			directionModifier = 1;
-			if (touchingGround) {
-				rb.velocity = new Vector2 (moveSpeed, rb.velocity.y);
-			} 
-			else 
-			{
-				rb.velocity = new Vector2 (moveSpeed * airSpeedModifier, rb.velocity.y);
+		if (canMove) {
+			//Left and right movement.
+			if ((Input.GetAxis ("LeftStickX_P" + playerNum) > 0) && stopRightMomentum == false) {
+				sr.flipX = false;
+				directionModifier = 1;
+				if (touchingGround) {
+					rb.velocity = new Vector2 (moveSpeed, rb.velocity.y);
+				} else {
+					rb.velocity = new Vector2 (moveSpeed * airSpeedModifier, rb.velocity.y);
+				}
 			}
-		}
 
-		if ((Input.GetAxis ("LeftStickX_P" + playerNum) < 0) && stopLeftMomentum == false) 
-		{
-			sr.flipX = true;
-			directionModifier = -1;
-			if (touchingGround) {
-				rb.velocity = new Vector2 (moveSpeed * -1, rb.velocity.y);
-			} 
-			else 
-			{
-				rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier), rb.velocity.y);
+			if ((Input.GetAxis ("LeftStickX_P" + playerNum) < 0) && stopLeftMomentum == false) {
+				sr.flipX = true;
+				directionModifier = -1;
+				if (touchingGround) {
+					rb.velocity = new Vector2 (moveSpeed * -1, rb.velocity.y);
+				} else {
+					rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier), rb.velocity.y);
+				}
 			}
-		}
 
-		if (Input.GetAxis ("LeftStickX_P" + playerNum) == 0)
-		{
-			rb.velocity = new Vector2 (0, rb.velocity.y);
+			if (Input.GetAxis ("LeftStickX_P" + playerNum) == 0) {
+				rb.velocity = new Vector2 (0, rb.velocity.y);
+			}
 		}
 
 	}

@@ -7,6 +7,8 @@ public class RoughHiro : Player {
 
 	public List<GameObject> meshSkeleton = new List<GameObject> ();
 	public Animator anim;
+	bool running;
+	bool walking;
 
 
 	public override void Awake ()
@@ -62,50 +64,87 @@ public class RoughHiro : Player {
 
 	public override void moving ()
 	{
-		//Left and right movement.
-		if ((Input.GetAxis ("LeftStickX_P" + playerNum) > 0) && stopRightMomentum == false) 
-		{
-			if (directionModifier != 1) 
-			{
-				flipCharacter ();
-				directionModifier = 1;
+
+		float stickInput = (Input.GetAxis ("LeftStickX_P" + playerNum));
+		float absSI = Mathf.Abs (stickInput); 
+		if (canMove) {
+			//Left and right movement.
+			if (stickInput > 0 && stopRightMomentum == false) {
+				if (directionModifier != 1) {
+					flipCharacter ();
+					directionModifier = 1;
+				}
+				if (touchingGround) 
+				{
+					rb.velocity = new Vector2 (moveSpeed * absSI, rb.velocity.y);
+				} else {
+					rb.velocity = new Vector2 ((moveSpeed * airSpeedModifier) * absSI, rb.velocity.y);
+				}
 			}
-			if (touchingGround) {
-				rb.velocity = new Vector2 (moveSpeed, rb.velocity.y);
-			} 
-			else 
-			{
-				rb.velocity = new Vector2 (moveSpeed * airSpeedModifier, rb.velocity.y);
+
+			if (stickInput < 0 && stopLeftMomentum == false) { 
+				if (directionModifier != -1) {
+					flipCharacter ();
+					directionModifier = -1;
+				}
+				if (touchingGround) {
+					rb.velocity = new Vector2 ((moveSpeed * -1) * absSI, rb.velocity.y);
+				} else {
+					rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier) * absSI, rb.velocity.y);
+				}
 			}
+
+//			if (Input.GetAxis ("LeftStickX_P" + playerNum) == 0) {
+//				rb.velocity = new Vector2 (0, rb.velocity.y);
+//			}
 		}
 
-		if ((Input.GetAxis ("LeftStickX_P" + playerNum) < 0) && stopLeftMomentum == false) 
+		if (absSI >= 0.5) 
 		{
-			if (directionModifier != -1) 
-			{
-				flipCharacter ();
-				directionModifier = -1;
-			}
-			if (touchingGround) {
-				rb.velocity = new Vector2 (moveSpeed * -1, rb.velocity.y);
-			} 
-			else 
-			{
-				rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier), rb.velocity.y);
-			}
+			running = true;
+			walking = false;
 		}
-
-		if (Input.GetAxis ("LeftStickX_P" + playerNum) == 0)
+		if (absSI < 0.5 && absSI != 0) 
 		{
-			rb.velocity = new Vector2 (0, rb.velocity.y);
+			walking = true;
+			running = false;
+		}
+		if (absSI == 0) 
+		{
+			walking = false;
+			running = false;
 		}
 
 	}
 
+	public override void actions ()
+	{
+		//Jumping
+		if (Input.GetButtonDown ("AButton_P" + playerNum)) 
+		{
+			if (touchingGround) 
+			{
+				anim.SetTrigger ("Jump");
+			}
+		}
+		airAction();
+		shoot();
+		normalAttacks ();
+		changeRPS ();
+		fastFalling ();
+		if (shieldDebug == false) 
+		{
+			if (shieldBroken == false) 
+			{
+				putUpShield ();
+			}
+		} 
+	}
+
 	public override void jump (float jumpNum)
 	{
-		anim.SetTrigger ("Jump");
 		base.jump (jumpNum);
+		Debug.Log ("Jump");
 	}
 
 	public override void handleColor()
@@ -137,6 +176,8 @@ public class RoughHiro : Player {
 	{
 		anim.SetBool ("Grounded", touchingGround);
 		anim.SetBool ("Shielding", shieldUp);
+		anim.SetBool ("Running", running);
+		anim.SetBool ("Walking", walking);
 		anim.SetFloat ("HitStun", currentHitStun);
 		anim.SetFloat ("HorizontalMovement", Mathf.Abs(rb.velocity.x));
 		anim.SetFloat ("VerticalMovement", rb.velocity.y);
