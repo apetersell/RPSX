@@ -18,7 +18,7 @@ public class AttackMoveset : MonoBehaviour {
 
 	public void doAttack (float stickPosX, float stickPosY, bool grounded, int directionModifier, string state, int owner, Player p)
 	{
-		string playerInput = RPSX.input (stickPosX, stickPosY, grounded);
+		string playerInput = RPSX.input (stickPosX, stickPosY, directionModifier, grounded, false, false);
 		GameObject attack = Instantiate(Resources.Load("Prefabs/MeleeAttacks/"+ moveset + "/" + playerInput)) as GameObject; 
 		Melee m = attack.GetComponent<Melee> ();
 		if (directionModifier == -1) {

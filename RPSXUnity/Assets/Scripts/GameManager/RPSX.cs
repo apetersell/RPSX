@@ -86,28 +86,42 @@ public class RPSX : MonoBehaviour {
 
 	}
 
-	public static string input (float x, float y, bool grounded)
+	public static string input (float x, float y, int dir, bool grounded, bool running, bool crouching)
 	{
 		string result = null; 
-		if (grounded) {
+		if (grounded) 
+		{
 			if (x == 0 && y == 0) {
 				result = "Jab";
 			}
-			if (Mathf.Abs (x) > Mathf.Abs (y)) {
-				result = "ForwardTilt";
+			if (Mathf.Abs (x) > Mathf.Abs (y)) 
+			{
+				if (running) {
+					result = "DashAttack";
+				} else {
+					result = "ForwardTilt";
+				}
 			}
 			if ((Mathf.Abs (x) < Mathf.Abs (y)) && y > 0) {
 				result = "DownTilt"; 
-			}
+			} 
 			if ((Mathf.Abs (x) < Mathf.Abs (y)) && y < 0) {
 				result = "UpTilt"; 
 			}
-		} else {
+		} 
+		else 
+		{
 			if (x == 0 && y == 0) {
 				result = "NeutralAir";
 			}
-			if (Mathf.Abs (x) > Mathf.Abs (y)) {
-				result = "ForwardAir";
+			if (Mathf.Abs (x) > Mathf.Abs (y)) 
+			{
+				if ((x > 0 && dir > 0) || (x < 0 && dir < 0)) {
+					result = "ForwardAir";
+				}
+				else {
+					result = "BackAir";
+				}
 			}
 			if ((Mathf.Abs (x) < Mathf.Abs (y)) && y > 0) {
 				result = "DownAir"; 

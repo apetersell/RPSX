@@ -9,6 +9,7 @@ public class RoughHiro : Player {
 	public Animator anim;
 	bool running;
 	bool walking;
+	bool crouching;
 
 
 	public override void Awake ()
@@ -56,7 +57,10 @@ public class RoughHiro : Player {
 		{
 			if (currentHitStun <= 0) 
 			{
-				moving ();
+				if (crouching == false) 
+				{
+					moving ();
+				}
 			}
 		}
 		rps = GetComponent<RPSState> ();
@@ -70,12 +74,12 @@ public class RoughHiro : Player {
 		if (canMove) {
 			//Left and right movement.
 			if (stickInput > 0 && stopRightMomentum == false) {
-				if (directionModifier != 1) {
-					flipCharacter ();
-					directionModifier = 1;
-				}
 				if (touchingGround) 
 				{
+					if (directionModifier != 1) {
+						flipCharacter ();
+						directionModifier = 1;
+					} 
 					rb.velocity = new Vector2 (moveSpeed * absSI, rb.velocity.y);
 				} else {
 					rb.velocity = new Vector2 ((moveSpeed * airSpeedModifier) * absSI, rb.velocity.y);
@@ -83,11 +87,11 @@ public class RoughHiro : Player {
 			}
 
 			if (stickInput < 0 && stopLeftMomentum == false) { 
-				if (directionModifier != -1) {
-					flipCharacter ();
-					directionModifier = -1;
-				}
 				if (touchingGround) {
+					if (directionModifier != -1) {
+						flipCharacter ();
+						directionModifier = -1;
+					}
 					rb.velocity = new Vector2 ((moveSpeed * -1) * absSI, rb.velocity.y);
 				} else {
 					rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier) * absSI, rb.velocity.y);
@@ -99,12 +103,12 @@ public class RoughHiro : Player {
 //			}
 		}
 
-		if (absSI >= 0.5) 
+		if (absSI >= 0.75) 
 		{
 			running = true;
 			walking = false;
 		}
-		if (absSI < 0.5 && absSI != 0) 
+		if (absSI < 0.75 && absSI != 0) 
 		{
 			walking = true;
 			running = false;
@@ -127,8 +131,12 @@ public class RoughHiro : Player {
 				anim.SetTrigger ("Jump");
 			}
 		}
+		if (Input.GetButtonDown ("BButton_P" + playerNum)) 
+		{
+			anim.SetTrigger ("Projectile");
+		}
 		airAction();
-		shoot();
+//		shoot();
 		normalAttacks ();
 		changeRPS ();
 		fastFalling ();
@@ -144,7 +152,11 @@ public class RoughHiro : Player {
 	public override void jump (float jumpNum)
 	{
 		base.jump (jumpNum);
-		Debug.Log ("Jump");
+	}
+
+	public override void shoot ()
+	{
+		GetComponent<ProjectileLauncher> ().fireProjectile (playerNum, directionModifier, currentState, touchingGround);
 	}
 
 	public override void handleColor()
@@ -170,14 +182,48 @@ public class RoughHiro : Player {
 			}
 		}
 	}
+
+	public override void normalAttacks ()
+	{
+		if (Input.GetButtonDown ("XButton_P" + playerNum))
+		{
+			string playerInput = RPSX.input (
+				Input.GetAxis("LeftStickX_P" + playerNum),
+				Input.GetAxis("LeftStickY_P" + playerNum),
+				directionModifier,
+				touchingGround,
+				running,
+				crouching);
+			anim.SetTrigger (playerInput);
+		}
+	}
+
+
+	public override void handleHitStun ()
+	{
+//		base.handleHitStun ();
+	}
+
+	public override void handleAttackDuration ()
+	{
+//		base.handleAttackDuration ();
+	}
 		
 		
 	public virtual void handleAnimations ()
 	{
+		if (Input.GetAxis ("LeftStickY_P" + playerNum) > gravityThreshold && touchingGround) 
+		{
+			crouching = true;
+		} else {
+			crouching = false;
+		}
+		anim.SetBool ("Actionable", actionable);
 		anim.SetBool ("Grounded", touchingGround);
 		anim.SetBool ("Shielding", shieldUp);
 		anim.SetBool ("Running", running);
 		anim.SetBool ("Walking", walking);
+		anim.SetBool ("Crouching", crouching);
 		anim.SetFloat ("HitStun", currentHitStun);
 		anim.SetFloat ("HorizontalMovement", Mathf.Abs(rb.velocity.x));
 		anim.SetFloat ("VerticalMovement", rb.velocity.y);

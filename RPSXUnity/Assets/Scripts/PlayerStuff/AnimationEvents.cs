@@ -6,6 +6,7 @@ using Anima2D;
 public class AnimationEvents : MonoBehaviour 
 {
 	public Player player;
+	public float miniJumpMod;
 	public AnimationClip dashStop; 
 	Rigidbody2D rb;
 
@@ -32,6 +33,16 @@ public class AnimationEvents : MonoBehaviour
 		player.canMove = true;
 	}
 
+	public virtual void turnOffActions ()
+	{
+		player.actionable = false;
+	}
+
+	public virtual void softUnlock ()
+	{
+		player.actionable = true;
+	}
+
 	public virtual void lockPlayer ()
 	{
 		player.actionable = false;
@@ -41,6 +52,16 @@ public class AnimationEvents : MonoBehaviour
 	public virtual void doJump ()
 	{
 		player.jump (player.jumpSpeed);
+	}
+
+	public virtual void miniJump ()
+	{
+		player.jump (player.jumpSpeed * miniJumpMod);
+	}
+
+	public virtual void doProjectile ()
+	{
+		player.shoot ();
 	}
 		
 	IEnumerator slowToStop (Vector3 speed, float time)
