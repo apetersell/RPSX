@@ -9,12 +9,12 @@ public abstract class Attack : MonoBehaviour {
 	public float damage; //How much damag the attack does to players.
 	public float shieldDamage; //How much damage the attack does to shields.
 	public float hitStun; //How long (in frames) the other player is stunned after getting hit by the attack.
+	public GameObject myPlayer;
 	public Color stateColor;  //The color of the attack (changes based on state).
 	public SpriteRenderer sr;
 
 	public void avoidCollidingWithSelf ()
 	{
-		GameObject myPlayer = null;
 		if (owner == 1) 
 		{
 			myPlayer = GameObject.Find (RPSX.Player1Name);

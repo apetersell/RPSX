@@ -256,16 +256,16 @@ public class Player : MonoBehaviour {
 			//				               Input.GetAxis ("LeftStickY_P" + playerNum),
 			//				               touchingGround);
 			//			Debug.Log (input);
-			if (meleeAttack == null) {
-				GetComponent<AttackMoveset> ().doAttack (
-					Input.GetAxis ("LeftStickX_P" + playerNum),
-					Input.GetAxis ("LeftStickY_P" + playerNum),
-					touchingGround,
-					directionModifier,
-					currentState,
-					playerNum,
-					this);
-			}
+//			if (meleeAttack == null) {
+////				GetComponent<AttackMoveset> ().doAttack (
+//					Input.GetAxis ("LeftStickX_P" + playerNum),
+//					Input.GetAxis ("LeftStickY_P" + playerNum),
+//					touchingGround,
+//					directionModifier,
+//					currentState,
+//					playerNum,
+//					this);
+//			}
 		}
 	}
 
@@ -476,15 +476,18 @@ public class Player : MonoBehaviour {
 	{
 		if (sentState != "Enviornment") {
 			string result = RPSX.determineWinner (currentState, sentState);
+			float inflictedDamage = 0;
 			if (result == "Win") {
-				HP = HP - (damage / 2);
+				inflictedDamage = damage /2;
 			}
 			if (result == "Loss") {
-				HP = HP - (damage * 2);
+				inflictedDamage = damage *2;
 			}
 			if (result == "Tie") {
-				HP = HP - damage;
+				inflictedDamage = damage;
 			}
+			HP -= inflictedDamage;
+			Debug.Log (result + ": " + this.name + " took " + inflictedDamage + " damage.");
 		} 
 		else 
 		{
@@ -493,6 +496,7 @@ public class Player : MonoBehaviour {
 		currentHitStun = inflictedHitStun; 
 		Destroy (meleeAttack);
 		meleeAttack = null;
+
 	
 	}
 
@@ -590,12 +594,12 @@ public class Player : MonoBehaviour {
 		{
 			currentHitStun = 0;
 		}
-		if (currentHitStun > 0) {
-			actionable = false; 
-		} else 
-		{
-			actionable = true;
-		}
+//		if (currentHitStun > 0) {
+//			actionable = false; 
+//		} else 
+//		{
+////			actionable = true;
+//		}
 	}
 
 	public virtual void handleAttackDuration ()

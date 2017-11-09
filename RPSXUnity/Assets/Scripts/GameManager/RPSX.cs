@@ -5,7 +5,7 @@ using UnityEngine;
 public class RPSX : MonoBehaviour {
 
 	public static string Player1Name = "RoughHiro";
-	public static string Player2Name = "Player_2";
+	public static string Player2Name = "RoughHiro2";
 
 	public static Color rockColor = new Color (0, 1f, 0f);
 	public static Color rockColorFaded = new Color (0.54f, 0.7f, 0.5f, 0.5f);

@@ -10,6 +10,7 @@ public class RoughHiro : Player {
 	bool running;
 	bool walking;
 	bool crouching;
+	public string movesetName;
 
 
 	public override void Awake ()
@@ -53,8 +54,8 @@ public class RoughHiro : Player {
 		movementSmoothing ();
 		handleAttackDuration ();
 		handleAnimations ();
-		if (meleeAttack == null || meleeAttack.GetComponent<Melee> ().grounded == false) 
-		{
+//		if (meleeAttack == null || meleeAttack.GetComponent<Melee> ().grounded == false) 
+//		{
 			if (currentHitStun <= 0) 
 			{
 				if (crouching == false) 
@@ -62,7 +63,6 @@ public class RoughHiro : Player {
 					moving ();
 				}
 			}
-		}
 		rps = GetComponent<RPSState> ();
 	}
 
@@ -136,7 +136,6 @@ public class RoughHiro : Player {
 			anim.SetTrigger ("Projectile");
 		}
 		airAction();
-//		shoot();
 		normalAttacks ();
 		changeRPS ();
 		fastFalling ();
@@ -194,6 +193,16 @@ public class RoughHiro : Player {
 				touchingGround,
 				running,
 				crouching);
+			Melee m = GetComponent<AttackMoveset> ().getAttack (playerInput);
+			if (playerInput == "BackAir") {
+				m.directionMod = directionModifier * -1;
+			} else {
+				m.directionMod = directionModifier;
+			}
+			m.state = currentState;
+			m.owner = playerNum;
+			m.player = this;
+			m.hitOpponent.Clear ();
 			anim.SetTrigger (playerInput);
 		}
 	}
@@ -201,7 +210,7 @@ public class RoughHiro : Player {
 
 	public override void handleHitStun ()
 	{
-//		base.handleHitStun ();
+		base.handleHitStun ();
 	}
 
 	public override void handleAttackDuration ()
@@ -224,7 +233,7 @@ public class RoughHiro : Player {
 		anim.SetBool ("Running", running);
 		anim.SetBool ("Walking", walking);
 		anim.SetBool ("Crouching", crouching);
-		anim.SetFloat ("HitStun", currentHitStun);
+		anim.SetFloat ("Hitstun", currentHitStun);
 		anim.SetFloat ("HorizontalMovement", Mathf.Abs(rb.velocity.x));
 		anim.SetFloat ("VerticalMovement", rb.velocity.y);
 	}

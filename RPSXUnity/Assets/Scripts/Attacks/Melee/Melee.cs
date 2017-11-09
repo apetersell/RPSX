@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Melee : Attack {
 
+	public int directionMod;
 	public float knockBackX;
 	public float knockBackY; 
 	public float reflectKnockBackX;
@@ -13,7 +14,7 @@ public class Melee : Attack {
 	public Vector3 modPos;
 	public bool grounded;
 	public bool multiHit;
-	Player hitOpponent;
+	public List<Player> hitOpponent = new List<Player> (); 
 	int reflectKBmodifier;
 
 	public virtual void Awake ()
@@ -23,22 +24,25 @@ public class Melee : Attack {
 
 	public virtual void Update ()
 	{
-		handleColor ();
+		if (sr != null) {
+			handleColor ();
+		}
 		avoidCollidingWithSelf ();
-		handlePosition ();
+//		handlePosition ();
 		handleSingleHits ();
 		reflectKBmodifier = player.directionModifier * -1;
 	}
 
-	public virtual void handlePosition ()
-	{
-		transform.position = player.transform.position + modPos;
-	}
+//	public virtual void handlePosition ()
+//	{
+//		transform.position = player.transform.position + modPos;
+//	}
 
 	public override void hitPlayer (Player p)
 	{
+		float trueKnockBackX = knockBackX * directionMod;
 		base.hitPlayer (p);
-		Vector2 knockBackDir = new Vector2 (knockBackX, knockBackY);
+		Vector2 knockBackDir = new Vector2 (trueKnockBackX, knockBackY); 
 		Rigidbody2D rb = p.gameObject.GetComponent<Rigidbody2D> ();
 		rb.velocity = Vector3.zero;
 		rb.AddForce (knockBackDir);
@@ -80,7 +84,8 @@ public class Melee : Attack {
 			if (playerHit.playerNum != owner) 
 			{
 				hitPlayer (playerHit);
-				hitOpponent = playerHit;
+				hitOpponent.Add (playerHit);
+				Debug.Log (this.gameObject.name);
 			}
 		}
 		if (coll.gameObject.tag == "Shield") 
@@ -97,9 +102,16 @@ public class Melee : Attack {
 
 	void handleSingleHits ()
 	{
-		if (multiHit == false && hitOpponent != null) 
+		if (multiHit == false) 
 		{
-			Physics2D.IgnoreCollision (GetComponent<Collider2D> (), hitOpponent.gameObject.GetComponent<Collider2D>());
+			if (hitOpponent.Count > 0) 
+			{
+				foreach (Player p in hitOpponent) 
+				{
+					GameObject player = p.gameObject;
+					Physics2D.IgnoreCollision (GetComponent<Collider2D> (), p.GetComponent<Collider2D> ());
+				}
+			}
 		}
 	}
 }

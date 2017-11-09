@@ -8,13 +8,15 @@ public class AnimationEvents : MonoBehaviour
 	public Player player;
 	public float miniJumpMod;
 	public AnimationClip dashStop; 
+	public AttackMoveset am;
 	Rigidbody2D rb;
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
 	{
 		player = GetComponent<Player> ();
 		rb = GetComponent<Rigidbody2D> ();
+		am = GetComponent<AttackMoveset> ();
 	}
 	
 	public virtual void stopMomentum () 
@@ -31,6 +33,7 @@ public class AnimationEvents : MonoBehaviour
 	{
 		player.actionable = true;
 		player.canMove = true;
+		am.jabCount = 0;
 	}
 
 	public virtual void turnOffActions ()
@@ -62,6 +65,11 @@ public class AnimationEvents : MonoBehaviour
 	public virtual void doProjectile ()
 	{
 		player.shoot ();
+	}
+
+	public virtual void clearAttack ()
+	{
+		Destroy (player.meleeAttack);
 	}
 		
 	IEnumerator slowToStop (Vector3 speed, float time)
