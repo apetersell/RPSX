@@ -59,9 +59,6 @@ public class Player : MonoBehaviour {
 	public float currentHitStun;
 	public bool canMove;
 
-	public float attackDuration;
-	public GameObject meleeAttack; 
-
 	public SFXGuy sfx;
 
 
@@ -107,13 +104,9 @@ public class Player : MonoBehaviour {
 		handleShield ();
 		handleColor ();
 		movementSmoothing ();
-		handleAttackDuration ();
-		if (meleeAttack == null || meleeAttack.GetComponent<Melee> ().grounded == false) 
+		if (canMove) 
 		{
-			if (currentHitStun <= 0) 
-			{
-				moving ();
-			}
+			moving ();
 		}
 		rps = GetComponent<RPSState> ();
 
@@ -290,14 +283,6 @@ public class Player : MonoBehaviour {
 		if (coll.gameObject.tag == "Floor") 
 		{
 			touchingGround = true;
-			if (meleeAttack != null) 
-			{
-				if (meleeAttack.GetComponent<Melee> ().grounded == false) 
-				{
-					Destroy (meleeAttack);
-					meleeAttack = null;
-				}
-			}
 		}
 
 		if (coll.gameObject.tag == "Wall") 
@@ -312,14 +297,6 @@ public class Player : MonoBehaviour {
 		if (coll.gameObject.tag == "Floor") 
 		{
 			touchingGround = false; 
-			if (meleeAttack != null) 
-			{
-				if (meleeAttack.GetComponent<Melee> ().grounded == true) 
-				{
-					Destroy (meleeAttack);
-					meleeAttack = null;
-				}
-			}
 		}
 
 		if (coll.gameObject.tag == "Wall")  
@@ -472,7 +449,7 @@ public class Player : MonoBehaviour {
 	}
 
 	//Function used for taking damage.
-	public virtual void takeDamage (float damage, string sentState, float inflictedHitStun)
+	public virtual void takeDamage (float damage, string sentState, float inflictedHitStun, string attackName)
 	{
 		if (sentState != "Enviornment") {
 			string result = RPSX.determineWinner (currentState, sentState);
@@ -487,15 +464,13 @@ public class Player : MonoBehaviour {
 				inflictedDamage = damage;
 			}
 			HP -= inflictedDamage;
-			Debug.Log (result + ": " + this.name + " took " + inflictedDamage + " damage.");
+			Debug.Log (result + ": " + attackName  + "hit " + this.name + " for " + inflictedDamage + " damage.");
 		} 
 		else 
 		{
 			HP = HP - damage;
 		}
-		currentHitStun = inflictedHitStun; 
-		Destroy (meleeAttack);
-		meleeAttack = null;
+		currentHitStun = inflictedHitStun;
 
 	
 	}
@@ -600,23 +575,6 @@ public class Player : MonoBehaviour {
 //		{
 ////			actionable = true;
 //		}
-	}
-
-	public virtual void handleAttackDuration ()
-	{
-		if (attackDuration <= 0) 
-		{
-			attackDuration = 0;
-			Destroy (meleeAttack);
-			meleeAttack = null;
-		}
-
-		if (meleeAttack != null) {
-			attackDuration--;
-			actionable = false;
-		} else {
-			actionable = true;
-		}
 	}
 
 	public virtual void moving ()

@@ -85,7 +85,6 @@ public class Melee : Attack {
 			{
 				hitPlayer (playerHit);
 				hitOpponent.Add (playerHit);
-				Debug.Log (this.gameObject.name);
 			}
 		}
 		if (coll.gameObject.tag == "Shield") 

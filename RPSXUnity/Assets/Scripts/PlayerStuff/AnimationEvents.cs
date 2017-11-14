@@ -7,8 +7,11 @@ public class AnimationEvents : MonoBehaviour
 {
 	public Player player;
 	public float miniJumpMod;
+	public float dairSpeed;
+	public Vector2 dairAngle; 
 	public AnimationClip dashStop; 
 	public AttackMoveset am;
+	bool dairing;
 	Rigidbody2D rb;
 
 	// Use this for initialization
@@ -17,6 +20,17 @@ public class AnimationEvents : MonoBehaviour
 		player = GetComponent<Player> ();
 		rb = GetComponent<Rigidbody2D> ();
 		am = GetComponent<AttackMoveset> ();
+	}
+
+	void Update ()
+	{
+		if (dairing) 
+		{
+			rb.velocity = new Vector2 (dairSpeed * (dairAngle.x * player.directionModifier), dairSpeed * dairAngle.y); 
+			rb.gravityScale = 0;
+			rb.mass = 0;
+			Debug.Log ("Down Air: " + dairing);
+		} 
 	}
 	
 	public virtual void stopMomentum () 
@@ -67,9 +81,28 @@ public class AnimationEvents : MonoBehaviour
 		player.shoot ();
 	}
 
-	public virtual void clearAttack ()
+	public virtual void turnOffGravity ()
 	{
-		Destroy (player.meleeAttack);
+		player.affectedByGrav = false;
+		rb.gravityScale = 0;
+		rb.mass = 0;
+	}
+
+	public virtual void turnOnGravity ()
+	{
+		player.affectedByGrav = true;
+		rb.gravityScale = player.normalGrav;
+		rb.mass = 1;
+	}
+
+	public virtual void doDair ()
+	{
+		dairing = true; 
+	}
+
+	public virtual void endDair ()
+	{
+		dairing = false; 
 	}
 		
 	IEnumerator slowToStop (Vector3 speed, float time)

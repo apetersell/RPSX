@@ -31,8 +31,8 @@ public class Jab_Basic : Melee {
 				j.state = state;
 				j.owner = owner;
 				j.player = player;
-				player.meleeAttack = jab;
-				player.attackDuration = j.duration;
+//				player.meleeAttack = jab;
+//				player.attackDuration = j.duration;
 				j.modPos.x = j.modPos.x * player.directionModifier;
 				Destroy (this.gameObject);
 			}

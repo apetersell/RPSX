@@ -52,17 +52,14 @@ public class RoughHiro : Player {
 		handleShield ();
 		handleColor ();
 		movementSmoothing ();
-		handleAttackDuration ();
 		handleAnimations ();
-//		if (meleeAttack == null || meleeAttack.GetComponent<Melee> ().grounded == false) 
-//		{
-			if (currentHitStun <= 0) 
+		if (currentHitStun <= 0) 
+		{
+			if (crouching == false) 
 			{
-				if (crouching == false) 
-				{
-					moving ();
-				}
+				moving ();
 			}
+		}
 		rps = GetComponent<RPSState> ();
 	}
 
@@ -97,10 +94,6 @@ public class RoughHiro : Player {
 					rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier) * absSI, rb.velocity.y);
 				}
 			}
-
-//			if (Input.GetAxis ("LeftStickX_P" + playerNum) == 0) {
-//				rb.velocity = new Vector2 (0, rb.velocity.y);
-//			}
 		}
 
 		if (absSI >= 0.75) 
@@ -162,8 +155,18 @@ public class RoughHiro : Player {
 	{
 		flashing = Color.Lerp(color, RPSX.basicColor, Mathf.PingPong(Time.time*10, 1));
 
-		if (currentTimeinState <= 3 && currentState != "Basic") {
-			if (currentHitStun == 0) 
+
+		if (currentHitStun != 0) 
+		{
+			foreach (GameObject mesh in meshSkeleton) 
+			{
+				SpriteMeshInstance smi = mesh.GetComponent<SpriteMeshInstance> ();
+				smi.color = RPSX.inHitStun;
+			}
+		} 
+		else 
+		{
+			if (currentTimeinState <= 3 && currentState != "Basic") 
 			{
 				foreach (GameObject mesh in meshSkeleton) 
 				{
@@ -171,13 +174,13 @@ public class RoughHiro : Player {
 					smi.color = flashing;
 				}
 			} 
-		} 
-		else 
-		{
-			foreach (GameObject mesh in meshSkeleton) 
+			else 
 			{
-				SpriteMeshInstance smi = mesh.GetComponent<SpriteMeshInstance> ();
-				smi.color = rps.color;
+				foreach (GameObject mesh in meshSkeleton) 
+				{
+					SpriteMeshInstance smi = mesh.GetComponent<SpriteMeshInstance> ();
+					smi.color = rps.color;
+				}
 			}
 		}
 	}
@@ -199,9 +202,9 @@ public class RoughHiro : Player {
 			} else {
 				m.directionMod = directionModifier;
 			}
-			m.state = currentState;
 			m.owner = playerNum;
 			m.player = this;
+			m.state = currentState;
 			m.hitOpponent.Clear ();
 			anim.SetTrigger (playerInput);
 		}
@@ -212,12 +215,6 @@ public class RoughHiro : Player {
 	{
 		base.handleHitStun ();
 	}
-
-	public override void handleAttackDuration ()
-	{
-//		base.handleAttackDuration ();
-	}
-		
 		
 	public virtual void handleAnimations ()
 	{

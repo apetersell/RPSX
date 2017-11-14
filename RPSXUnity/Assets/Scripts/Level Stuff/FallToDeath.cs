@@ -87,7 +87,7 @@ public class FallToDeath : MonoBehaviour {
 	{
 		Player p = player.GetComponent<Player> ();
 		player.GetComponent<Rigidbody2D> ().isKinematic = false; 
-		p.takeDamage (fallDamage, "Enviornment", 0);
+		p.takeDamage (fallDamage, "Enviornment", 0, "Enviornment");
 		p.actionable = true;
 		if (p.playerNum == 1) 
 		{

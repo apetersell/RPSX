@@ -84,7 +84,7 @@ public abstract class Attack : MonoBehaviour {
 
 	public virtual void hitPlayer (Player p)
 	{
-		p.takeDamage (damage, state, hitStun);
+		p.takeDamage (damage, state, hitStun, this.name);
 	}
 
 	public virtual void hitShield (Player p)
