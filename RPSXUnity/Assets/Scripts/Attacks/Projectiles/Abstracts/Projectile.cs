@@ -84,7 +84,8 @@ public abstract class Projectile : Attack
 	//Hanldes the colliions interaction between players and projectiles (same as in Attack Script).
 	public override void hitPlayer (Player p)
 	{
-		base.hitPlayer (p);
 		killProjectile ();
+		base.hitPlayer (p);
+
 	}
 }

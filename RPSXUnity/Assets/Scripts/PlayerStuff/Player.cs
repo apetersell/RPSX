@@ -36,10 +36,10 @@ public class Player : MonoBehaviour {
 	public bool stopLeftMomentum = false;
 	public bool passThroughPlatforms;
 	public bool fusionReady; 
+	
 
 	public GameObject shield;
 	public Shield s;
-	public Collider2D playerCollider;
 	public float maxShieldDuration;
 	public float currentShieldDuration;
 	public bool shieldUp;
@@ -69,7 +69,6 @@ public class Player : MonoBehaviour {
 		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
 		maxShieldDuration = RPSX.maxShieldDuration;
 		currentShieldDuration = RPSX.maxShieldDuration;
-		playerCollider = GetComponent<Collider2D> ();
 	}
 
 	public virtual void Start () {
@@ -279,12 +278,6 @@ public class Player : MonoBehaviour {
 		
 	public virtual void OnCollisionEnter2D (Collision2D coll)
 	{
-		//Reset Jumps upon touching ground
-		if (coll.gameObject.tag == "Floor") 
-		{
-			touchingGround = true;
-		}
-
 		if (coll.gameObject.tag == "Wall") 
 		{
 			touchingWall = true;
@@ -294,11 +287,6 @@ public class Player : MonoBehaviour {
 
 	public virtual void OnCollisionExit2D (Collision2D coll)
 	{
-		if (coll.gameObject.tag == "Floor") 
-		{
-			touchingGround = false; 
-		}
-
 		if (coll.gameObject.tag == "Wall")  
 		{
 			touchingWall = false;
@@ -465,6 +453,7 @@ public class Player : MonoBehaviour {
 			}
 			HP -= inflictedDamage;
 			Debug.Log (result + ": " + attackName  + "hit " + this.name + " for " + inflictedDamage + " damage.");
+			Debug.Log ("Current HP: " + HP);
 		} 
 		else 
 		{
@@ -547,17 +536,17 @@ public class Player : MonoBehaviour {
 
 		if (passThroughPlatforms) {
 			if (playerNum == 1) {
-				Physics2D.IgnoreLayerCollision (8, 11, true);
+				Physics2D.IgnoreLayerCollision (11, 15, true);
 			}
 			if (playerNum == 2) {
-				Physics2D.IgnoreLayerCollision (9, 11, true);
+				Physics2D.IgnoreLayerCollision (11, 15, true);
 			}
 		} else {
 			if (playerNum == 1) {
-				Physics2D.IgnoreLayerCollision (8, 11, false);
+				Physics2D.IgnoreLayerCollision (11, 16, false);
 			}
 			if (playerNum == 2) {
-				Physics2D.IgnoreLayerCollision (9, 11, false);
+				Physics2D.IgnoreLayerCollision (11, 16, false);
 			}
 		}
 	}

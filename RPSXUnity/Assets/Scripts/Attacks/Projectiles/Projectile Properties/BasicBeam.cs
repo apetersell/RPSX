@@ -30,6 +30,7 @@ public class BasicBeam : Projectile {
 		handleColor ();
 		handleMovement ();
 		handleDuration ();
+		avoidCollidingWithSelf ();
 	}
 
 	public override void OnCollisionEnter2D (Collision2D coll)

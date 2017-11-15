@@ -29,7 +29,6 @@ public class RoughHiro : Player {
 		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
 		maxShieldDuration = RPSX.maxShieldDuration;
 		currentShieldDuration = RPSX.maxShieldDuration;
-		playerCollider = GetComponent<Collider2D> ();
 	}
 	
 	// Add animation handler

@@ -12,18 +12,23 @@ public abstract class Attack : MonoBehaviour {
 	public GameObject myPlayer;
 	public Color stateColor;  //The color of the attack (changes based on state).
 	public SpriteRenderer sr;
+	public bool multiHit;
+	public List<Player> hitOpponent = new List<Player> (); 
 
 	public void avoidCollidingWithSelf ()
 	{
 		if (owner == 1) 
 		{
-			myPlayer = GameObject.Find (RPSX.Player1Name);
+			myPlayer = GameObject.Find (RPSX.Player1Name); 
 		}
 		if (owner == 2) 
 		{
-			myPlayer = GameObject.Find (RPSX.Player2Name);
+			myPlayer = GameObject.Find (RPSX.Player2Name); 
 		}
-		Physics2D.IgnoreCollision (myPlayer.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
+		Collider2D[] playerColliders = myPlayer.GetComponentsInChildren<Collider2D> ();
+		for (int i = 0; i < playerColliders.Length; i++) {
+			Physics2D.IgnoreCollision (GetComponent<Collider2D> (), playerColliders [i]);
+		}
 	}
 
 	// Makes sure the attack is colored correctly based on it's state.
@@ -54,21 +59,14 @@ public abstract class Attack : MonoBehaviour {
 	//Handles Collisions with other objects.
 	public virtual void OnCollisionEnter2D (Collision2D coll)
 	{
-		//Debug line.  When Commente in, will show what hits what in the console.
-//		Debug.Log (this.gameObject.name + " hit " + coll.gameObject.name);
-
 		//Handles collisions with players.
 		if (coll.gameObject.tag == "Player") 
 		{
-			Player p = coll.gameObject.GetComponent<Player> ();
-			if (p.playerNum != owner) {
+			Player p = coll.gameObject.GetComponentInParent<Player> ();
+			if (p.playerNum != owner && !hitOpponent.Contains (p)) 
+			{
 				hitPlayer (p);
 			} 
-//			//Ignores collision if colliding with player who performed that attack (so you can't hit yourself).
-//			if (p.playerNum == owner) 
-//			{
-//				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
-//			}
 		}
 		//Handles collisions with shields.
 		if (coll.gameObject.tag == "Shield")
@@ -101,6 +99,20 @@ public abstract class Attack : MonoBehaviour {
 		}
 	}
 		
+	public virtual void handleSingleHits ()
+	{
+		if (multiHit == false) 
+		{
+			if (hitOpponent.Count > 0) 
+			{
+				foreach (Player p in hitOpponent) 
+				{
+					GameObject player = p.gameObject;
+					Physics2D.IgnoreCollision (GetComponent<Collider2D> (), p.GetComponent<Collider2D> ());
+				}
+			}
+		}
+	}	
 
 
 

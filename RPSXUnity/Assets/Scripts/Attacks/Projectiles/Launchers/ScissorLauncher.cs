@@ -6,15 +6,6 @@ public class ScissorLauncher : ProjectileLauncher {
 
 	public override void fireProjectile (int owner, int directionMod, string state, bool touchingGround)
 	{
-		GameObject p = null;
-		if (owner == 1) 
-		{
-			p = GameObject.Find (RPSX.Player1Name);
-		}
-		if (owner == 2) 
-		{
-			p = GameObject.Find (RPSX.Player2Name);
-		}
 		float modX = (Input.GetAxis ("LeftStickX_P" + owner));
 		float modY = (Input.GetAxis ("LeftStickY_P" + owner)) * -1;
 		GameObject beam = null;
@@ -26,7 +17,6 @@ public class ScissorLauncher : ProjectileLauncher {
 			modY = 0;
 		}
 		direction = new Vector3 (modX, modY, 0).normalized;
-		p.GetComponent<Player> ().startShotDelay ();
 		StartCoroutine (delayShot (owner, modX, modY, state));
 		
 
@@ -40,6 +30,7 @@ public class ScissorLauncher : ProjectileLauncher {
 		yield return new WaitForSeconds (0.1f);
 		shootScissor (owner, modX, modY, state);
 	}
+
 
 	public void shootScissor (int owner, float modX, float modY, string state)
 	{

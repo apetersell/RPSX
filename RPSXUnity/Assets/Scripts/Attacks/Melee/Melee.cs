@@ -13,8 +13,6 @@ public class Melee : Attack {
 	public Player player;
 	public Vector3 modPos;
 	public bool grounded;
-	public bool multiHit;
-	public List<Player> hitOpponent = new List<Player> (); 
 	int reflectKBmodifier;
 
 	public virtual void Awake ()
@@ -28,15 +26,9 @@ public class Melee : Attack {
 			handleColor ();
 		}
 		avoidCollidingWithSelf ();
-//		handlePosition ();
 		handleSingleHits ();
 		reflectKBmodifier = player.directionModifier * -1;
 	}
-
-//	public virtual void handlePosition ()
-//	{
-//		transform.position = player.transform.position + modPos;
-//	}
 
 	public override void hitPlayer (Player p)
 	{
@@ -78,10 +70,10 @@ public class Melee : Attack {
 
 	public virtual void OnTriggerEnter2D (Collider2D coll)
 	{
-		if (coll.gameObject.tag == "Player") 
+		if (coll.gameObject.tag == "Hurtbox") 
 		{
-			Player playerHit = coll.gameObject.GetComponent<Player> ();
-			if (playerHit.playerNum != owner) 
+			Player playerHit = coll.gameObject.GetComponentInParent<Player> ();
+			if (playerHit.playerNum != owner && !hitOpponent.Contains(playerHit)) 
 			{
 				hitPlayer (playerHit);
 				hitOpponent.Add (playerHit);
@@ -95,21 +87,6 @@ public class Melee : Attack {
 			{
 				hitShield (p);
 				Debug.Log (this.gameObject.name + " hit " + s.gameObject.name);
-			}
-		}
-	}
-
-	void handleSingleHits ()
-	{
-		if (multiHit == false) 
-		{
-			if (hitOpponent.Count > 0) 
-			{
-				foreach (Player p in hitOpponent) 
-				{
-					GameObject player = p.gameObject;
-					Physics2D.IgnoreCollision (GetComponent<Collider2D> (), p.GetComponent<Collider2D> ());
-				}
 			}
 		}
 	}
