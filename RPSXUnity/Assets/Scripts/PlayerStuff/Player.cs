@@ -536,17 +536,17 @@ public class Player : MonoBehaviour {
 
 		if (passThroughPlatforms) {
 			if (playerNum == 1) {
-				Physics2D.IgnoreLayerCollision (11, 15, true);
+				Physics2D.IgnoreLayerCollision (11, 8, true);
 			}
 			if (playerNum == 2) {
-				Physics2D.IgnoreLayerCollision (11, 15, true);
+				Physics2D.IgnoreLayerCollision (11, 9, true);
 			}
 		} else {
 			if (playerNum == 1) {
-				Physics2D.IgnoreLayerCollision (11, 16, false);
+				Physics2D.IgnoreLayerCollision (11, 8, false);
 			}
 			if (playerNum == 2) {
-				Physics2D.IgnoreLayerCollision (11, 16, false);
+				Physics2D.IgnoreLayerCollision (11, 9, false);
 			}
 		}
 	}
