@@ -26,7 +26,8 @@ public abstract class Attack : MonoBehaviour {
 			myPlayer = GameObject.Find (RPSX.Player2Name); 
 		}
 		Collider2D[] playerColliders = myPlayer.GetComponentsInChildren<Collider2D> ();
-		for (int i = 0; i < playerColliders.Length; i++) {
+		for (int i = 0; i < playerColliders.Length; i++) 
+		{
 			Physics2D.IgnoreCollision (GetComponent<Collider2D> (), playerColliders [i]);
 		}
 	}
@@ -62,11 +63,12 @@ public abstract class Attack : MonoBehaviour {
 		//Handles collisions with players.
 		if (coll.gameObject.tag == "Player") 
 		{
-			Player p = coll.gameObject.GetComponentInParent<Player> ();
-			if (p.playerNum != owner && !hitOpponent.Contains (p)) 
+			Player playerHit = coll.gameObject.GetComponentInParent<Player> ();
+			if (playerHit.playerNum != owner && !hitOpponent.Contains(playerHit)) 
 			{
-				hitPlayer (p);
-			} 
+				hitPlayer (playerHit);
+				hitOpponent.Add (playerHit);
+			}
 		}
 		//Handles collisions with shields.
 		if (coll.gameObject.tag == "Shield")

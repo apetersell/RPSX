@@ -30,6 +30,7 @@ public class ScissorShot : Projectile {
 		handleColor ();
 		handleMovement ();
 		handleDuration ();
+		handleSingleHits ();
 		avoidCollidingWithSelf ();
 	}
 

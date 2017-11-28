@@ -49,6 +49,7 @@ public class RockThrow : Projectile {
 			handleDuration ();
 		}
 		handleMovement ();
+		handleSingleHits ();
 	}
 
 	public override void OnCollisionEnter2D (Collision2D coll)

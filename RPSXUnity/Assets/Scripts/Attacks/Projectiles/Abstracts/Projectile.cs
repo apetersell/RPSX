@@ -86,6 +86,5 @@ public abstract class Projectile : Attack
 	{
 		killProjectile ();
 		base.hitPlayer (p);
-
 	}
 }

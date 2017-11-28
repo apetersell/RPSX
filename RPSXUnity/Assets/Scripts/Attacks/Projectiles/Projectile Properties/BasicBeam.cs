@@ -30,6 +30,7 @@ public class BasicBeam : Projectile {
 		handleColor ();
 		handleMovement ();
 		handleDuration ();
+		handleSingleHits ();
 		avoidCollidingWithSelf ();
 	}
 
