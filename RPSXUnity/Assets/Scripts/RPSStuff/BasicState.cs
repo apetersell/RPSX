@@ -11,10 +11,10 @@ public class BasicState : RPSState {
 		jumpSpeed = 20;
 		normalGrav = 6;
 		fastFallGrav = 12;
+		shieldGrav = 1.5f;
 		maxAirActions = 1;
 		airSpeedModifier = 1.5f;
 		shieldDiminishRate = 10;
-		shieldSize = 1.75f;
 		projectileFireRate = 20;
 		color = RPSX.basicColor;
 

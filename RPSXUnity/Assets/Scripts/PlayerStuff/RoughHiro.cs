@@ -56,7 +56,10 @@ public class RoughHiro : Player {
 		{
 			if (crouching == false) 
 			{
-				moving ();
+				if (shieldUp == false) 
+				{
+					moving ();
+				}
 			}
 		}
 		rps = GetComponent<RPSState> ();
@@ -207,6 +210,29 @@ public class RoughHiro : Player {
 			m.hitOpponent.Clear ();
 			anim.SetTrigger (playerInput);
 		}
+	}
+
+	public override void handleShield ()
+	{
+		if (shieldUp) {
+			float stickInput = (Input.GetAxis ("LeftStickX_P" + playerNum));
+			float absSI = Mathf.Abs (stickInput); 
+			if (stickInput > 0 && stopRightMomentum == false) {
+				if (directionModifier != 1) {
+					flipCharacter (); 
+					directionModifier = 1;
+				}
+			} 
+			if (stickInput < 0 && stopLeftMomentum == false) { 
+				if (touchingGround) {
+					if (directionModifier != -1) {
+						flipCharacter ();
+						directionModifier = -1;
+					}
+				}
+			}
+		}
+		base.handleShield ();
 	}
 
 

@@ -11,10 +11,11 @@ public class Shield : MonoBehaviour {
 	public Sprite rock;
 	public Sprite paper;
 	public Sprite scissors;
-	public Vector2 placement; 
+	public Vector2 placement;
+	public float mod;
 	Rigidbody2D rb;
 	SpriteRenderer sr;
-	Player p;
+	public Player p;
 
 
 	void Awake () {
@@ -30,21 +31,32 @@ public class Shield : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
-		currentState = p.currentState;
-		placement = new Vector2 (Input.GetAxis ("LeftStickX_P" + p.playerNum), Input.GetAxis ("LeftStickY_P" + p.playerNum) * -1).normalized; 
+	void Update () 
+	{
+		float shieldPosX = (Input.GetAxis ("LeftStickX_P" + p.playerNum) * mod * (p.directionModifier));
+		float shieldPosY = (Input.GetAxis ("LeftStickY_P" + p.playerNum) * (mod * -1));
+		placement = new Vector2 (shieldPosX, shieldPosY);   
 		transform.localPosition = placement; 
-		if (p.touchingGround == true) 
+		if (shieldPosX < mod) 
 		{
-			if (placement.y <= 0) 
-			{
-				transform.localPosition = new Vector2 (placement.x, 0);
+			shieldPosX = mod;
+		}
+		if (shieldPosY <= mod) 
+		{
+			shieldPosY = mod;
+		}
+		if (p.touchingGround == true) {
+			if (placement.y <= 0) {
+				transform.localPosition = new Vector2 (shieldPosX, 0);
 			}
 		}
-		rps = GetComponentInParent<RPSState> (); 
-		transform.localScale = new Vector2 (rps.shieldSize, rps.shieldSize);
 
+		float angle = Mathf.Atan2 (placement.y, placement.x * p.directionModifier) * Mathf.Rad2Deg;
+		transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+	
+
+		rps = GetComponentInParent<RPSState> (); 
+		currentState = p.currentState;
 		if (currentState == "Basic") 
 		{
 			sr.color = RPSX.basicColor;
@@ -71,16 +83,16 @@ public class Shield : MonoBehaviour {
 
 	}
 
-	void OnCollisionEnter2D (Collision2D coll)
-	{
-		if (coll.gameObject.tag == "Player") 
-		{
-			Player p = coll.gameObject.GetComponent<Player> ();
-			if (p.playerNum == owner) 
-			{
-				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
-			}
-		}
-	}
+//	void OnCollisionEnter2D (Collision2D coll)
+//	{
+//		if (coll.gameObject.tag == "Player") 
+//		{
+//			Player p = coll.gameObject.GetComponent<Player> ();
+//			if (p.playerNum == owner) 
+//			{
+//				Physics2D.IgnoreCollision (coll.gameObject.GetComponent<Collider2D> (), GetComponent<Collider2D> ());
+//			}
+//		}
+//	}
 		
 }

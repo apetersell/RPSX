@@ -82,7 +82,7 @@ public class Melee : Attack {
 		if (coll.gameObject.tag == "Shield") 
 		{
 			Shield s = coll.gameObject.GetComponent<Shield> ();
-			Player p = GameObject.Find ("Player_" + s.owner).GetComponent<Player>(); 
+			Player p = s.p; 
 			if (s.owner != owner) 
 			{
 				hitShield (p);

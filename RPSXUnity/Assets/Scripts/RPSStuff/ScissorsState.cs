@@ -18,9 +18,9 @@ public class ScissorsState : RPSState {
 		moveSpeed = 7; 
 		jumpSpeed = 25;
 		normalGrav = 8;
+		shieldGrav = 1.5f;
 		fastFallGrav = 16;
 		maxAirActions = 2;
-		shieldSize = 1.75f;
 		shieldDiminishRate = 11; 
 		airSpeedModifier = .75f;
 		projectileFireRate = 30;

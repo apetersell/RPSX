@@ -24,6 +24,7 @@ public class Player : MonoBehaviour {
 	public float jumpSpeed;
 	public float normalGrav;
 	public float fastFallGrav;
+	public float shieldGrav;
 	public float gravityThreshold;
 	public int directionModifier;
 	public int maxAirActions;
@@ -161,6 +162,10 @@ public class Player : MonoBehaviour {
 		{
 			if (Input.GetAxis ("RTrigger_P" + playerNum) == 1) 
 			{
+				if (shieldUp == false) 
+				{
+					GetComponent<AnimationEvents> ().stopMomentum ();
+				}
 				shield.SetActive (true);
 				shieldUp = true;
 			} 
@@ -302,6 +307,7 @@ public class Player : MonoBehaviour {
 		normalGrav = rps.normalGrav;
 		fastFallGrav = rps.fastFallGrav;
 		maxAirActions = rps.maxAirActions;
+		shieldGrav = rps.shieldGrav;
 		shieldDiminishRate = rps.shieldDiminishRate;
 		if (currentHitStun == 0) {
 			color = rps.color;
@@ -401,6 +407,14 @@ public class Player : MonoBehaviour {
 		if (currentShieldDuration >= maxShieldDuration) 
 		{
 			shieldBroken = false;
+		}
+
+		if (shieldUp) 
+		{
+			if (touchingGround == false) 
+			{
+				rb.gravityScale = shieldGrav;
+			}
 		}
 	
 	}
@@ -536,17 +550,17 @@ public class Player : MonoBehaviour {
 
 		if (passThroughPlatforms) {
 			if (playerNum == 1) {
-				Physics2D.IgnoreLayerCollision (11, 8, true);
+				Physics2D.IgnoreLayerCollision (11, 15, true);
 			}
 			if (playerNum == 2) {
-				Physics2D.IgnoreLayerCollision (11, 9, true);
+				Physics2D.IgnoreLayerCollision (11, 16, true);
 			}
 		} else {
 			if (playerNum == 1) {
-				Physics2D.IgnoreLayerCollision (11, 8, false);
+				Physics2D.IgnoreLayerCollision (11, 15, false);
 			}
 			if (playerNum == 2) {
-				Physics2D.IgnoreLayerCollision (11, 9, false);
+				Physics2D.IgnoreLayerCollision (11, 16, false);
 			}
 		}
 	}

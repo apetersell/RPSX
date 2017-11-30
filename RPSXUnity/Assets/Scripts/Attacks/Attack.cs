@@ -74,7 +74,7 @@ public abstract class Attack : MonoBehaviour {
 		if (coll.gameObject.tag == "Shield")
 		{
 			Shield s = coll.gameObject.GetComponent<Shield>();
-			Player p = GameObject.Find ("Player_" + s.owner).GetComponent<Player>(); 
+			Player p = s.p;
 			if (p.playerNum != owner)
 			{
 				hitShield (p);

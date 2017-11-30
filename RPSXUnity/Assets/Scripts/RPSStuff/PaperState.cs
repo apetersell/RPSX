@@ -10,9 +10,9 @@ public class PaperState : RPSState {
 		moveSpeed = 3;
 		jumpSpeed = 20;
 		normalGrav = 3;
+		shieldGrav = .5f;
 		fastFallGrav = 5;
 		maxAirActions = 5;
-		shieldSize = 1.75f;
 		shieldDiminishRate = 20;
 		airSpeedModifier = 2.5f;
 		projectileFireRate = 40;

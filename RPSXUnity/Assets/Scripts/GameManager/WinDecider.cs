@@ -18,18 +18,15 @@ public class WinDecider : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
-		findPlayers ();
+		if (itsOver == false) {
+			findPlayers ();
+		}
 		if (wd == null) {
 			wd = this;
 			DontDestroyOnLoad (this);
 		} else {
 			Destroy (gameObject);
 		}
-	
-
-
-		
 	}
 	
 	// Update is called once per frame
@@ -75,7 +72,8 @@ public class WinDecider : MonoBehaviour {
 
 	void findPlayers ()
 	{
-		if (player1 == null && player2 == null && itsOver == false) {
+		if (itsOver == false) 
+		{
 			player1 = GameObject.Find (RPSX.Player1Name).GetComponent<Player> ();
 			player2 = GameObject.Find (RPSX.Player2Name).GetComponent<Player> ();
 		}

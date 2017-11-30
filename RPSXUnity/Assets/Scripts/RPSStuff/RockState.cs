@@ -18,11 +18,11 @@ public class RockState : RPSState {
 		moveSpeed = 12; 
 		jumpSpeed = 25;
 		normalGrav = 10;
+		shieldGrav = 3;;
 		fastFallGrav = 20;
 		maxAirActions = 1;
 		airSpeedModifier = .5f;
 		shieldDiminishRate = 5.5f;
-		shieldSize = 1.75f;
 		projectileFireRate = 50;
 		color = RPSX.rockColor;
 
