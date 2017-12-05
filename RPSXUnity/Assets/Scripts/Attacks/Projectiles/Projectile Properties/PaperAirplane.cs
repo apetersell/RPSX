@@ -32,7 +32,9 @@ public class PaperAirplane : Projectile {
 		handleMovement ();
 		handleDuration ();
 		handleSingleHits ();
-		avoidCollidingWithSelf ();
+		if (reflected) {
+			avoidCollidingWithSelf ();
+		}
 
 	}
 
@@ -60,7 +62,7 @@ public class PaperAirplane : Projectile {
 	public override void reflectProjectile (int sentOwner)
 	{
 		base.reflectProjectile (owner);
-		Physics2D.IgnoreCollision (GameObject.Find ("Player_" + RPSX.opponentNum(owner)).GetComponent<BoxCollider2D> (), GetComponent<Collider2D> (), false); 
+		Physics2D.IgnoreCollision (GameObject.Find (RPSX.playerName(owner)).GetComponent<Collider2D> (), GetComponent<Collider2D> (), false); 
 
 	}
 }

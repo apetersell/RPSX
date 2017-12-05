@@ -48,12 +48,19 @@ public class Shield : MonoBehaviour {
 		if (p.touchingGround == true) {
 			if (placement.y <= 0) {
 				transform.localPosition = new Vector2 (shieldPosX, 0);
+				transform.rotation = Quaternion.identity;
+			} else {
+				float angle = Mathf.Atan2 (placement.y, placement.x * p.directionModifier) * Mathf.Rad2Deg;
+				transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 			}
+		} else 
+		{
+			float angle = Mathf.Atan2 (placement.y, placement.x * p.directionModifier) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
 		}
-
-		float angle = Mathf.Atan2 (placement.y, placement.x * p.directionModifier) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
-	
+//		float angle = Mathf.Atan2 (placement.y, placement.x * p.directionModifier) * Mathf.Rad2Deg;
+//		transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+//	
 
 		rps = GetComponentInParent<RPSState> (); 
 		currentState = p.currentState;

@@ -13,4 +13,14 @@ public class DownAir_RHiro : Melee {
 //	void Update () {
 //		
 //	}
+
+	public override void hitShield (Player p)
+	{
+		Debug.Log ("DAIR HIT SHEILD");
+		AnimationEvents ae = GetComponentInParent<AnimationEvents> ();
+		ae.turnOnGravity ();
+		ae.stopMomentum ();
+		ae.endDair ();
+		base.hitShield (p);
+	}
 }

@@ -16,6 +16,8 @@ public class Footbox : MonoBehaviour {
 		if (coll.gameObject.tag == "Floor") 
 		{
 			p.touchingGround = true; 
+			p.bounceStun = 0;
+			p.canAirShield = 1;
 		}
 	}
 

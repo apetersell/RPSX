@@ -48,7 +48,6 @@ public abstract class Projectile : Attack
 		string result = RPSX.determineWinner (state, p.currentState);
 		if (result == "Loss") 
 		{
-			GameObject player = GameObject.Find ("Player_" + owner); 
 			reflectProjectile (owner);
 		} 
 		else 

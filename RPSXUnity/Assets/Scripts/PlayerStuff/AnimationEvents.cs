@@ -29,7 +29,6 @@ public class AnimationEvents : MonoBehaviour
 			rb.velocity = new Vector2 (dairSpeed * (dairAngle.x * player.directionModifier), dairSpeed * dairAngle.y); 
 			rb.gravityScale = 0;
 			rb.mass = 0;
-			Debug.Log ("Down Air: " + dairing);
 		} 
 	}
 	

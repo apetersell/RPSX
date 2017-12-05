@@ -62,6 +62,9 @@ public class Player : MonoBehaviour {
 
 	public SFXGuy sfx;
 
+	public float bounceStun;
+	public int canAirShield = 1;
+
 
 	// Use this for initialization
 	public virtual void Awake ()
@@ -151,6 +154,7 @@ public class Player : MonoBehaviour {
 			{
 				rps.airAction ();
 				airActionsRemaining--;
+				canAirShield = 1;
 			}
 		}
 	}
@@ -160,21 +164,26 @@ public class Player : MonoBehaviour {
 	{
 		if (shieldDebug == false) 
 		{
-			if (Input.GetAxis ("RTrigger_P" + playerNum) == 1) 
-			{
-				if (shieldUp == false) 
+			if (bounceStun == 0) {
+				if (Input.GetAxis ("RTrigger_P" + playerNum) == 1) 
 				{
-					GetComponent<AnimationEvents> ().stopMomentum ();
+					if (canAirShield > 0) {
+						if (shieldUp == false) {
+							GetComponent<AnimationEvents> ().stopMomentum ();
+						}
+						shield.SetActive (true);
+						shieldUp = true;
+						if (!touchingGround) 
+						{
+							canAirShield--;
+						}
+					}
+				} else {
+					shield.SetActive (false);
+					shieldUp = false;
 				}
-				shield.SetActive (true);
-				shieldUp = true;
-			} 
-			else 
-			{
-				shield.SetActive (false);
-				shieldUp = false;
 			}
-		} 
+		}
 		else 
 		{
 			shield.SetActive (true); 
@@ -309,10 +318,12 @@ public class Player : MonoBehaviour {
 		maxAirActions = rps.maxAirActions;
 		shieldGrav = rps.shieldGrav;
 		shieldDiminishRate = rps.shieldDiminishRate;
-		if (currentHitStun == 0) {
+		if (currentHitStun == 0 && bounceStun == 0) {
 			color = rps.color;
-		} else {
+		} else if (currentHitStun != 0) {
 			color = RPSX.inHitStun;
+		} else if (bounceStun != 0) {
+			color = RPSX.inBounceStun;
 		}
 		shotDelay = rps.projectileFireRate;
 		if (airActionsRemaining > maxAirActions) 

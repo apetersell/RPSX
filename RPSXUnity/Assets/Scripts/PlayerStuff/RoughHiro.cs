@@ -25,7 +25,7 @@ public class RoughHiro : Player {
 			GameObject currentMesh = meshes.transform.GetChild (i).gameObject;
 			meshSkeleton.Add (currentMesh);
 		}
-		shield = GameObject.Find ("Shield_" + gameObject.name);
+		shield = GameObject.Find ("Shield_P" + playerNum);
 		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
 		maxShieldDuration = RPSX.maxShieldDuration;
 		currentShieldDuration = RPSX.maxShieldDuration;
@@ -34,7 +34,10 @@ public class RoughHiro : Player {
 	// Add animation handler
 	public override void Update () 
 	{
-
+		bounceStun--;
+		if (bounceStun <= 0) {
+			bounceStun = 0;
+		}
 		if (actionable) 
 		{
 			actions ();
@@ -67,51 +70,49 @@ public class RoughHiro : Player {
 
 	public override void moving ()
 	{
-
-		float stickInput = (Input.GetAxis ("LeftStickX_P" + playerNum));
-		float absSI = Mathf.Abs (stickInput); 
-		if (canMove) {
-			//Left and right movement.
-			if (stickInput > 0 && stopRightMomentum == false) {
-				if (touchingGround) 
-				{
-					if (directionModifier != 1) {
-						flipCharacter ();
-						directionModifier = 1;
-					} 
-					rb.velocity = new Vector2 (moveSpeed * absSI, rb.velocity.y);
-				} else {
-					rb.velocity = new Vector2 ((moveSpeed * airSpeedModifier) * absSI, rb.velocity.y);
-				}
-			}
-
-			if (stickInput < 0 && stopLeftMomentum == false) { 
-				if (touchingGround) {
-					if (directionModifier != -1) {
-						flipCharacter ();
-						directionModifier = -1;
+		if (bounceStun == 0) 
+		{
+			float stickInput = (Input.GetAxis ("LeftStickX_P" + playerNum));
+			float absSI = Mathf.Abs (stickInput); 
+			if (canMove) {
+				//Left and right movement.
+				if (stickInput > 0 && stopRightMomentum == false) {
+					if (touchingGround) {
+						if (directionModifier != 1) {
+							flipCharacter ();
+							directionModifier = 1;
+						} 
+						rb.velocity = new Vector2 (moveSpeed * absSI, rb.velocity.y);
+					} else {
+						rb.velocity = new Vector2 ((moveSpeed * airSpeedModifier) * absSI, rb.velocity.y);
 					}
-					rb.velocity = new Vector2 ((moveSpeed * -1) * absSI, rb.velocity.y);
-				} else {
-					rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier) * absSI, rb.velocity.y);
+				}
+
+				if (stickInput < 0 && stopLeftMomentum == false) { 
+					if (touchingGround) {
+						if (directionModifier != -1) {
+							flipCharacter ();
+							directionModifier = -1;
+						}
+						rb.velocity = new Vector2 ((moveSpeed * -1) * absSI, rb.velocity.y);
+					} else {
+						rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier) * absSI, rb.velocity.y);
+					}
 				}
 			}
-		}
 
-		if (absSI >= 0.75) 
-		{
-			running = true;
-			walking = false;
-		}
-		if (absSI < 0.75 && absSI != 0) 
-		{
-			walking = true;
-			running = false;
-		}
-		if (absSI == 0) 
-		{
-			walking = false;
-			running = false;
+			if (absSI >= 0.75) {
+				running = true;
+				walking = false;
+			}
+			if (absSI < 0.75 && absSI != 0) {
+				walking = true;
+				running = false;
+			}
+			if (absSI == 0) {
+				walking = false;
+				running = false;
+			}
 		}
 
 	}
@@ -158,15 +159,18 @@ public class RoughHiro : Player {
 		flashing = Color.Lerp(color, RPSX.basicColor, Mathf.PingPong(Time.time*10, 1));
 
 
-		if (currentHitStun != 0) 
-		{
-			foreach (GameObject mesh in meshSkeleton) 
-			{
+		if (currentHitStun != 0) {
+			foreach (GameObject mesh in meshSkeleton) {
 				SpriteMeshInstance smi = mesh.GetComponent<SpriteMeshInstance> ();
 				smi.color = RPSX.inHitStun;
 			}
-		} 
-		else 
+		} else if (bounceStun != 0) {
+			foreach (GameObject mesh in meshSkeleton) {
+				SpriteMeshInstance smi = mesh.GetComponent<SpriteMeshInstance> ();
+				smi.color = RPSX.inBounceStun;
+			}
+		}
+		else
 		{
 			if (currentTimeinState <= 3 && currentState != "Basic") 
 			{

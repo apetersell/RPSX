@@ -31,7 +31,9 @@ public class ScissorShot : Projectile {
 		handleMovement ();
 		handleDuration ();
 		handleSingleHits ();
-		avoidCollidingWithSelf ();
+		if (reflected) {
+			avoidCollidingWithSelf ();
+		}
 	}
 
 	public override void OnCollisionEnter2D (Collision2D coll)

@@ -9,6 +9,7 @@ public class Melee : Attack {
 	public float knockBackY; 
 	public float reflectKnockBackX;
 	public float reflectKnockBackY;
+	public float bounceStun; 
 	public float duration;
 	public Player player;
 	public Vector3 modPos;
@@ -42,15 +43,22 @@ public class Melee : Attack {
 
 	public override void hitShield (Player p)
 	{	
-		GameObject player = GameObject.Find ("Player_" + owner); 
+		GameObject player = null; 
+		if (owner == 1) {
+			player = GameObject.Find(RPSX.Player1Name);
+		} else {
+			player = GameObject.Find(RPSX.Player2Name);
+		}
 		Rigidbody2D rb = player.GetComponent<Rigidbody2D> ();
 		Vector2 bounceAway;
 		string result = RPSX.determineWinner (state, p.currentState);
+		Debug.Log (result + ": " + this.gameObject.name + " hit a shield.");
 		if (result == "Loss") 
 		{
-			bounceAway = new Vector2 (reflectKnockBackX * 2 * reflectKBmodifier, reflectKnockBackY * 2);
+			bounceAway = new Vector2 (reflectKnockBackX * 1.25f * reflectKBmodifier, reflectKnockBackY * 1.25f);
 			rb.velocity = Vector3.zero; 
-			rb.AddForce (bounceAway);   
+			rb.AddForce (bounceAway); 
+			player.GetComponent<Player> ().bounceStun = bounceStun * 2;
 		} 
 		else 
 		{
@@ -58,6 +66,7 @@ public class Melee : Attack {
 			bounceAway = new Vector2 (reflectKnockBackX * reflectKBmodifier, reflectKnockBackY);
 			rb.velocity = Vector3.zero;
 			rb.AddForce (bounceAway);  
+			player.GetComponent<Player> ().bounceStun = bounceStun;
 		}
 		Rigidbody2D rbs = GameObject.Find ("Shield_P" + RPSX.opponentNum (owner)).GetComponent<Rigidbody2D> ();
 		rbs.velocity = Vector3.zero;
@@ -83,10 +92,10 @@ public class Melee : Attack {
 		{
 			Shield s = coll.gameObject.GetComponent<Shield> ();
 			Player p = s.p; 
-			if (s.owner != owner) 
+			if (s.owner != owner && !hitOpponent.Contains(p)) 
 			{
 				hitShield (p);
-				Debug.Log (this.gameObject.name + " hit " + s.gameObject.name);
+				hitOpponent.Add (p);
 			}
 		}
 	}
