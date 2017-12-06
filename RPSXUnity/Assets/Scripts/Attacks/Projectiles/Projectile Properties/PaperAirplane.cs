@@ -32,9 +32,7 @@ public class PaperAirplane : Projectile {
 		handleMovement ();
 		handleDuration ();
 		handleSingleHits ();
-		if (reflected) {
-			avoidCollidingWithSelf ();
-		}
+		avoidCollidingWithSelf ();
 
 	}
 
@@ -61,8 +59,19 @@ public class PaperAirplane : Projectile {
 
 	public override void reflectProjectile (int sentOwner)
 	{
+		if (owner == 1) 
+		{
+			myPlayer = GameObject.Find (RPSX.Player1Name); 
+		}
+		if (owner == 2) 
+		{
+			myPlayer = GameObject.Find (RPSX.Player2Name); 
+		}
+		Collider2D[] playerColliders = myPlayer.GetComponentsInChildren<Collider2D> ();
+		for (int i = 0; i < playerColliders.Length; i++) 
+		{
+			Physics2D.IgnoreCollision (GetComponent<Collider2D> (), playerColliders [i], false);
+		}
 		base.reflectProjectile (owner);
-		Physics2D.IgnoreCollision (GameObject.Find (RPSX.playerName(owner)).GetComponent<Collider2D> (), GetComponent<Collider2D> (), false); 
-
 	}
 }

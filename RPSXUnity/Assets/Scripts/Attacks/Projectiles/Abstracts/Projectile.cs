@@ -49,6 +49,7 @@ public abstract class Projectile : Attack
 		if (result == "Loss") 
 		{
 			reflectProjectile (owner);
+			GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ().playSFX ("winShield");
 		} 
 		else 
 		{
@@ -57,6 +58,29 @@ public abstract class Projectile : Attack
 		}
 	}
 
+	public override void handleColor ()
+	{
+		if (reflected) {
+			stateColor = RPSX.inBounceStun;
+		} else {
+			if (state == "Basic") {
+				stateColor = RPSX.basicColor;
+			}
+
+			if (state == "Rock") {
+				stateColor = RPSX.rockColor;
+			}
+
+			if (state == "Paper") {
+				stateColor = RPSX.paperColor;
+			}
+
+			if (state == "Scissors") {
+				stateColor = RPSX.scissorsColor;
+			}
+		}
+		sr.color = stateColor;
+	}
 	// Handles reflection properties.
 	public virtual void reflectProjectile (int sentOwner)
 	{

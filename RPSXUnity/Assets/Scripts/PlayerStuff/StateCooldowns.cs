@@ -24,16 +24,24 @@ public class StateCooldowns : MonoBehaviour {
 	public Text paperTime;
 	public Text scissorsTime;
 	string nada = "";
+	bool rockBursted = true;
+	bool paperBursted = true;
+	bool scissorsBursted = true;
+
+	Player p;
+	SFXGuy sfx;
 
 	// Use this for initialization
 	void Start () {
 
+		p = GetComponent<Player> ();
 		rockTime = GameObject.Find ("RockTimer_P" + playerNum).GetComponent<Text> ();
 		paperTime = GameObject.Find ("PaperTimer_P" + playerNum).GetComponent<Text> ();
 		scissorsTime = GameObject.Find ("ScissorsTimer_P" + playerNum).GetComponent<Text> ();
 		rockSign = GameObject.Find ("RockSign P_" + playerNum);
 		paperSign = GameObject.Find ("PaperSign P_" + playerNum);
 		scissorsSign = GameObject.Find ("ScissorsSign P_" + playerNum);
+		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
 		
 	}
 	
@@ -69,18 +77,21 @@ public class StateCooldowns : MonoBehaviour {
 		{
 			rockOnCooldown = true;
 			currentRockCoolDown = 0;
+			rockBursted = false;
 		}
 
 		if (rps == "Paper") 
 		{
 			paperOnCooldown = true;
 			currentPaperCoolDown = 0;
+			paperBursted = false;
 		}
 
 		if (rps == "Scissors") 
 		{
 			scissorsOnCooldown = true;
 			currentScissorsCoolDown = 0;
+			scissorsBursted = false;
 		}
 	}
 
@@ -88,15 +99,14 @@ public class StateCooldowns : MonoBehaviour {
 	{
 		if (rockOnCooldown) 
 		{
-			currentRockCoolDown = currentRockCoolDown + Time.deltaTime; 
+			currentRockCoolDown = currentRockCoolDown + Time.deltaTime;  
 			rockTime.text = rockTimeLeft.ToString ();
 		}
 
 		if (currentRockCoolDown >= maxCoolDownTime) 
 		{
-			rockOnCooldown = false;
-			statesOnCoolDown.Remove ("Rock");
-			rockTime.text = nada;
+			recharge ("Rock");
+			rechargeEffect ("Rock");
 		}
 			
 		if (paperOnCooldown) 
@@ -107,9 +117,8 @@ public class StateCooldowns : MonoBehaviour {
 
 		if (currentPaperCoolDown >= maxCoolDownTime) 
 		{
-			paperOnCooldown = false;
-			statesOnCoolDown.Remove ("Paper");
-			paperTime.text = nada;
+			recharge ("Paper");
+			rechargeEffect ("Paper");
 		}	
 
 		if (scissorsOnCooldown) 
@@ -120,11 +129,59 @@ public class StateCooldowns : MonoBehaviour {
 
 		if (currentScissorsCoolDown >= maxCoolDownTime) 
 		{
+			recharge ("Scissors");
+			rechargeEffect ("Scissors");
+		}
+	}
+
+	void recharge (string state)
+	{
+		if (state == "Rock") 
+		{
+			rockOnCooldown = false;
+			statesOnCoolDown.Remove ("Rock");
+			rockTime.text = nada;
+		}
+		if (state == "Paper") 
+		{
+			paperOnCooldown = false;
+			statesOnCoolDown.Remove ("Paper");
+			paperTime.text = nada;
+		}
+		if (state == "Scissors") {
 			scissorsOnCooldown = false;
 			statesOnCoolDown.Remove ("Scissors");
 			scissorsTime.text = nada;
 		}
 	}
 
+	void rechargeEffect (string state)
+	{
+		if (state == "Rock") 
+		{
+			if (!rockBursted) 
+			{
+				p.particleBurst (RPSX.rockColor, 5);
+				sfx.playSFX ("newState");
+				rockBursted = true;
+			}
+		}
+		if (state == "Paper") 
+		{
+			if (!paperBursted) {
+				p.particleBurst (RPSX.paperColor, 5);
+				sfx.playSFX ("newState");
+				paperBursted = true;
+			}
+		}
+		if (state == "Scissors") 
+		{
+			if (!scissorsBursted) {
+				p.particleBurst (RPSX.scissorsColor, 5);
+				sfx.playSFX ("newState");
+				scissorsBursted = true;
+			}
+		}
 
+	}
 }

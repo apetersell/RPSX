@@ -56,6 +56,7 @@ public class Melee : Attack {
 		if (result == "Loss") 
 		{
 			bounceAway = new Vector2 (reflectKnockBackX * 1.25f * reflectKBmodifier, reflectKnockBackY * 1.25f);
+			GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ().playSFX ("winShield");
 			rb.velocity = Vector3.zero; 
 			rb.AddForce (bounceAway); 
 			player.GetComponent<Player> ().bounceStun = bounceStun * 2;

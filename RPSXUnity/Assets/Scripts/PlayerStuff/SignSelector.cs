@@ -5,9 +5,10 @@ using UnityEngine;
 public class SignSelector : MonoBehaviour {
 
 	public int playerNum;
-	public Sprite rock;
-	public Sprite paper;
-	public Sprite scissors;
+	public GameObject rock;
+	public GameObject paper;
+	public GameObject scissors;
+	public GameObject shield;
 	Color lerpingRock;
 	Color lerpingPaper;
 	Color lerpingScissors;
@@ -57,37 +58,58 @@ public class SignSelector : MonoBehaviour {
 		if (visible) 
 		{
 			timer = timer - Time.deltaTime;
-
-			if (p.selectedState == "Rock") {
-				sr.sprite = rock;
-				if (sc.rockOnCooldown || p.currentState == "Rock") {
-					sr.color = used;
-				} else {
-					sr.color = lerpingRock;
-				}
-
+//
+//			if (p.selectedState == "Rock") {
+//				sr.sprite = rock;
+//				if (sc.rockOnCooldown || p.currentState == "Rock") {
+//					sr.color = used;
+//				} else {
+//					sr.color = lerpingRock;
+//				}
+//
+//			}
+//
+//			if (p.selectedState == "Paper") {
+//				sr.sprite = paper;
+//				if (sc.paperOnCooldown || p.currentState == "Paper") {
+//					sr.color = used;
+//				} else {
+//					sr.color = lerpingPaper;
+//				}
+//			}
+//
+//			if (p.selectedState == "Scissors") {
+//				sr.sprite = scissors;
+//				if (sc.scissorsOnCooldown || p.currentState == "Scissors") {
+//					sr.color = used;
+//				} else {
+//					sr.color = lerpingScissors;
+//				}
+//			}
+			if (p.selectedState == "Rock") 
+			{
+				rock.SetActive (true);
+				paper.SetActive (false);
+				scissors.SetActive (false);
 			}
-
-			if (p.selectedState == "Paper") {
-				sr.sprite = paper;
-				if (sc.paperOnCooldown || p.currentState == "Paper") {
-					sr.color = used;
-				} else {
-					sr.color = lerpingPaper;
-				}
+			if (p.selectedState == "Paper") 
+			{
+				rock.SetActive (false);
+				paper.SetActive (true);
+				scissors.SetActive (false);
 			}
-
-			if (p.selectedState == "Scissors") {
-				sr.sprite = scissors;
-				if (sc.scissorsOnCooldown || p.currentState == "Scissors") {
-					sr.color = used;
-				} else {
-					sr.color = lerpingScissors;
-				}
+			if (p.selectedState == "Scissors") 
+			{
+				rock.SetActive (false);
+				paper.SetActive (false);
+				scissors.SetActive (true);
 			}
-		} else 
+		} 
+		else 
 		{
-			sr.sprite = null;
+			rock.SetActive (false);
+			paper.SetActive (false);
+			scissors.SetActive (false);
 		}
 
 	}

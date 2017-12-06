@@ -15,6 +15,9 @@ public class UIScript : MonoBehaviour {
 	public Sprite fullShield;
 	public Sprite brokenShield;
 	string TargetName;
+	public bool personal;
+	public float timer;
+	public float timerMax; 
 
 
 	// Use this for initialization
@@ -32,8 +35,16 @@ public class UIScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-
+	void Update () 
+	{
+		if (personal) 
+		{
+			if (p.directionModifier == 1) {
+				content.fillClockwise = true;
+			} else {
+				content.fillClockwise = false;
+			}
+		}
 		if (p.currentState == "Rock") 
 		{
 			color = RPSX.rockColor;
@@ -64,7 +75,10 @@ public class UIScript : MonoBehaviour {
 			content.color = color;
 		}
 
-		shieldValue.GetComponent<Text> ().text = Mathf.Round (p.currentShieldDuration).ToString ();
+		if (!personal) 
+		{
+			shieldValue.GetComponent<Text> ().text = Mathf.Round (p.currentShieldDuration).ToString ();
+		}
 
 		handleFill ();
 		
@@ -78,6 +92,5 @@ public class UIScript : MonoBehaviour {
 	void handleFill ()
 	{
 		content.fillAmount = map (p.currentShieldDuration, p.maxShieldDuration);
-	}
-		
+	}		
 }

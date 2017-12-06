@@ -33,7 +33,7 @@ public abstract class Attack : MonoBehaviour {
 	}
 
 	// Makes sure the attack is colored correctly based on it's state.
-	public void handleColor ()
+	public virtual void handleColor ()
 	{
 		if (state == "Basic") 
 		{

@@ -11,13 +11,10 @@ public class RoughHiro : Player {
 	bool walking;
 	bool crouching;
 	public string movesetName;
-
-
 	public override void Awake ()
 	{
 		//Get a reference to the animator
 		anim = GetComponent<Animator>();
-
 		//Gets a reference to every mesh that makes up Rough Hiro;
 		GameObject meshes = transform.GetChild (0).gameObject;
 		for (int i = 0; i < meshes.transform.childCount; i++) 
@@ -27,13 +24,31 @@ public class RoughHiro : Player {
 		}
 		shield = GameObject.Find ("Shield_P" + playerNum);
 		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
+		shieldUI = GameObject.Find("ShieldUI_P" + playerNum);
 		maxShieldDuration = RPSX.maxShieldDuration;
 		currentShieldDuration = RPSX.maxShieldDuration;
+		ps = GameObject.Find ("Particles_P" + playerNum).GetComponent<ParticleSystem> ();
 	}
 	
 	// Add animation handler
 	public override void Update () 
 	{
+		if (Input.GetAxis ("RTrigger_P" + playerNum) == 1)
+		{
+			if (!ss.visible) 
+			{
+				shieldUI.SetActive (true);
+			} else {
+				shieldUI.SetActive (false);
+			}
+		} 
+		else 
+		{
+			if (shieldUI != null) {
+				shieldUI.SetActive (false);
+			}
+		}
+
 		bounceStun--;
 		if (bounceStun <= 0) {
 			bounceStun = 0;

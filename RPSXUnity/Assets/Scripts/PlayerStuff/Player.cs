@@ -61,14 +61,19 @@ public class Player : MonoBehaviour {
 	public bool canMove;
 
 	public SFXGuy sfx;
+	bool playedShieldSound;
 
 	public float bounceStun;
 	public int canAirShield = 1;
+	public GameObject shieldUI;
+
+	protected ParticleSystem ps;
 
 
 	// Use this for initialization
 	public virtual void Awake ()
 	{
+		ps = GameObject.Find ("Particles_P" + playerNum).GetComponent<ParticleSystem> ();
 		shield = GameObject.Find ("Shield_P" + playerNum);
 		sfx = GameObject.Find ("SoundGuy").GetComponent<SFXGuy> ();
 		maxShieldDuration = RPSX.maxShieldDuration;
@@ -89,8 +94,8 @@ public class Player : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	public virtual void Update () {
-
+	public virtual void Update () 
+	{
 		if (actionable) 
 		{
 			actions ();
@@ -220,7 +225,8 @@ public class Player : MonoBehaviour {
 					gameObject.AddComponent<RockState> ();
 					ss.addToTimer (.5f);
 					selectionEffect ("Rock");
-
+					sfx.playSFX ("rock");
+					particleBurst (RPSX.rockColor, 10);
 				} else if (selectedState == "Paper" && sc.paperOnCooldown == false) {
 					currentState = "Paper";
 					Destroy (gameObject.GetComponent<RPSState>()); 
@@ -229,6 +235,8 @@ public class Player : MonoBehaviour {
 					gameObject.AddComponent<PaperState> ();
 					ss.addToTimer (.5f);
 					selectionEffect ("Paper");
+					sfx.playSFX ("paper");
+					particleBurst (RPSX.paperColor, 10);
 				} else if (selectedState == "Scissors" && sc.scissorsOnCooldown == false) {
 					currentState = "Scissors";
 					Destroy (gameObject.GetComponent<RPSState>()); 
@@ -237,6 +245,8 @@ public class Player : MonoBehaviour {
 					gameObject.AddComponent<ScissorsState> ();
 					ss.addToTimer (.5f);
 					selectionEffect ("Scissors");
+					sfx.playSFX ("scissors");
+					particleBurst (RPSX.scissorsColor, 10);
 				}
 				currentTimeinState = maxTimeinState;
 				rb.gravityScale = rps.normalGrav;
@@ -406,6 +416,14 @@ public class Player : MonoBehaviour {
 		{
 			shield.SetActive(false);
 			shieldBroken = true;
+			if (!playedShieldSound) 
+			{
+				sfx.playSFX ("shieldBreak");
+				sc.putStateOnCooldown (currentState);
+				backToBasic ();
+				playedShieldSound = true;
+			}
+
 		}
 
 		//Shield can't be up if it's broken.
@@ -418,6 +436,7 @@ public class Player : MonoBehaviour {
 		if (currentShieldDuration >= maxShieldDuration) 
 		{
 			shieldBroken = false;
+			playedShieldSound = false;
 		}
 
 		if (shieldUp) 
@@ -442,6 +461,7 @@ public class Player : MonoBehaviour {
 		rb.mass = 1;
 		affectedByGrav = true;
 		sfx.playSFX ("powerDown");
+		particleBurst (RPSX.basicColor, 10);
 		if (heldRock != null) 
 		{
 			ProjectilePool.addToPool (heldRock, "Rock");
@@ -464,17 +484,23 @@ public class Player : MonoBehaviour {
 	//Function used for taking damage.
 	public virtual void takeDamage (float damage, string sentState, float inflictedHitStun, string attackName)
 	{
-		if (sentState != "Enviornment") {
+		if (sentState != "Enviornment") 
+		{
+			GetComponent<AnimationEvents> ().turnOnGravity ();
+			GetComponent<AnimationEvents> ().endDair ();
 			string result = RPSX.determineWinner (currentState, sentState);
 			float inflictedDamage = 0;
 			if (result == "Win") {
 				inflictedDamage = damage /2;
+				sfx.playSFX ("smallHit");
 			}
 			if (result == "Loss") {
 				inflictedDamage = damage *2;
+				sfx.playSFX ("bigHit");
 			}
 			if (result == "Tie") {
 				inflictedDamage = damage;
+				sfx.playSFX ("regularHit");
 			}
 			HP -= inflictedDamage;
 			Debug.Log (result + ": " + attackName  + "hit " + this.name + " for " + inflictedDamage + " damage.");
@@ -492,13 +518,16 @@ public class Player : MonoBehaviour {
 	public virtual void takeShieldDamage (float damage, string sentState)
 	{
 		string result = RPSX.determineWinner (currentState, sentState);
-		if (result == "Loss") 
-		{
+		if (result == "Loss") {
 			currentShieldDuration = currentShieldDuration - (damage * 2);
-		}
-		if (result == "Tie") 
-		{
+			sfx.playSFX ("lossShield");
+		} 
+		if (result == "Tie") {
 			currentShieldDuration = currentShieldDuration - damage;
+			sfx.playSFX ("regularShield");
+		}
+		if (result == "Win") {
+			sfx.playSFX("winShield");
 		}
 	}
 
@@ -619,8 +648,12 @@ public class Player : MonoBehaviour {
 				rb.velocity = new Vector2 (0, rb.velocity.y);
 			}
 		}
-
 	}
-		
 
+	public void particleBurst (Color colour, int num)
+	{
+		ParticleSystem.ColorOverLifetimeModule coltm = ps.colorOverLifetime;
+		coltm.color = colour;
+		ps.Emit (num);
+	}
 }

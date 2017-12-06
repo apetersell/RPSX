@@ -31,10 +31,7 @@ public class BasicBeam : Projectile {
 		handleMovement ();
 		handleDuration ();
 		handleSingleHits ();
-		if (reflected)
-		{
-			avoidCollidingWithSelf ();
-		}
+		avoidCollidingWithSelf ();
 	}
 
 	public override void OnCollisionEnter2D (Collision2D coll)
@@ -58,6 +55,19 @@ public class BasicBeam : Projectile {
 		else 
 		{
 			sr.flipX = true;
+		}
+		if (owner == 1) 
+		{
+			myPlayer = GameObject.Find (RPSX.Player1Name); 
+		}
+		if (owner == 2) 
+		{
+			myPlayer = GameObject.Find (RPSX.Player2Name); 
+		}
+		Collider2D[] playerColliders = myPlayer.GetComponentsInChildren<Collider2D> ();
+		for (int i = 0; i < playerColliders.Length; i++) 
+		{
+			Physics2D.IgnoreCollision (GetComponent<Collider2D> (), playerColliders [i], false);
 		}
 		base.reflectProjectile (owner);
 	}
