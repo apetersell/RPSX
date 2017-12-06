@@ -67,7 +67,7 @@ public class Player : MonoBehaviour {
 	public int canAirShield = 1;
 	public GameObject shieldUI;
 
-	protected ParticleSystem ps;
+	protected  ParticleSystem ps;
 
 
 	// Use this for initialization
