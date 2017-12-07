@@ -12,6 +12,8 @@ public class AnimationEvents : MonoBehaviour
 	public AnimationClip dashStop; 
 	public AttackMoveset am;
 	bool dairing;
+	public bool airDashCheck;
+	public AirDash_RHiro airDash;
 	Rigidbody2D rb;
 
 	// Use this for initialization
@@ -35,6 +37,7 @@ public class AnimationEvents : MonoBehaviour
 	public virtual void stopMomentum () 
 	{
 		rb.velocity = Vector3.zero;
+		airDashCheck = false;
 	}
 
 	public virtual void dashSlow ()
@@ -102,6 +105,24 @@ public class AnimationEvents : MonoBehaviour
 	public virtual void endDair ()
 	{
 		dairing = false; 
+	}
+
+	public virtual void resetAirDashAttack ()
+	{
+		if (!airDashCheck) 
+		{
+			airDash.myPlayer = player.gameObject;
+			airDash.owner = player.playerNum; 
+			airDash.player = player; 
+			airDash.state = player.currentState;
+			airDash.hitOpponent.Clear ();
+			airDashCheck = true;
+		}
+	}
+
+	public virtual void endAirDash ()
+	{
+		GetComponent<State_RoughHiro> ().remainingDashTime = 0;
 	}
 		
 	IEnumerator slowToStop (Vector3 speed, float time)

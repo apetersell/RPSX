@@ -15,7 +15,6 @@ public class BasicState : RPSState {
 		maxAirActions = 1;
 		airSpeedModifier = 1.5f;
 		shieldDiminishRate = 10;
-		projectileFireRate = 20;
 		color = RPSX.basicColor;
 
 

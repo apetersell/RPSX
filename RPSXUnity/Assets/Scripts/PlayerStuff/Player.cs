@@ -232,7 +232,7 @@ public class Player : MonoBehaviour {
 					Destroy (gameObject.GetComponent<RPSState>()); 
 					Destroy (gameObject.GetComponent<ProjectileLauncher> ());
 					gameObject.AddComponent<PaperAirplaneLauncher> ();
-					gameObject.AddComponent<PaperState> ();
+					gameObject.AddComponent<Paper_RoughHiro> ();
 					ss.addToTimer (.5f);
 					selectionEffect ("Paper");
 					sfx.playSFX ("paper");
@@ -242,7 +242,7 @@ public class Player : MonoBehaviour {
 					Destroy (gameObject.GetComponent<RPSState>()); 
 					Destroy (gameObject.GetComponent<ProjectileLauncher> ());
 					gameObject.AddComponent<ScissorLauncher> ();
-					gameObject.AddComponent<ScissorsState> ();
+					gameObject.AddComponent<Scissors_RoughHiro> ();
 					ss.addToTimer (.5f);
 					selectionEffect ("Scissors");
 					sfx.playSFX ("scissors");
@@ -335,7 +335,6 @@ public class Player : MonoBehaviour {
 		} else if (bounceStun != 0) {
 			color = RPSX.inBounceStun;
 		}
-		shotDelay = rps.projectileFireRate;
 		if (airActionsRemaining > maxAirActions) 
 		{
 			airActionsRemaining = maxAirActions;
@@ -455,7 +454,7 @@ public class Player : MonoBehaviour {
 		Destroy (gameObject.GetComponent<RPSState> ());
 		Destroy (gameObject.GetComponent <ProjectileLauncher> ());
 		currentState = "Basic";
-		gameObject.AddComponent<BasicState>();
+		gameObject.AddComponent<Basic_RoughHiro>();
 		gameObject.AddComponent<BasicBeamLauncher> ();
 		rb.gravityScale = rps.normalGrav; 
 		rb.mass = 1;
@@ -486,6 +485,7 @@ public class Player : MonoBehaviour {
 	{
 		if (sentState != "Enviornment") 
 		{
+			GetComponent<AnimationEvents> ().endAirDash ();
 			GetComponent<AnimationEvents> ().turnOnGravity ();
 			GetComponent<AnimationEvents> ().endDair ();
 			string result = RPSX.determineWinner (currentState, sentState);
@@ -650,10 +650,17 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	public void particleBurst (Color colour, int num)
+	public virtual void particleBurst (Color colour, int num)
 	{
 		ParticleSystem.ColorOverLifetimeModule coltm = ps.colorOverLifetime;
 		coltm.color = colour;
 		ps.Emit (num);
+	}
+
+	public virtual void flipCharacter (int dm)
+	{
+		Vector3 flip = new Vector3 (transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+		transform.localScale = flip;
+		directionModifier = dm;
 	}
 }

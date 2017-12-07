@@ -94,8 +94,7 @@ public class RoughHiro : Player {
 				if (stickInput > 0 && stopRightMomentum == false) {
 					if (touchingGround) {
 						if (directionModifier != 1) {
-							flipCharacter ();
-							directionModifier = 1;
+							flipCharacter (1);
 						} 
 						rb.velocity = new Vector2 (moveSpeed * absSI, rb.velocity.y);
 					} else {
@@ -106,7 +105,7 @@ public class RoughHiro : Player {
 				if (stickInput < 0 && stopLeftMomentum == false) { 
 					if (touchingGround) {
 						if (directionModifier != -1) {
-							flipCharacter ();
+							flipCharacter (-1);
 							directionModifier = -1;
 						}
 						rb.velocity = new Vector2 ((moveSpeed * -1) * absSI, rb.velocity.y);
@@ -223,6 +222,7 @@ public class RoughHiro : Player {
 			} else {
 				m.directionMod = directionModifier;
 			}
+			m.myPlayer = this.gameObject;
 			m.owner = playerNum;
 			m.player = this;
 			m.state = currentState;
@@ -238,15 +238,13 @@ public class RoughHiro : Player {
 			float absSI = Mathf.Abs (stickInput); 
 			if (stickInput > 0 && stopRightMomentum == false) {
 				if (directionModifier != 1) {
-					flipCharacter (); 
-					directionModifier = 1;
+					flipCharacter (1); 
 				}
 			} 
 			if (stickInput < 0 && stopLeftMomentum == false) { 
 				if (touchingGround) {
 					if (directionModifier != -1) {
-						flipCharacter ();
-						directionModifier = -1;
+						flipCharacter (-1);
 					}
 				}
 			}
@@ -277,11 +275,5 @@ public class RoughHiro : Player {
 		anim.SetFloat ("Hitstun", currentHitStun);
 		anim.SetFloat ("HorizontalMovement", Mathf.Abs(rb.velocity.x));
 		anim.SetFloat ("VerticalMovement", rb.velocity.y);
-	}
-
-	public virtual void flipCharacter ()
-	{
-		Vector3 flip = new Vector3 (transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
-		transform.localScale = flip;
 	}
 }

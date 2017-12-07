@@ -23,7 +23,6 @@ public class RockState : RPSState {
 		maxAirActions = 1;
 		airSpeedModifier = .5f;
 		shieldDiminishRate = 5.5f;
-		projectileFireRate = 50;
 		color = RPSX.rockColor;
 
 

@@ -15,7 +15,6 @@ public class PaperState : RPSState {
 		maxAirActions = 5;
 		shieldDiminishRate = 20;
 		airSpeedModifier = 2.5f;
-		projectileFireRate = 40;
 		color = RPSX.paperColor;
 
 
