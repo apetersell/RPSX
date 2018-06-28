@@ -2,6 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum RPS_State 
+{
+	Basic = 0,
+	Rock = 1,
+	Paper = 2,
+	Scissors = 3
+}
+
+public enum RPS_Result
+{
+	Tie = 0,
+	Win = 1,
+	Loss = 2
+}
+
 public class RPSX : MonoBehaviour {
 
 	public static string Player1Name = "RoughHiro";
@@ -23,7 +38,7 @@ public class RPSX : MonoBehaviour {
 	public static Color inBounceStun = new Color (74f, 0f, 107f);
 
 	public static float UIFlashSpeed = 3f;
-	public static float playerMaxHP = 100f;
+	public static float playerMaxHP = 20f;
 
 	public static float maxShieldDuration = 25f;
 
@@ -40,55 +55,55 @@ public class RPSX : MonoBehaviour {
 		return result;
 	}
 
-	public static string determineWinner (string hero, string villian)
+	public static RPS_Result determineWinner (RPS_State hero, RPS_State villian)
 	{
-		string result = null;
-		if (hero == "Basic" && villian != "Basic") 
+		RPS_Result result = RPS_Result.Tie;
+		if (hero == RPS_State.Basic && villian != RPS_State.Basic) 
 		{
-			result = "Loss";
+			result = RPS_Result.Loss;
 		}
-		if (hero != "Basic" && villian == "Basic") 
+		if (hero != RPS_State.Basic && villian == RPS_State.Basic) 
 		{
-			result = "Win";
+			result = RPS_Result.Win;
 		}
 		if (hero == villian) 
 		{
-			result = "Tie";
+			result = RPS_Result.Tie;
 		}
-		if (hero == "Rock") 
+		if (hero == RPS_State.Rock) 
 		{
-			if (villian == "Paper") 
+			if (villian == RPS_State.Paper) 
 			{
-				result = "Loss";
+				result = RPS_Result.Loss;
 			}
 
-			if (villian == "Scissors")
+			if (villian == RPS_State.Scissors)
 			{
-				result = "Win";
+				result = RPS_Result.Win;
 			}
 		}
 
-		if (hero == "Paper") 
+		if (hero == RPS_State.Paper) 
 		{
-			if (villian == "Rock") 
+			if (villian == RPS_State.Rock) 
 			{
-				result = "Win";
+				result = RPS_Result.Win;
 			}
-			if (villian == "Scissors") 
+			if (villian == RPS_State.Scissors) 
 			{
-				result = "Loss";
+				result = RPS_Result.Loss;
 			}
 		}
-		if (hero == "Scissors") 
+		if (hero == RPS_State.Scissors) 
 		{
-			if (villian == "Rock") 
+			if (villian == RPS_State.Rock) 
 			{
-				result = "Loss";
+				result = RPS_Result.Loss;
 			}
 
-			if (villian == "Paper") 
+			if (villian == RPS_State.Paper) 
 			{
-				result = "Win";
+				result = RPS_Result.Win;
 			}
 
 		}

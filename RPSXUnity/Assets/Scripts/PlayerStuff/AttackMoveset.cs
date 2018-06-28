@@ -5,20 +5,20 @@ using UnityEngine;
 public class AttackMoveset : MonoBehaviour {
 
 	public GameObject hitboxes; 
-	public Melee ForwardTilt;
-	public Melee UpTilt;
-	public Melee DownTilt;
-	public Melee ForwardAir;
-	public Melee BackAir;
-	public Melee UpAir;
-	public Melee DownAir;
+	public Attack ForwardTilt;
+	public Attack UpTilt;
+	public Attack DownTilt;
+	public Attack ForwardAir;
+	public Attack BackAir;
+	public Attack UpAir;
+	public Attack DownAir;
 	public int jabCount;
 
 //	public string moveset; 
 
 	void Awake ()
 	{
-		ForwardTilt = hitboxes.GetComponentInChildren<Melee>();
+		
 	}
 
 	// Use this for initialization
@@ -33,9 +33,9 @@ public class AttackMoveset : MonoBehaviour {
 		
 	}
 
-	public Melee getAttack (string name)
+	public Attack getAttack (string name)
 	{
-		Melee returnAttack = null; 
+		Attack returnAttack = null; 
 
 		if (name == "ForwardTilt") 
 		{

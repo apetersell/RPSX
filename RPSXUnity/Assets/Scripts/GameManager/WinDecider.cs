@@ -67,7 +67,7 @@ public class WinDecider : MonoBehaviour {
 		{
 			SceneManager.LoadScene ("TestScene");
 		}
-		ProjectilePool.clearPool ("All");
+		//ProjectilePool.clearPool ("All");
 	}
 
 	void findPlayers ()

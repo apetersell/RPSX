@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DownAir_RHiro_Sour : MonoBehaviour {
+public class FTilt_Test : Attack {
 
 	// Use this for initialization
 	void Start () {

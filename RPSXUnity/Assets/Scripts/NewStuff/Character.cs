@@ -39,6 +39,12 @@ public class Character : MonoBehaviour {
 
 	//Attack Stuff
 
+	//RPS Stuff
+	public RPS_State currentState;
+
+	//Getting Hit
+	public float hitStun;
+	public float weight;
 
 	//MovementSmooting
 	public int directionModifier;
@@ -56,12 +62,14 @@ public class Character : MonoBehaviour {
 	void Start () 
 	{
 		GetReferences ();
+		currentState = RPS_State.Basic;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		movementSmoothing ();
+		handleHitStun ();
 		if (actionable) 
 		{
 			actions ();
@@ -168,24 +176,26 @@ public class Character : MonoBehaviour {
 					grounded(),
 					running,
 					crouching); 
-			//			Melee m = GetComponent<AttackMoveset> ().getAttack (playerInput);
-			//			if (playerInput == "BackAir") {
-			//				m.directionMod = directionModifier * -1;
-			//			} else {
-			//				m.directionMod = directionModifier;
-			////			}
-			//			m.myPlayer = this.gameObject;
-			//			m.owner = playerNum;
-			//			m.player = this;
-			//			m.state = currentState;
-			//			m.hitOpponent.Clear ();
+			Attack attack = GetComponent<AttackMoveset> ().getAttack (playerInput);
+			float KBIX = Input.GetAxis ("LeftStickX_P" + playerNum);
+			float KBIY = -Input.GetAxis ("LeftStickY_P" + playerNum);
+			if (playerInput == "BackAir") 
+			{
+				attack.directionMod = directionModifier * -1;
+			} else {
+				attack.directionMod = directionModifier;
+			}
+			attack.owner = this;
+			attack.state = currentState;
+			attack.playersHit.Clear ();
+			attack.KBIFactorX = KBIX;
+			attack.KBIFactorY = KBIY;
 			doAttack (playerInput);
 		}
 	}
 
 	public virtual void doAttack (string sent)
 	{
-		Debug.Log (sent);
 		anim.SetTrigger (sent);
 	}
 
@@ -200,7 +210,6 @@ public class Character : MonoBehaviour {
 
 	public virtual void shoot ()
 	{
-		Debug.Log ("FIRE!");
 	}
 		
 	public void jump(float sent)
@@ -259,6 +268,25 @@ public class Character : MonoBehaviour {
 			if (playerNum == 2) {
 				Physics2D.IgnoreLayerCollision (11, 9, false);
 			}
+		}
+	}
+
+	public void takeHit (Vector3 knockback)
+	{
+		rb.velocity = knockback;
+		hitStun = 1;
+	}
+
+	void handleHitStun ()
+	{
+		if (hitStun > 0) 
+		{
+			actionable = false;
+			hitStun -= Time.deltaTime;
+		}
+		if (hitStun <= 0) 
+		{
+			actionable = true;
 		}
 	}
 

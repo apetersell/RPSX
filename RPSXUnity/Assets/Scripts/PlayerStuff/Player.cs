@@ -255,7 +255,7 @@ public class Player : MonoBehaviour {
 				sfx.playSFX ("newState");
 				if (heldRock != null) 
 				{
-					ProjectilePool.addToPool (heldRock, "Rock");
+					//ProjectilePool.addToPool (heldRock, "Rock");
 				}
 			}
 
@@ -463,7 +463,7 @@ public class Player : MonoBehaviour {
 		particleBurst (RPSX.basicColor, 10);
 		if (heldRock != null) 
 		{
-			ProjectilePool.addToPool (heldRock, "Rock");
+			//ProjectilePool.addToPool (heldRock, "Rock");
 		}
 	}
 
@@ -483,52 +483,52 @@ public class Player : MonoBehaviour {
 	//Function used for taking damage.
 	public virtual void takeDamage (float damage, string sentState, float inflictedHitStun, string attackName)
 	{
-		if (sentState != "Enviornment") 
-		{
-			GetComponent<AnimationEvents> ().endAirDash ();
-			GetComponent<AnimationEvents> ().turnOnGravity ();
-			GetComponent<AnimationEvents> ().endDair ();
-			string result = RPSX.determineWinner (currentState, sentState);
-			float inflictedDamage = 0;
-			if (result == "Win") {
-				inflictedDamage = damage /2;
-				sfx.playSFX ("smallHit");
-			}
-			if (result == "Loss") {
-				inflictedDamage = damage *2;
-				sfx.playSFX ("bigHit");
-			}
-			if (result == "Tie") {
-				inflictedDamage = damage;
-				sfx.playSFX ("regularHit");
-			}
-			HP -= inflictedDamage;
-			Debug.Log (result + ": " + attackName  + "hit " + this.name + " for " + inflictedDamage + " damage.");
-			Debug.Log ("Current HP: " + HP);
-		} 
-		else 
-		{
-			HP = HP - damage;
-		}
-		currentHitStun = inflictedHitStun;
+//		if (sentState != "Enviornment") 
+//		{
+//			GetComponent<AnimationEvents> ().endAirDash ();
+//			GetComponent<AnimationEvents> ().turnOnGravity ();
+//			GetComponent<AnimationEvents> ().endDair ();
+//			string result = RPSX.determineWinner (currentState, sentState);
+//			float inflictedDamage = 0;
+//			if (result == "Win") {
+//				inflictedDamage = damage /2;
+//				sfx.playSFX ("smallHit");
+//			}
+//			if (result == "Loss") {
+//				inflictedDamage = damage *2;
+//				sfx.playSFX ("bigHit");
+//			}
+//			if (result == "Tie") {
+//				inflictedDamage = damage;
+//				sfx.playSFX ("regularHit");
+//			}
+//			HP -= inflictedDamage;
+//			Debug.Log (result + ": " + attackName  + "hit " + this.name + " for " + inflictedDamage + " damage.");
+//			Debug.Log ("Current HP: " + HP);
+//		} 
+//		else 
+//		{
+//			HP = HP - damage;
+//		}
+//		currentHitStun = inflictedHitStun;
 
 	
 	}
 
 	public virtual void takeShieldDamage (float damage, string sentState)
 	{
-		string result = RPSX.determineWinner (currentState, sentState);
-		if (result == "Loss") {
-			currentShieldDuration = currentShieldDuration - (damage * 2);
-			sfx.playSFX ("lossShield");
-		} 
-		if (result == "Tie") {
-			currentShieldDuration = currentShieldDuration - damage;
-			sfx.playSFX ("regularShield");
-		}
-		if (result == "Win") {
-			sfx.playSFX("winShield");
-		}
+//		string result = RPSX.determineWinner (currentState, sentState);
+//		if (result == "Loss") {
+//			currentShieldDuration = currentShieldDuration - (damage * 2);
+//			sfx.playSFX ("lossShield");
+//		} 
+//		if (result == "Tie") {
+//			currentShieldDuration = currentShieldDuration - damage;
+//			sfx.playSFX ("regularShield");
+//		}
+//		if (result == "Win") {
+//			sfx.playSFX("winShield");
+//		}
 	}
 
 	public virtual void handleShotDelay ()
