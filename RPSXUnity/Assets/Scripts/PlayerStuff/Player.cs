@@ -222,7 +222,7 @@ public class Player : MonoBehaviour {
 					Destroy (gameObject.GetComponent<RPSState>()); 
 					Destroy (gameObject.GetComponent<ProjectileLauncher> ());
 					gameObject.AddComponent<RockLauncher> ();
-					gameObject.AddComponent<RockState> ();
+					gameObject.AddComponent<Rock_RoughHiro> ();
 					ss.addToTimer (.5f);
 					selectionEffect ("Rock");
 					sfx.playSFX ("rock");

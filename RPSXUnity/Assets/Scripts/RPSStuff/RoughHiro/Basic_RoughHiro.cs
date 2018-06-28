@@ -8,7 +8,7 @@ public class Basic_RoughHiro : State_RoughHiro
 	{
 		p = GetComponent<Player> ();
 		moveSpeed = 12;
-		jumpSpeed = 20;
+		jumpSpeed = 22;
 		normalGrav = 6;
 		fastFallGrav = 8;
 		shieldGrav = 1.5f;
@@ -18,7 +18,7 @@ public class Basic_RoughHiro : State_RoughHiro
 		color = RPSX.basicColor;
 		airDashSpeed = 25;
 		maxDashTime = 12;
-		attackDamage = 5;
+		attackDamage = 2;
 		attackShieldDamage = 3;
 		attackHitStun = 15;
 		attackBounceStun = 15;

@@ -103,15 +103,11 @@ public class RPSX : MonoBehaviour {
 		if (grounded) 
 		{
 			if (x == 0 && y == 0) {
-				result = "Jab";
+				result = "ForwardTilt";
 			}
 			if (Mathf.Abs (x) > Mathf.Abs (y)) 
 			{
-				if (running) {
-					result = "DashAttack";
-				} else {
-					result = "ForwardTilt";
-				}
+				result = "ForwardTilt";
 			}
 			if ((Mathf.Abs (x) < Mathf.Abs (y)) && y > 0) {
 				result = "DownTilt"; 
@@ -123,7 +119,7 @@ public class RPSX : MonoBehaviour {
 		else 
 		{
 			if (x == 0 && y == 0) {
-				result = "NeutralAir";
+				result = "ForwardAir";
 			}
 			if (Mathf.Abs (x) > Mathf.Abs (y)) 
 			{

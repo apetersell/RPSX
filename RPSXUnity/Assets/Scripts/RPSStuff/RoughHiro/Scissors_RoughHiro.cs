@@ -16,9 +16,9 @@ public class Scissors_RoughHiro : State_RoughHiro {
 		airSpeedModifier = .75f;
 		shieldDiminishRate = 30;
 		color = RPSX.scissorsColor;
-		airDashSpeed = 50;
-		maxDashTime = 6;
-		attackDamage = 10;
+		airDashSpeed = 40;
+		maxDashTime = 10;
+		attackDamage = 8;
 		attackShieldDamage = 5;
 		attackHitStun = 25;
 		attackBounceStun = 15;

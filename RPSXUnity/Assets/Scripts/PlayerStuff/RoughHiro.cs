@@ -102,7 +102,8 @@ public class RoughHiro : Player {
 					}
 				}
 
-				if (stickInput < 0 && stopLeftMomentum == false) { 
+				if (stickInput < 0 && stopLeftMomentum == false) 
+				{ 
 					if (touchingGround) {
 						if (directionModifier != -1) {
 							flipCharacter (-1);
@@ -110,7 +111,7 @@ public class RoughHiro : Player {
 						}
 						rb.velocity = new Vector2 ((moveSpeed * -1) * absSI, rb.velocity.y);
 					} else {
-						rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier) * absSI, rb.velocity.y);
+							rb.velocity = new Vector2 (((moveSpeed * -1) * airSpeedModifier) * absSI, rb.velocity.y);
 					}
 				}
 			}
