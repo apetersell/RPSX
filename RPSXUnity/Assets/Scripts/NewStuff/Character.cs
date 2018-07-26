@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class Character : MonoBehaviour {
@@ -40,17 +41,29 @@ public class Character : MonoBehaviour {
 	//Attack Stuff
 
 	//RPS Stuff
-	public RPS_State currentState;
+	public RPS_State currentState; 
 
 	//Getting Hit
 	public float hitStun;
 	public float weight;
+	public float hitStunMultiplier = 0.1f;
+	public float DIMultiplier = 0.1f;
 
-	//MovementSmooting
+	//MovementSmoothing
 	public int directionModifier;
 	public static float gravityThreshold = 0.5f;
 	public static float leftRightThreshold = 0.5f;
 	public bool passThroughPlatforms; 
+
+	//MeterStuff
+	public static float meterMax = 10;
+	public float meterCurrent;
+	public static float meterDegradeRate = 0.1f;
+	public static float meterChargeRate = 1;
+	public Image superMeter;
+
+	//State Color
+	Color stateColor;
 
 	//Animation bools
 	bool crouching;
@@ -68,8 +81,10 @@ public class Character : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		colorHandle ();
 		movementSmoothing ();
 		handleHitStun ();
+		handleMeter ();
 		if (actionable) 
 		{
 			actions ();
@@ -79,12 +94,17 @@ public class Character : MonoBehaviour {
 		{
 			DebugStuff ();
 		}
+		if (hitStun > 0) 
+		{
+			directionalInfluence ();
+		}
 	}
 
 	public void GetReferences()
 	{
 		rb = GetComponent<Rigidbody2D> ();
 		anim = GetComponent<Animator> ();
+		superMeter = GameObject.Find ("Fill_P" + playerNum).GetComponent<Image> ();
 		footOrigin = transform.GetChild (0);
 		frontOrigin = transform.GetChild (1); 
 		backOrigin = transform.GetChild (2); 
@@ -97,6 +117,7 @@ public class Character : MonoBehaviour {
 		handleCrouching ();
 		gravControl ();
 		handleAttacks ();
+		changeState ();
 	}
 
 	public void movement()
@@ -194,6 +215,26 @@ public class Character : MonoBehaviour {
 		}
 	}
 
+	void changeState ()
+	{
+		if (Input.GetButtonDown ("DPadUp_P" + playerNum)) 
+		{
+			currentState = RPS_State.Paper;
+		}
+		if (Input.GetButtonDown ("DPadLeft_P" + playerNum)) 
+		{
+			currentState = RPS_State.Rock;
+		}
+		if (Input.GetButtonDown ("DPadRight_P" + playerNum)) 
+		{
+			currentState = RPS_State.Scissors;
+		}
+		if (Input.GetButtonDown ("DPadDown_P" + playerNum)) 
+		{
+			currentState = RPS_State.Basic;
+		}
+	}
+
 	public virtual void doAttack (string sent)
 	{
 		anim.SetTrigger (sent);
@@ -215,6 +256,23 @@ public class Character : MonoBehaviour {
 	public void jump(float sent)
 	{
 		rb.velocity = new Vector2 (rb.velocity.x, sent); 
+	}
+
+	public void handleMeter()
+	{
+		if (meterCurrent <= 0) 
+		{
+			meterCurrent = 0;
+			if (currentState != RPS_State.Basic) 
+			{
+				currentState = RPS_State.Basic;
+			}
+		}
+		if (currentState != RPS_State.Basic) 
+		{
+			meterCurrent -= Time.deltaTime;
+		}
+		superMeter.fillAmount = meterCurrent / meterMax;
 	}
 
 	public void handleCrouching ()
@@ -271,10 +329,10 @@ public class Character : MonoBehaviour {
 		}
 	}
 
-	public void takeHit (Vector3 knockback)
+	public void takeHit (Vector3 knockbackAngle, float knockback )
 	{
-		rb.velocity = knockback;
-		hitStun = 1;
+		rb.velocity = knockbackAngle;
+		hitStun = knockback * hitStunMultiplier;
 	}
 
 	void handleHitStun ()
@@ -288,6 +346,14 @@ public class Character : MonoBehaviour {
 		{
 			actionable = true;
 		}
+	}
+
+	void directionalInfluence ()
+	{
+		float DIX = Input.GetAxis ("LeftStickX_P" + playerNum) * DIMultiplier;
+		float DIY = -Input.GetAxis ("LeftStickY_P" + playerNum) * DIMultiplier;
+		Vector2 DI = new Vector3 (DIX, DIY);
+		rb.velocity += DI; 
 	}
 
 	public bool grounded ()
@@ -332,6 +398,17 @@ public class Character : MonoBehaviour {
 		}
 	}
 
+	void OnTriggerEnter2D (Collider2D coll)
+	{
+		if (coll.gameObject.tag == "Token") 
+		{
+			Token token = coll.gameObject.GetComponent<Token> ();
+			meterCurrent = meterMax;
+			currentState = token.type;
+			token.collect ();
+		}
+	}
+
 	public virtual void handleAnimations ()
 	{
 		anim.SetBool ("Actionable", actionable);
@@ -355,5 +432,31 @@ public class Character : MonoBehaviour {
 
 		Vector3 backEndPoint = new Vector3 (backOrigin.position.x - backRaycastDistance * directionModifier, backOrigin.position.y, backOrigin.position.z);
 		Debug.DrawLine (backOrigin.transform.position, backEndPoint , Color.blue);
+	}
+
+	void colorHandle ()
+	{
+		SpriteRenderer sr = GetComponent<SpriteRenderer> ();
+		if (hitStun > 0) {
+			sr.color = Color.magenta;
+		} else {
+			sr.color = stateColor;
+		}
+		switch (currentState) 
+		{
+		case RPS_State.Basic:
+			stateColor = RPSX.basicColor;
+			break;
+		case RPS_State.Rock:
+			stateColor = RPSX.rockColor;
+			break;
+		case RPS_State.Paper:
+			stateColor = RPSX.paperColor;
+			break;
+		case RPS_State.Scissors:
+			stateColor = RPSX.scissorsColor;
+			break;
+		}
+		superMeter.color = stateColor;
 	}
 }

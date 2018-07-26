@@ -18,7 +18,13 @@ public class AttackMoveset : MonoBehaviour {
 
 	void Awake ()
 	{
-		
+		ForwardTilt = hitboxes.transform.GetChild (0).gameObject.GetComponent<Attack> ();
+		UpTilt = hitboxes.transform.GetChild (1).gameObject.GetComponent<Attack> ();
+		DownTilt = hitboxes.transform.GetChild (2).gameObject.GetComponent<Attack> ();
+		ForwardAir = hitboxes.transform.GetChild (3).gameObject.GetComponent<Attack> ();
+		BackAir = hitboxes.transform.GetChild (4).gameObject.GetComponent<Attack> ();
+		DownAir = hitboxes.transform.GetChild (5).gameObject.GetComponent<Attack> ();
+		UpAir = hitboxes.transform.GetChild (6).gameObject.GetComponent<Attack> ();
 	}
 
 	// Use this for initialization

@@ -85,28 +85,28 @@ public abstract class Attack : MonoBehaviour
 	public virtual void hitPlayer (Character c)
 	{
 		float effectiveDamage = 0;
-		float effectiveKB = 0;
+		float effectiveKB = baseKnockback - c.weight;
 		Vector3 effectiveKBA = Vector3.zero;
 		RPS_Result result = RPSX.determineWinner (state, c.currentState);
 		switch (result) 
 		{
 		case RPS_Result.Tie:
-			effectiveKB = baseKnockback;
+			effectiveKB = baseKnockback - c.weight;
 			effectiveDamage = damage;
 			break;
 		case RPS_Result.Win:
-			effectiveKB = baseKnockback * 2;
+			effectiveKB = (baseKnockback * 2) - c.weight;
 			effectiveDamage = damage * 2;
 			break;
 		case RPS_Result.Loss:
-			effectiveKB = baseKnockback;
+			effectiveKB = (baseKnockback/2) - c.weight;
 			effectiveDamage = damage / 2;
 			break;
 		}
 		effectiveKBA = new Vector3 ((knockbackAngle.x * directionMod) + KBIFactorX, knockbackAngle.y + KBIFactorY, knockbackAngle.z);
 		Vector3 finalKB = effectiveKBA * effectiveKB;
 		RPSXManager.takeDamage (c.playerNum, effectiveDamage);
-		c.takeHit (finalKB);
+		c.takeHit (finalKB, effectiveKB);
 	}
 //
 //	public virtual void hitShield (Player p)
